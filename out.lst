@@ -1,0 +1,43 @@
+    1 00:0000 -  -  -  -  #include "bin/asm/include.inc"
+Listing for file "C:\Users\sande\IdeaProjects\ti_compile\bin\asm\include.inc"
+    1 00:0000 -  -  -  -  
+    2 00:0000 -  -  -  -  ;Various Parts Contributed by
+    3 00:0000 -  -  -  -  ;- BrandonW
+    4 00:0000 -  -  -  -  ;- calc84
+    5 00:0000 -  -  -  -  ;- MateoConLechuga
+    6 00:0000 -  -  -  -  ;- Runer112
+    7 00:0000 -  -  -  -  ;- tr1p1ea
+    8 00:0000 -  -  -  -  ;- Kerm Martian
+    9 00:0000 -  -  -  -  ;- Texas Instruments (ti83plus.inc)
+Listing for file "bin/asm/main.asm"
+    2 00:0000 -  -  -  -  
+    3 00:0000 -  -  -  -   .assume ADL=1
+    4 00:0000 -  -  -  -   .org userMem-2
+    5 00:0000 EF 7B -  -   .db tExtTok,tAsm84CeCmp
+    6 00:0002 -  -  -  -  
+    7 00:0002 CD 28 08 02  call _homeup
+    8 00:0006 CD 10 08 02  call _ClrScrnFull
+    9 00:000A 21 1F 00 00  ld hl,TutorialText
+   10 00:000E CD C0 07 02  call _PutS
+   11 00:0012 CD 8C 0D 02  call _GetKey
+   12 00:0016 CD 10 08 02  call _ClrScrnFull
+   13 00:001A FD CB 00 AE  res donePrgm,(iy+doneFlags)
+   14 00:001E C9 -  -  -   ret
+   15 00:001F -  -  -  -  
+   16 00:001F -  -  -  -  TutorialText:
+   17 00:001F 45 78 63 65 
+              6C 6C 65 6E 
+              74 20 6A 6F 
+              62 21 20 3A 
+              29 20 59 6F 
+              75 20 68 61 
+              76 65 63 72 
+              65 61 74 65 
+              64 20 79 6F 
+              75 72 20 66 
+              69 72 73 74 
+              20 61 73 73 
+              65 6D 62 6C 
+              79 20 70 72 
+              6F 67 72 61 
+              6D 21 00 -    .db "Excellent job! :) You havecreated your first assembly program!",0
