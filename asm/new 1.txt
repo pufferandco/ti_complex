@@ -1,0 +1,49 @@
+non_zero = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+
+digit = "0" | non_zero;
+
+number = non_zero, {digit}
+
+letter = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | 	"l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z";
+
+special_tokens = "+" | "*" | "-" | "/" | "=" | "^" | "<" | ">" | "%" | "!" | ":" | ";" | "&" | "," | "." | "_", " ";
+
+identifier = letter, {letter | digit | "_"};
+
+character = digit | letter | special_tokens;
+
+boolean = " false " | " true "
+
+string = '"', {character}, '"';
+
+math_add = math_node, "+",math_node
+math_subtract = math_node, "-", math_node
+math_multiply = math_node, "*",math_node
+math_divide = math_node, "/",math_node
+math_modulo  = math_node, "%", math_node
+
+math_node =  {" "},(number | identifier | function_call | math_expresion),{" "};
+math_expresion = math_add | math_subtract | math_multiply | math_divide | math_modulo;
+
+logic_and = logic_node, " and ",logic_node
+logic_or = logic_node, " or ", logic_node
+logic_not = "!",logic_node
+
+compare_equel = expresion, "==", expresion
+compare_not_equel = expresion, "!=", expresion
+compare_higher_then = expresion, ">", expresion
+compare_higher_or_equel_to = expresion, "=>", expresion
+compare_lower_then = expresion, "<", expresion
+compare_lower_or_equel_to = expresion, "<=", expresion
+
+
+logic_node =  {" "},(boolean | identifier | function_call | logic_expresion),{" "};
+logic_expresion = logic_and | logic_or | logic_not | compare_equel | compare_not_equel | compare_higher_then | compare_higher_or_equel_to | compare_lower_then | compare_lower_or_equel_to;
+
+expresion = {" "},(identifier | digit | string | function_call | boolean | logic_expresion | math_expresion),{" "};
+
+function_parameters = "(",{" "}, {parameter,{" "}, ",",{" "}}, parameter,{" "}, ")" | "(",{" "},")";
+
+function_call = {" "},identifier, function_parameters,{" "}
+
+function_create = "fun", identifier, "(", {identifier, ":", identifier, ","}, identifier, ":", identifier, ")"

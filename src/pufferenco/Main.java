@@ -50,7 +50,7 @@ public class Main {
         builder.append_tag("StackSave");
         builder.append_db("0,0,0");
 
-        IOUtil.writeTxt("bin/asm/main.asm", AssemblyCollapse.optimize(builder, OPTIMIZE_LEVEL).getAssembly() + "\n" + Constants.getAssembly());
+        IOUtil.writeTxt("asm/main.asm", AssemblyCollapse.optimize(builder, OPTIMIZE_LEVEL).getAssembly() + "\n" + Constants.getAssembly());
     }
 
     private static void init(){
