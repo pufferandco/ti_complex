@@ -48,6 +48,7 @@ public class IntType implements DataType {
             builder.append_ld("HL","0");
             builder.append_ld("H","D");
             builder.append_ld("L","E");
+            builder.append_push("HL");
             return new StackElement("converted_int_" + Main.getId(), Data_type_id);
         }
 
@@ -59,7 +60,7 @@ public class IntType implements DataType {
     @Override
     public StackElement callOperator(String operator, AssemblyBuilder builder, StackElement right) {
         if(!Operators.containsKey(operator))
-            builder.error("illegal operator [+] with combination: " + DataType.NAMES[Data_type_id] + " and " + DataType.NAMES[right.type]);
+            builder.error("illegal operator [" + operator + "] with combination: " + DataType.NAMES[Data_type_id] + " and " + DataType.NAMES[right.type]);
 
         return Operators.get(operator).apply(builder, right);
     }

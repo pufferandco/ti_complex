@@ -31,12 +31,8 @@ public class Main {
         builder.append((new AssemblyLine("")));
 
         String code = IOUtil.readTxt("root/main.TIC");
-        List<List<Token>> tokenLines = Token.tokenizeLines(code);
-        for (List<Token> tokens : tokenLines) {
-            builder.append(AssemblyLine.customAssemblyLine("\t;" + tokens));
-            builder.tIC_line++;
-            globalReader.read(tokens, builder);
-        }
+        tokenizeAndRun(code, builder);
+
         builder.append((new AssemblyLine("")));
         builder.append_tag("ProgramExit");
         builder.append_call("_GetKey");
@@ -49,6 +45,16 @@ public class Main {
         builder.append_db("0,0,0");
 
         IOUtil.writeTxt("asm/main.asm", AssemblyCollapse.optimize(builder, OPTIMIZE_LEVEL).getAssembly() + "\n" + Constants.getAssembly());
+    }
+
+    public static void tokenizeAndRun(String code, AssemblyBuilder builder){
+        List<List<Token>> tokenLines = Token.tokenizeLines(code);
+        for (List<Token> tokens : tokenLines) {
+            builder.append(new AssemblyLine(""));
+            System.out.println(tokens);
+            builder.tIC_line++;
+            globalReader.read(tokens, builder);
+        }
     }
 
     private static void init(){

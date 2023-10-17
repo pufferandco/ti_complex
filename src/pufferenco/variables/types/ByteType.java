@@ -22,16 +22,16 @@ public class ByteType implements DataType {
 
     @Override
     public StackElement getStackVariable(StackElement element, AssemblyBuilder builder) {
-        builder.append_ld("A", "("+StackStart + "-" + (element.location+3)+")");
-        builder.append_push("A");
+        builder.append_ld("HL", "("+StackStart + "-" + (element.location+3)+")");
+        builder.append_push("HL");
         return element;
     }
 
     @Override
     public void setValue(StackElement variable, StackElement newValue, AssemblyBuilder builder) {
         convertFrom(newValue, builder, false);
-        builder.append_pop("AF");
-        builder.append_ld("("+StackStart + "-" + (variable.location+3)+")", "A");
+        builder.append_pop("HL");
+        builder.append_ld("("+StackStart + "-" + (variable.location+3)+")", "HL");
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ByteType implements DataType {
     @Override
     public StackElement callOperator(String operator, AssemblyBuilder builder, StackElement right) {
         if(!Operators.containsKey(operator))
-            builder.error("illegal operator [+] with combination: " + DataType.NAMES[Data_type_id] + " and " + DataType.NAMES[right.type]);
+            builder.error("illegal operator [" + operator + "] with combination: " + DataType.NAMES[Data_type_id] + " and " + DataType.NAMES[right.type]);
 
         return Operators.get(operator).apply(builder, right);
     }
@@ -108,6 +108,7 @@ public class ByteType implements DataType {
                 builder.append_ld("L", "B");
             }
             builder.append_mlt("HL");
+            builder.append_ld("H", "L");
             builder.append_push("HL");
 
             return new StackElement("byte_mlt_" + right.name, Data_type_id);
@@ -116,8 +117,8 @@ public class ByteType implements DataType {
         Operators.put(">", (AssemblyBuilder builder, StackElement right)->{
             convertFrom(right, builder, true);
 
-            builder.append_pop("HL");
             builder.append_pop("AF");
+            builder.append_pop("HL");
             builder.append_call("byte_higher");
             builder.append_push("HL");
 
@@ -127,8 +128,8 @@ public class ByteType implements DataType {
         Operators.put("<", (AssemblyBuilder builder, StackElement right)->{
             convertFrom(right, builder, true);
 
-            builder.append_pop("HL");
             builder.append_pop("AF");
+            builder.append_pop("HL");
             builder.append_call("byte_smaller");
             builder.append_push("HL");
 
@@ -138,8 +139,8 @@ public class ByteType implements DataType {
         Operators.put("=>", (AssemblyBuilder builder, StackElement right)->{
             convertFrom(right, builder, true);
 
-            builder.append_pop("HL");
             builder.append_pop("AF");
+            builder.append_pop("HL");
             builder.append_call("byte_higher_or_equals");
             builder.append_push("HL");
 
@@ -149,8 +150,8 @@ public class ByteType implements DataType {
         Operators.put("<=", (AssemblyBuilder builder, StackElement right)->{
             convertFrom(right, builder, true);
 
-            builder.append_pop("HL");
             builder.append_pop("AF");
+            builder.append_pop("HL");
             builder.append_call("byte_lower_or_equals");
             builder.append_push("HL");
 

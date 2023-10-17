@@ -37,7 +37,7 @@ public class AssemblyBuilder {
     }
 
     public void error(String error_code){
-        throw new RuntimeException(tIC_line + ": " + error_code);
+        throw new RuntimeException("error at line " + tIC_line + ": " + error_code);
     }
 
     //public void append_ld(String left, String right, String name){
@@ -77,7 +77,9 @@ public class AssemblyBuilder {
     public void append_or(String operand1, String operand2){append(new AssemblyLine("or", operand1, operand2));}
     public void append_xor(String operand1, String operand2){append(new AssemblyLine("xor", operand1, operand2));}
 
-
+    public void append_jp(String statement, String pointer){append(new AssemblyLine("jp", statement, pointer));}
+    public void append_jp(String pointer){append(new AssemblyLine("jp", pointer));}
+    public void append_cp(String left, String right){append(new AssemblyLine("cp", left, right));}
 
 
 }

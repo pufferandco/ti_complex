@@ -1,1 +1,10 @@
-var hello: int = 326;
+var age: byte = 150;
+if(age > 100){
+    printLn("ancient age");
+}elif(age > 30){
+    printLn("aging");
+}elif(age > 15){
+    printLn("prime age");
+}else{
+    printLn("baby");
+};

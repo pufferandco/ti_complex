@@ -29,7 +29,9 @@ public class Token {
         int XOR = 16;
         int TRUE = 17;
         int FALSE = 18;
-
+        int IF = 19;
+        int ELSE = 20;
+        int ELIF = 21;
     }
     private static final Pattern IDENTIFIER_TOKENS = Pattern.compile("[a-zA-Z0-9_]");
     private static final Character[] ARITHMETIC_TOKENS = {'+', '*', '-', '/', '=', '^', '<', '>', '%'};
@@ -37,7 +39,7 @@ public class Token {
     private static final Character[] SUB_ENTER_TOKENS = {'(', '{', '[', '"', '\''};
     private static final Character[] SUB_LEAVE_TOKENS = {')', '}', ']', '"', '\''};
 
-    private static final String[] KEYWORDS = {"fun", "def", "var", "val", "and","or", "xor", "true", "false"};
+    private static final String[] KEYWORDS = {"fun", "def", "var", "val", "and","or", "xor", "true", "false", "if", "else", "elif"};
 
 
     static ArrayList<Token> tokenize(String content){

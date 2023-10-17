@@ -10,9 +10,66 @@ stackStart .equ saveSScreen+768
 	call         _homeup
 	call         _ClrScrnFull
 	             
-	;[12:var, 7:hello, 6::, 7:int, 5:=, 7:326]
-	ld           HL,326
+	             
+	ld           H,150
 	push         HL
+	             
+	ld           HL,(stackStart-3)
+	push         HL
+	ld           H,100
+	push         HL
+	pop          AF
+	pop          HL
+	call         byte_higher
+	push         HL
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,elif_next_4
+	             
+	ld           HL,string_5
+	call         _PutS
+	call         _NewLine
+	jp           end_if_2
+elif_next_4:
+	ld           HL,(stackStart-3)
+	push         HL
+	ld           H,30
+	push         HL
+	pop          AF
+	pop          HL
+	call         byte_higher
+	push         HL
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,elif_next_7
+	             
+	ld           HL,string_8
+	call         _PutS
+	call         _NewLine
+	jp           end_if_2
+elif_next_7:
+	ld           HL,(stackStart-3)
+	push         HL
+	ld           H,15
+	push         HL
+	pop          AF
+	pop          HL
+	call         byte_higher
+	push         HL
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,elif_next_10
+	             
+	ld           HL,string_11
+	call         _PutS
+	call         _NewLine
+	jp           end_if_2
+elif_next_10:
+	             
+	ld           HL,string_12
+	call         _PutS
+	call         _NewLine
+end_if_2:
 	             
 ProgramExit:
 	call         _GetKey
@@ -24,3 +81,11 @@ ProgramExit:
 StackSave:
 	.db          0,0,0
 
+string_5:
+	.db          "ancient age", 0
+string_8:
+	.db          "aging", 0
+string_11:
+	.db          "prime age", 0
+string_12:
+	.db          "baby", 0

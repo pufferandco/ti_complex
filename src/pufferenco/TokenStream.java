@@ -15,6 +15,8 @@ public class TokenStream {
     }
 
     public Token read(){
+        if(index == tokens.size())
+            builder.error("token stream reached end");
         Token token = tokens.get(index++);
         if(token.type == Token.TokenTypes.NEW_LINE)
             builder.tIC_line++;

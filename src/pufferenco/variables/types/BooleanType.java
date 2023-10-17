@@ -56,7 +56,7 @@ public class BooleanType implements DataType {
     @Override
     public StackElement callOperator(String operator, AssemblyBuilder builder, StackElement right) {
         if(!Operators.containsKey(operator))
-            builder.error("illegal operator [+] with combination: boolean and " + DataType.NAMES[right.type]);
+            builder.error("illegal operator [" + operator + "] with combination: boolean and " + DataType.NAMES[right.type]);
 
         return Operators.get(operator).apply(builder, right);
     }

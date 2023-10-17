@@ -20,6 +20,11 @@ class globalReader {
                     else
                         throw new RuntimeException("unknown function: " + token.content);
                 }
+                case TokenTypes.IF -> {
+                    String end_id = "end_if_" + Main.getId();
+                    IfReader.read(stream, builder, end_id);
+                    builder.append_tag(end_id);
+                }
                 case TokenTypes.NEW_LINE -> builder.tIC_line++;
                 case TokenTypes.VAR -> Variable.init(stream, builder);
                 default -> throw new RuntimeException("unknown global token: " + token.content);

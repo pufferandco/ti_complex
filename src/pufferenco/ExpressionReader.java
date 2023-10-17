@@ -134,7 +134,9 @@ public class ExpressionReader {
 
     private static StackElement evalByte(Token token, AssemblyBuilder builder, boolean allow_constant){
         try {
-            byte number = Byte.parseByte(token.content);
+            int number = Integer.parseInt(token.content);
+            if(number < 0 || number > 256)
+                return null;
 
             if(allow_constant){
                 return new StackElement("byteC_" + Main.getId(), DataType.BYTE, number);
@@ -150,7 +152,9 @@ public class ExpressionReader {
 
     private static StackElement evalInt(Token token, AssemblyBuilder builder, boolean allow_constant){
         try {
-            short number = Short.parseShort(token.content);
+            int number = Integer.parseInt(token.content);
+            if(number < 0 || number > 60536)
+                return null;
 
             if(allow_constant){
                 return new StackElement("intC_" + Main.getId(), DataType.INT, number);
