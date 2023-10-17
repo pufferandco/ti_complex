@@ -17,7 +17,7 @@ public class Main {
         init();
 
 
-        builder.append(customAssemblyLine("#include \"bin/asm/include.inc\""));
+        builder.append(customAssemblyLine("#include \"asm/include.inc\""));
         builder.append(customAssemblyLine(".assume\tADL=1"));
         builder.append(customAssemblyLine(DataStack.StackStart + " .equ saveSScreen+768"));
         builder.append(customAssemblyLine(".org\tuserMem-2"));
@@ -29,24 +29,22 @@ public class Main {
         builder.append_call("_homeup");
         builder.append_call("_ClrScrnFull");
         builder.append((new AssemblyLine("")));
-        builder.append((new AssemblyLine("")));
 
         String code = IOUtil.readTxt("root/main.TIC");
         List<List<Token>> tokenLines = Token.tokenizeLines(code);
         for (List<Token> tokens : tokenLines) {
+            builder.append(AssemblyLine.customAssemblyLine("\t;" + tokens));
             builder.tIC_line++;
-            System.out.println(tokens);
             globalReader.read(tokens, builder);
-            builder.append((new AssemblyLine("")));
         }
-
+        builder.append((new AssemblyLine("")));
         builder.append_tag("ProgramExit");
         builder.append_call("_GetKey");
         builder.append_call("_ClrScrnFull");
         builder.append_res("donePrgm","(iy+doneFlags)");
         builder.append_ld("SP", "(StackSave)");
         builder.append_ret();
-        builder.append(customAssemblyLine("#include \"bin/asm/api.asm\""));
+        builder.append(customAssemblyLine("#include \"asm/api.asm\""));
         builder.append_tag("StackSave");
         builder.append_db("0,0,0");
 

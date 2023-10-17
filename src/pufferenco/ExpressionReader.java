@@ -112,6 +112,10 @@ public class ExpressionReader {
             if(byte_type != null)
                 return byte_type;
 
+            StackElement double_type = evalInt(token, builder, allow_constant);
+            if(double_type != null)
+                return double_type;
+
             if (NativeFunction.exists(token.content))
                 return NativeFunction.exec(token.content, readParameters(tokenStream, builder), builder, true);
 
@@ -138,6 +142,22 @@ public class ExpressionReader {
                 builder.append_ld("H", String.valueOf(number));
                 builder.append_push("HL");
                 return new StackElement("byte_" + Main.getId(), DataType.BYTE);
+            }
+        } catch (NumberFormatException ignore) {
+            return null;
+        }
+    }
+
+    private static StackElement evalInt(Token token, AssemblyBuilder builder, boolean allow_constant){
+        try {
+            short number = Short.parseShort(token.content);
+
+            if(allow_constant){
+                return new StackElement("intC_" + Main.getId(), DataType.INT, number);
+            }else {
+                builder.append_ld("HL", String.valueOf(number));
+                builder.append_push("HL");
+                return new StackElement("int_" + Main.getId(), DataType.INT);
             }
         } catch (NumberFormatException ignore) {
             return null;

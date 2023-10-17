@@ -251,3 +251,47 @@ true_string:
 	.db "true",0
 false_string:
 	.db "false",0
+
+
+
+byte_smaller:
+    cp		A, H
+    jr		C, byte_smaller__true
+    ld	    H, %00000000
+    ret
+byte_smaller__true:
+    ld	    H, %11111111
+    ret
+
+
+
+byte_higher:
+    cp		A, H
+    jr		NC, byte_higher__true
+    ld	    H, %11111111
+    ret
+byte_higher__true:
+    ld	    H, %00000000
+    ret
+
+
+
+byte_higher_or_equals:
+    cp		A, H
+    jr		NC, byte_higher_or_equals__true
+    ld	    H, %00000000
+    ret
+byte_higher_or_equals__true:
+    ld	    H, %11111111
+    ret
+
+
+
+byte_lower_or_equals:
+    cp		A, H
+    jr		C, byte_lower_or_equals__true
+    ld	    H, %11111111
+    ret
+byte_lower_or_equals__true:
+    ld	    H, %00000000
+    ret

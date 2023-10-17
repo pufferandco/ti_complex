@@ -68,6 +68,10 @@ public class AssemblyBuilder {
     public void append_res(String left, String right){append(new AssemblyLine("res", left, right));}
     public void append_add(String left, String right){append(new AssemblyLine("add", left, right));}
     public void append_sub(String left, String right){append(new AssemblyLine("sub", left, right));}
+    public void append_sbc(String left, String right){append(new AssemblyLine("sbc", left, right));}
+    public void append_ex(String left, String right){append(new AssemblyLine("ex", left, right));}
+
+
     public void append_mlt(String rr){append(new AssemblyLine("mlt", rr));}
     public void append_and(String operand1, String operand2){append(new AssemblyLine("and", operand1, operand2));}
     public void append_or(String operand1, String operand2){append(new AssemblyLine("or", operand1, operand2));}

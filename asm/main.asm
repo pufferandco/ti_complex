@@ -1,4 +1,4 @@
-#include "bin/asm/include.inc"
+#include "asm/include.inc"
 .assume	ADL=1
 stackStart .equ saveSScreen+768
 .org	userMem-2
@@ -10,12 +10,9 @@ stackStart .equ saveSScreen+768
 	call         _homeup
 	call         _ClrScrnFull
 	             
-	             
-	ld           H,%00000000
+	;[12:var, 7:hello, 6::, 7:double, 5:=, 7:326]
+	ld           HL,326.0
 	push         HL
-	pop          AF
-	call         print_bool
-	call         _NewLine
 	             
 ProgramExit:
 	call         _GetKey
@@ -23,7 +20,7 @@ ProgramExit:
 	res          donePrgm,(iy+doneFlags)
 	ld           SP,(StackSave)
 	ret          
-#include "bin/asm/api.asm"
+#include "asm/api.asm"
 StackSave:
 	.db          0,0,0
 

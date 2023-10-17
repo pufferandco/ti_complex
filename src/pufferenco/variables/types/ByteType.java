@@ -22,16 +22,16 @@ public class ByteType implements DataType {
 
     @Override
     public StackElement getStackVariable(StackElement element, AssemblyBuilder builder) {
-        builder.append_ld("HL", "("+StackStart + "-" + (element.location+3)+")");
-        builder.append_push("HL");
+        builder.append_ld("A", "("+StackStart + "-" + (element.location+3)+")");
+        builder.append_push("A");
         return element;
     }
 
     @Override
     public void setValue(StackElement variable, StackElement newValue, AssemblyBuilder builder) {
         convertFrom(newValue, builder, false);
-        builder.append_pop("HL");
-        builder.append_ld("("+StackStart + "-" + (variable.location+3)+")", "HL");
+        builder.append_pop("AF");
+        builder.append_ld("("+StackStart + "-" + (variable.location+3)+")", "A");
     }
 
     @Override
@@ -111,7 +111,50 @@ public class ByteType implements DataType {
             builder.append_push("HL");
 
             return new StackElement("byte_mlt_" + right.name, Data_type_id);
+        });
 
+        Operators.put(">", (AssemblyBuilder builder, StackElement right)->{
+            convertFrom(right, builder, true);
+
+            builder.append_pop("HL");
+            builder.append_pop("AF");
+            builder.append_call("byte_higher");
+            builder.append_push("HL");
+
+            return new StackElement("byte_compare", DataType.BOOL);
+        });
+
+        Operators.put("<", (AssemblyBuilder builder, StackElement right)->{
+            convertFrom(right, builder, true);
+
+            builder.append_pop("HL");
+            builder.append_pop("AF");
+            builder.append_call("byte_smaller");
+            builder.append_push("HL");
+
+            return new StackElement("byte_compare", DataType.BOOL);
+        });
+
+        Operators.put("=>", (AssemblyBuilder builder, StackElement right)->{
+            convertFrom(right, builder, true);
+
+            builder.append_pop("HL");
+            builder.append_pop("AF");
+            builder.append_call("byte_higher_or_equals");
+            builder.append_push("HL");
+
+            return new StackElement("byte_compare", DataType.BOOL);
+        });
+
+        Operators.put("<=", (AssemblyBuilder builder, StackElement right)->{
+            convertFrom(right, builder, true);
+
+            builder.append_pop("HL");
+            builder.append_pop("AF");
+            builder.append_call("byte_lower_or_equals");
+            builder.append_push("HL");
+
+            return new StackElement("byte_compare", DataType.BOOL);
         });
     }
 

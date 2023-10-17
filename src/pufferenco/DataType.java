@@ -4,13 +4,14 @@ import pufferenco.variables.DataStack;
 import pufferenco.variables.StackElement;
 import pufferenco.variables.types.BooleanType;
 import pufferenco.variables.types.ByteType;
+import pufferenco.variables.types.IntType;
 import pufferenco.variables.types.StringType;
 
 public interface DataType {
     String[] NAMES = {"byte", "double", "string", "null", "bool"};
-    DataType[] TYPES = {new ByteType(), null, new StringType(), null, new BooleanType()};
+    DataType[] TYPES = {new ByteType(), new IntType(), new StringType(), null, new BooleanType()};
     int BYTE = 0;
-    int DOUBLE = 1;
+    int INT = 1;
     int STRING = 2;
     int NULL = 3;
     int BOOL = 4;
