@@ -53,6 +53,15 @@ public class NativeFunction {
                 new AssemblyLine("call", "_DispHL"),
                 new AssemblyLine("call","_NewLine")
         ));
+        new NativeFunction("print", new int[]{BOOL}, NULL, List.of(
+                new AssemblyLine("pop", "AF"),
+                new AssemblyLine("call", "print_bool")
+        ));
+        new NativeFunction("printLn", new int[]{BOOL}, NULL, List.of(
+                new AssemblyLine("pop", "AF"),
+                new AssemblyLine("call", "print_bool"),
+                new AssemblyLine("call","_NewLine")
+        ));
         new NativeFunction("len", new int[]{STRING}, DOUBLE, List.of(
                 new AssemblyLine("pop", "HL"),
                 new AssemblyLine("call", "get_string_size"),

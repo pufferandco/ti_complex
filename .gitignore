@@ -11,10 +11,8 @@ out/
 .settings
 .springBeans
 .sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
+bin/out.8xp
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

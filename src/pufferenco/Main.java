@@ -35,6 +35,7 @@ public class Main {
         List<List<Token>> tokenLines = Token.tokenizeLines(code);
         for (List<Token> tokens : tokenLines) {
             builder.tIC_line++;
+            System.out.println(tokens);
             globalReader.read(tokens, builder);
             builder.append((new AssemblyLine("")));
         }

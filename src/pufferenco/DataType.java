@@ -13,6 +13,7 @@ public interface DataType {
     int DOUBLE = 1;
     int STRING = 2;
     int NULL = 3;
+    int BOOL = 4;
 
     static DataType getInstance(int type){
         return TYPES[type];

@@ -37,18 +37,17 @@ public class BooleanType implements DataType {
     @Override
     public StackElement convertFrom(StackElement old, AssemblyBuilder builder, boolean keep_constant) {
         if(old.type != Data_type_id) {
-            builder.error("cannot convert value to bool");
+            builder.error("cannot convert " + DataType.NAMES[old.type] + " to bool");
             throw new RuntimeException();
         }
-        if(old.is_constant && !keep_constant){
+        if(old.is_constant){
             old.is_constant = false;
-            try{
-                builder.append_ld("HL", String.valueOf(old.Constant_value));
-                builder.append_push("HL");
-                return old;
-            }catch (NumberFormatException e){
-                builder.error("constant value is not a bool");
-            }
+            if(old.Constant_value.equals("true"))
+                builder.append_ld("HL", "%11111111");
+            else
+                builder.append_ld("HL", "%00000000");
+            builder.append_push("HL");
+            return old;
         }
         return old;
     }
@@ -69,14 +68,23 @@ public class BooleanType implements DataType {
             builder.append_pop("HL");
             builder.append_pop("AF");
             builder.append_and("A","H");
-            builder.append_push("A");
+            builder.append_push("AF");
             return right;
         }));
         Operators.put("or", ((builder, right) -> {
+            right = convertFrom(right, builder, false);
             builder.append_pop("HL");
             builder.append_pop("AF");
-            builder.append_and("A","H");
-            builder.append_push("A");
+            builder.append_or("A","H");
+            builder.append_push("AF");
+            return right;
+        }));
+        Operators.put("xor", ((builder, right) -> {
+            right = convertFrom(right, builder, false);
+            builder.append_pop("HL");
+            builder.append_pop("AF");
+            builder.append_xor("A","H");
+            builder.append_push("AF");
             return right;
         }));
     }

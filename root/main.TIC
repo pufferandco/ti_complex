@@ -1,4 +1,1 @@
-var hello: string = "gello";
-printLn(hello);
-hello = "hello";
-printLn(hello);
+printLn(false);

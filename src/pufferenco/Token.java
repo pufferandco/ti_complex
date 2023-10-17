@@ -26,6 +26,10 @@ public class Token {
         int VAL = 13;
         int AND = 14;
         int OR = 15;
+        int XOR = 16;
+        int TRUE = 17;
+        int FALSE = 18;
+
     }
     private static final Pattern IDENTIFIER_TOKENS = Pattern.compile("[a-zA-Z0-9_]");
     private static final Character[] ARITHMETIC_TOKENS = {'+', '*', '-', '/', '=', '^', '<', '>', '%'};
@@ -33,7 +37,7 @@ public class Token {
     private static final Character[] SUB_ENTER_TOKENS = {'(', '{', '[', '"', '\''};
     private static final Character[] SUB_LEAVE_TOKENS = {')', '}', ']', '"', '\''};
 
-    private static final String[] KEYWORDS = {"fun", "def", "var", "val", "and", ""};
+    private static final String[] KEYWORDS = {"fun", "def", "var", "val", "and","or", "xor", "true", "false"};
 
 
     static ArrayList<Token> tokenize(String content){
@@ -146,7 +150,7 @@ public class Token {
     public int type;
 
     private Token(String content, int type){
-        if(isInArray(content.toLowerCase(), KEYWORDS)){
+        if(type == TokenTypes.IDENTIFIER && isInArray(content.toLowerCase(), KEYWORDS)){
             this.content = content.toLowerCase();
             this.type = inArray(content.toLowerCase(), KEYWORDS) + 10;
         }else {

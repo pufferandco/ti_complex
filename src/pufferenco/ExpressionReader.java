@@ -45,9 +45,15 @@ public class ExpressionReader {
         while(stream.isNotEmpty()) {
             Token token = stream.read();
             type = switch (token.type) {
-                case Token.TokenTypes.QUOTE, Token.TokenTypes.DOUBLE_QUOTE -> evalString(token, stream, builder, type);
-                case Token.TokenTypes.IDENTIFIER, Token.TokenTypes.ARITHMETIC-> evalIdentifier(token, stream, builder, type, allow_constant);
-                case Token.TokenTypes.ROUND_BRACKETS-> evalExpression(new TokenStream(Token.tokenize(token.content), builder), builder, allow_constant);
+                case Token.TokenTypes.QUOTE, Token.TokenTypes.DOUBLE_QUOTE
+                        -> evalString(token, stream, builder, type);
+                case Token.TokenTypes.IDENTIFIER, Token.TokenTypes.ARITHMETIC, Token.TokenTypes.AND, Token.TokenTypes.OR, Token.TokenTypes.XOR
+                        -> evalIdentifier(token, stream, builder, type, allow_constant);
+                case Token.TokenTypes.ROUND_BRACKETS
+                        -> evalExpression(new TokenStream(Token.tokenize(token.content), builder), builder, allow_constant);
+                case Token.TokenTypes.TRUE, Token.TokenTypes.FALSE
+                        -> evalBool(token, builder, allow_constant);
+
                 default -> {
                     builder.error("unknown parameter" + token.content);
                     yield null;
@@ -66,7 +72,7 @@ public class ExpressionReader {
         while(tokenStream.isNotEmpty()){
             Token current = tokenStream.read();
 
-            if(current.type == Token.TokenTypes.ARITHMETIC || current.type == Token.TokenTypes.AND || current.type == Token.TokenTypes.OR){
+            if(current.type == Token.TokenTypes.ARITHMETIC || current.type == Token.TokenTypes.AND || current.type == Token.TokenTypes.OR || current.type == Token.TokenTypes.XOR){
                 prev = DataType.getInstance(prev.type)
                         .callOperator(
                                 operator.content, builder,
@@ -114,7 +120,7 @@ public class ExpressionReader {
                 return Variable.get(token.content, builder);
 
         }else{
-            if(token.type == Token.TokenTypes.ARITHMETIC)
+            if(token.type == Token.TokenTypes.ARITHMETIC || token.type == Token.TokenTypes.AND || token.type == Token.TokenTypes.OR || token.type == Token.TokenTypes.XOR)
                 return evalMathematicsExpression(token, tokenStream, builder, prev, allow_constant);
         }
 
@@ -136,5 +142,19 @@ public class ExpressionReader {
         } catch (NumberFormatException ignore) {
             return null;
         }
+    }
+
+    private static StackElement evalBool(Token token, AssemblyBuilder builder, boolean allow_constant){
+            if(allow_constant){
+                return new StackElement("boolC_" + Main.getId(), DataType.BOOL, token.content);
+            }else {
+                if(token.type == Token.TokenTypes.TRUE)
+                    builder.append_ld("H", "%11111111");
+                else
+                    builder.append_ld("H", "%00000000");
+                builder.append_push("HL");
+                return new StackElement("bool_" + Main.getId(), DataType.BOOL);
+            }
+
     }
 }
