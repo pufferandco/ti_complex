@@ -8,7 +8,7 @@ import pufferenco.variables.types.IntType;
 import pufferenco.variables.types.StringType;
 
 public interface DataType {
-    String[] NAMES = {"byte", "double", "string", "null", "bool"};
+    String[] NAMES = {"byte", "int", "string", "null", "bool"};
     DataType[] TYPES = {new ByteType(), new IntType(), new StringType(), null, new BooleanType()};
     int BYTE = 0;
     int INT = 1;

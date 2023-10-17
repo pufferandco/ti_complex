@@ -12,7 +12,6 @@ out/
 .springBeans
 .sts4-cache
 
-bin/out.8xp
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
@@ -26,3 +25,8 @@ bin/out.8xp
 ### Mac OS ###
 .DS_Store
 /.idea/
+
+### ti_compile ###
+bin/out.8xp
+bin/out.lst
+asm/main.asm

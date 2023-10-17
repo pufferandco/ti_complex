@@ -1,1 +1,1 @@
-var hello: double = 326;
+var hello: int = 326;

@@ -10,8 +10,8 @@ stackStart .equ saveSScreen+768
 	call         _homeup
 	call         _ClrScrnFull
 	             
-	;[12:var, 7:hello, 6::, 7:double, 5:=, 7:326]
-	ld           HL,326.0
+	;[12:var, 7:hello, 6::, 7:int, 5:=, 7:326]
+	ld           HL,326
 	push         HL
 	             
 ProgramExit:
