@@ -295,3 +295,94 @@ byte_lower_or_equals:
 byte_lower_or_equals__true:
     ld	    H, %00000000
     ret
+
+
+
+stack_to_call_stack:       ; append_to_call_stack()
+    ld      HL, 0           ; pointer(HL) old_stack = StackPointer
+    add     HL, SP          ;;
+
+    ld      SP, (CallStack) ; StackPointer(SP) = CallStack
+    push    HL              ; move old_stack(HL -> STACK)
+    ld      (CallStack), SP ; StackPointer(SP) = CallStack
+
+    ld      SP, HL
+    ret
+
+
+
+snapshot_to_call_stack:       ; append_to_call_stack(pointer(DE) return_pointer)
+    ld      IX, 0           ; pointer(HL) old_stack = StackPointer
+    add     IX, SP          ;;
+
+    ld      SP, (CallStack) ; StackPointer(SP) = CallStack
+    push    IX              ; move old_stack(HL -> STACK)
+    push    DE              ; move return_pointer(DE -> STACK)
+    ld      (CallStack), SP ; StackPointer(SP) = CallStack
+
+    ld      SP, HL
+    ret
+
+
+
+snapshot_from_call_stack:   ; append_to_call_stack(pointer(DE) return_pointer)
+    ld      HL, 0           ; pointer(HL) old_stack = StackPointer
+    add     HL, SP          ;;
+
+    ld      SP, (CallStack) ; StackPointer(SP) = CallStack
+    pop     BC              ; move return_pointer(DE -> STACK)
+    pop     HL              ; move old_stack(HL -> STACK)
+    ld      (CallStack), SP ; StackPointer(SP) = CallStack
+
+    ld      SP, HL
+    ret
+
+
+
+int_smaller:
+    or a
+    sbc hl, de
+    add hl, de
+    jp  Z, int_smaller__false
+    jp  C, int_smaller__false
+    ld  A, %11111111
+    ret
+int_smaller__false:
+    ld  A, %00000000
+
+
+
+int_higher:
+    or a
+    sbc hl, de
+    add hl, de
+    jp  Z, int_smaller__false
+    jp  NC, int_smaller__false
+    ld  A, %11111111
+    ret
+int_smaller__false:
+    ld  A, %00000000
+
+
+
+int_higher_or_equals:
+    or a
+    sbc hl, de
+    add hl, de
+    jp  NC, int_smaller__false
+    ld  A, %11111111
+    ret
+int_higher_or_equals__false:
+    ld  A, %00000000
+
+
+
+int_smaller_or_equals:
+    or a
+    sbc hl, de
+    add hl, de
+    jp  C, int_smaller__false
+    ld  A, %11111111
+    ret
+int_smaller_or_equals__false:
+    ld  A, %00000000

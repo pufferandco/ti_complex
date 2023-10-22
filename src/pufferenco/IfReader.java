@@ -1,24 +1,43 @@
 package pufferenco;
 
+import pufferenco.variables.DataStack;
 import pufferenco.variables.StackElement;
 
 import static pufferenco.Main.tokenizeAndRun;
 
 class IfReader {
-    static void read(TokenStream stream, AssemblyBuilder builder, String end_id) {
+    static void read(TokenStream stream, AssemblyBuilder builder) {
         header(stream, builder);
+        String end_id = "if_end_" + Main.getId();
 
         Token if_block = stream.read();
         if (if_block.type != Token.TokenTypes.CURLY_BRACKETS) {
             builder.error("no code block following if statement");
         }
-        if (!stream.isNotEmpty()) {
+
+        if (stream.isEmpty()) {
+            builder.append_ld("HL", "0");
+            builder.append_add("HL", "SP");
+            builder.append_ld("SP", "(" + DataStack.CallStack + ")");
+            builder.append_push("HL");
+            builder.append_ld("(" + DataStack.CallStack + ")", "SP");
+            builder.append_ld("SP", "HL");
+
             builder.append_pop("AF");
             builder.append_cp("A", "%11111111");
             builder.append_jp("NZ", end_id);
+
             tokenizeAndRun(if_block.content, builder);
+
+            builder.append_tag(end_id);
+
+            builder.append_ld("SP", "(" + DataStack.CallStack + ")");
+            builder.append_pop("HL");
+            builder.append_ld("(" + DataStack.CallStack + ")", "SP");
+            builder.append_ld("SP", "HL");
             return;
         }
+
         Token following_statement = stream.read();
         if (following_statement.type == Token.TokenTypes.ELSE) {
             Token else_block = stream.read();
@@ -26,21 +45,51 @@ class IfReader {
                 builder.error("no code block following else statement");
             }
             String else_start = "true_end_" + Main.getId();
+
+            builder.append_ld("HL", "0");
+            builder.append_add("HL", "SP");
+            builder.append_ld("SP", "(" + DataStack.CallStack + ")");
+            builder.append_push("HL");
+            builder.append_ld("(" + DataStack.CallStack + ")", "SP");
+            builder.append_ld("SP", "HL");
+
             builder.append_pop("AF");
             builder.append_cp("A", "%11111111");
             builder.append_jp("NZ", else_start);
+
             tokenizeAndRun(if_block.content, builder);
+
             builder.append_jp(end_id);
             builder.append_tag(else_start);
+
             tokenizeAndRun(else_block.content, builder);
+
+            builder.append_tag(end_id);
+
+            builder.append_ld("SP", "(" + DataStack.CallStack + ")");
+            builder.append_pop("HL");
+            builder.append_ld("(" + DataStack.CallStack + ")", "SP");
+            builder.append_ld("SP", "HL");
+
+
             return;
         }
         if (following_statement.type == Token.TokenTypes.ELIF) {
             String next_end = "elif_next_" + Main.getId();
+
+            builder.append_ld("HL", "0");
+            builder.append_add("HL", "SP");
+            builder.append_ld("SP", "(" + DataStack.CallStack + ")");
+            builder.append_push("HL");
+            builder.append_ld("(" + DataStack.CallStack + ")", "SP");
+            builder.append_ld("SP", "HL");
+
             builder.append_pop("AF");
             builder.append_cp("A", "%11111111");
             builder.append_jp("NZ", next_end);
+
             tokenizeAndRun(if_block.content, builder);
+
             builder.append_jp(end_id);
             builder.append_tag(next_end);
 
@@ -55,6 +104,7 @@ class IfReader {
                     }
 
                     tokenizeAndRun(else_block.content, builder);
+                    builder.append_tag(end_id);
                     return;
                 }
                 if (next_statement.type == Token.TokenTypes.ELIF) {
@@ -76,13 +126,13 @@ class IfReader {
                 }
                 builder.error("if statement is not closed");
             }
-            return;
+            builder.append_tag(end_id);
+
+            builder.append_ld("SP", "(" + DataStack.CallStack + ")");
+            builder.append_pop("HL");
+            builder.append_ld("(" + DataStack.CallStack + ")", "SP");
+            builder.append_ld("SP", "HL");
         }
-
-
-
-
-
     }
 
     private static void header(TokenStream stream, AssemblyBuilder builder) {

@@ -27,6 +27,10 @@ public class TokenStream {
         return index < tokens.size();
     }
 
+    public boolean isEmpty(){
+        return index >= tokens.size();
+    }
+
     public TokenStream split(Function<Token, Boolean> evaluator, boolean isInclusive){
         LinkedList<Token> list = new LinkedList<>();
         Token currentToken;

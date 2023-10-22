@@ -1,10 +1,6 @@
-var age: byte = 150;
-if(age > 100){
-    printLn("ancient age");
-}elif(age > 30){
-    printLn("aging");
-}elif(age > 15){
-    printLn("prime age");
-}else{
-    printLn("baby");
+var i: byte = 5;
+while(i > 0) {
+    printLn(i);
+    i = i - 1;
 };
+printLn(i);

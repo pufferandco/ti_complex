@@ -68,6 +68,11 @@ public class NativeFunction {
                 new AssemblyLine("dec", "HL"),
                 new AssemblyLine("push", "HL")
         ));
+        new NativeFunction("not", new int[]{BOOL}, BOOL, List.of(
+                new AssemblyLine("pop", "AF"),
+                new AssemblyLine("CPL"),
+                new AssemblyLine("push", "AF")
+        ));
     }
 
     public static StackElement exec(String name, List<StackElement> params, AssemblyBuilder builder, boolean returns){

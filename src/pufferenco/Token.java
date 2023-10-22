@@ -21,7 +21,7 @@ public class Token {
         int DOUBLE_QUOTE = 3;
         int QUOTE = 4;
         int FUN = 10;
-        int DEF = 11;
+        int WHILE = 11;
         int VAR = 12;
         int VAL = 13;
         int AND = 14;
@@ -39,7 +39,7 @@ public class Token {
     private static final Character[] SUB_ENTER_TOKENS = {'(', '{', '[', '"', '\''};
     private static final Character[] SUB_LEAVE_TOKENS = {')', '}', ']', '"', '\''};
 
-    private static final String[] KEYWORDS = {"fun", "def", "var", "val", "and","or", "xor", "true", "false", "if", "else", "elif"};
+    private static final String[] KEYWORDS = {"fun", "while", "var", "val", "and","or", "xor", "true", "false", "if", "else", "elif"};
 
 
     static ArrayList<Token> tokenize(String content){

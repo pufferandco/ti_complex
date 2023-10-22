@@ -8,7 +8,9 @@ import java.util.LinkedList;
 public class DataStack {
     private final LinkedList<StackElement> stack = new LinkedList<>();
     private int size = 0;
-    public static final String StackStart = "stackStart";
+    public int max_size = 0;
+    public static final String STACK_START = "stackStart";
+    public static final String CallStack = "callStack";
 
     public StackElement push(String name, int size, int type, AssemblyBuilder builder){
         return push(new StackElement(name, size, type, this.size), builder);
@@ -22,6 +24,7 @@ public class DataStack {
         element.location = size;
         stack.add(element);
         size += element.size * 3;
+        max_size = Math.max(max_size, size);
         return element;
     }
 
@@ -44,5 +47,8 @@ public class DataStack {
                 return stackElement;
         }
         throw new RuntimeException("no variable exists with the name: " + name);
+    }
+    public void trim(int size){
+        stack.removeIf(stackElement -> stackElement.location > size);
     }
 }

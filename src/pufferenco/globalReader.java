@@ -1,9 +1,11 @@
 package pufferenco;
 
+import pufferenco.variables.StackElement;
 import pufferenco.variables.Variable;
 
 import java.util.List;
 
+import static pufferenco.Main.Call_stack;
 import static pufferenco.Token.TokenTypes;
 class globalReader {
     static void read(List<Token> tokens, AssemblyBuilder builder){
@@ -18,16 +20,20 @@ class globalReader {
                     else if(Variable.exists(token.content))
                         Variable.set(token.content, builder, stream);
                     else
-                        throw new RuntimeException("unknown function: " + token.content);
+                        builder.error("unknown token: " + token.content);
                 }
                 case TokenTypes.IF -> {
-                    String end_id = "end_if_" + Main.getId();
-                    IfReader.read(stream, builder, end_id);
-                    builder.append_tag(end_id);
+                    Variable.increase_scope(builder);
+                    IfReader.read(stream, builder);
+                    Variable.decrease_scope();
+                }case TokenTypes.WHILE -> {
+                    Variable.increase_scope(builder);
+                    WhileReader.read(stream, builder);
+                    Variable.decrease_scope();
                 }
                 case TokenTypes.NEW_LINE -> builder.tIC_line++;
                 case TokenTypes.VAR -> Variable.init(stream, builder);
-                default -> throw new RuntimeException("unknown global token: " + token.content);
+                default -> builder.error("unknown token: " + token.content);
             }
         }
     }

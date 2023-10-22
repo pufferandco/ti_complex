@@ -1,75 +1,68 @@
 #include "asm/include.inc"
 .assume	ADL=1
-stackStart .equ saveSScreen+768
 .org	userMem-2
 	.db          tExtTok,tAsm84CeCmp
 	             
 	ld           (StackSave),SP
+	ld           HL,callStackStart
+	ld           (callStack),HL
 	ld           SP,stackStart
 	call         init
 	call         _homeup
 	call         _ClrScrnFull
 	             
 	             
-	ld           H,150
+	ld           H,5
 	push         HL
 	             
 	ld           HL,(stackStart-3)
 	push         HL
-	ld           H,100
+	ld           H,0
 	push         HL
 	pop          AF
 	pop          HL
 	call         byte_higher
 	push         HL
+while_start5:
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	push         HL
+	ld           (callStack),SP
+	ld           SP,HL
 	pop          AF
 	cp           A,%11111111
-	jp           NZ,elif_next_4
+	jp           NZ,while_end6
 	             
-	ld           HL,string_5
-	call         _PutS
-	call         _NewLine
-	jp           end_if_2
-elif_next_4:
 	ld           HL,(stackStart-3)
 	push         HL
-	ld           H,30
-	push         HL
-	pop          AF
-	pop          HL
-	call         byte_higher
-	push         HL
-	pop          AF
-	cp           A,%11111111
-	jp           NZ,elif_next_7
-	             
-	ld           HL,string_8
-	call         _PutS
+	pop          DE
+	ld           HL,0
+	ld           L,D
+	call         _DispHL
 	call         _NewLine
-	jp           end_if_2
-elif_next_7:
+	             
 	ld           HL,(stackStart-3)
 	push         HL
-	ld           H,15
-	push         HL
+	ld           H,1
 	pop          AF
+	sub          A,H
+	ld           H,A
+	ld           (stackStart-3),HL
+	ld           SP,(callStack)
 	pop          HL
-	call         byte_higher
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           while_start5
+while_end6:
+	             
+	ld           HL,(stackStart-3)
 	push         HL
-	pop          AF
-	cp           A,%11111111
-	jp           NZ,elif_next_10
-	             
-	ld           HL,string_11
-	call         _PutS
+	pop          DE
+	ld           HL,0
+	ld           L,D
+	call         _DispHL
 	call         _NewLine
-	jp           end_if_2
-elif_next_10:
-	             
-	ld           HL,string_12
-	call         _PutS
-	call         _NewLine
-end_if_2:
 	             
 ProgramExit:
 	call         _GetKey
@@ -80,12 +73,8 @@ ProgramExit:
 #include "asm/api.asm"
 StackSave:
 	.db          0,0,0
+CallStack:
+	.db          0,0,0
+stackStart .equ saveSScreen+762
+callStackStart .equ saveSScreen+768
 
-string_5:
-	.db          "ancient age", 0
-string_8:
-	.db          "aging", 0
-string_11:
-	.db          "prime age", 0
-string_12:
-	.db          "baby", 0

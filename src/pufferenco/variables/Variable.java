@@ -2,10 +2,13 @@ package pufferenco.variables;
 
 import pufferenco.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import static pufferenco.Main.Call_stack;
+
 public class Variable {
-    static HashMap<String, StackElement> Variables = new HashMap<>();
+    public static ArrayList<HashMap<String, StackElement>> Variables = new ArrayList<>();
     public static void init(TokenStream stream, AssemblyBuilder builder){
         Token name = stream.read();
         if(name.type != Token.TokenTypes.IDENTIFIER)
@@ -30,33 +33,65 @@ public class Variable {
 
 
         DataType dataType = DataType.TYPES[dataId];
-        Variables.put(name.content, dataType.initStackVariable(
+        Variables.get(Variables.size()-1).put(name.content, dataType.initStackVariable(
                 ExpressionReader.evalExpression(stream, builder, false),
-                Main.Data_stack,
+                Main.Variable_stack,
                 builder
         ));
     }
 
+    public static void increase_scope(AssemblyBuilder builder){
+        Call_stack.push(new StackElement("stack_save_" + Main.getId(), DataType.POINTER), builder);
+        Variables.add(new HashMap<>());
+    }
+
+    public static void decrease_scope(){
+        Variables.remove(Variables.size()-1);
+        Call_stack.pop();
+    }
+
     public static boolean exists(String name){
-        return Variables.containsKey(name);
+        for (int i = Variables.size() - 1; i >= 0; i--) {
+            HashMap<String, StackElement> current_scope = Variables.get(i);
+            if(current_scope.containsKey(name)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public static StackElement get(String name, AssemblyBuilder builder){
-        StackElement element = Variables.get(name);
-        return DataType.getInstance(element.type).getStackVariable(element,builder);
+        for (int i = Variables.size() - 1; i >= 0; i--) {
+            HashMap<String, StackElement> current_scope = Variables.get(i);
+            if(current_scope.containsKey(name)){
+                StackElement element = current_scope.get(name);
+                return DataType.getInstance(element.type).getStackVariable(element,builder);
+            }
+        }
+        builder.error("variable [" + name + "] does not exist");
+        throw new RuntimeException("variable [" + name + "] does not exist");
     }
 
     public static void set(String name, AssemblyBuilder builder, TokenStream stream){
-        StackElement element = Variables.get(name);
-        if(!stream.read().content.equals("="))
-            builder.error("no required token [=] after global mention of variable");
 
+        for (int i = Variables.size() - 1; i >= 0; i--) {
+            HashMap<String, StackElement> current_scope = Variables.get(i);
+            if(current_scope.containsKey(name)){
+                StackElement element = current_scope.get(name);
+                if(!stream.read().content.equals("="))
+                    builder.error("no required token [=] after global mention of variable");
 
+                DataType.getInstance(element.type).setValue(
+                        element,
+                        ExpressionReader.evalExpression(stream, builder, false),
+                        builder
+                );
+                return;
+            }
+        }
+    }
 
-        DataType.getInstance(element.type).setValue(
-                element,
-                ExpressionReader.evalExpression(stream, builder, false),
-                builder
-        );
+    public Variable(String name, int size, int type){
+        Variables.get(Variables.size()-1).put(name, new StackElement(name, size, type));
     }
 }

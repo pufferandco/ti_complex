@@ -9,7 +9,7 @@ import pufferenco.variables.StackElement;
 import java.util.HashMap;
 import java.util.function.BiFunction;
 
-import static pufferenco.variables.DataStack.StackStart;
+import static pufferenco.variables.DataStack.STACK_START;
 
 public class IntType implements DataType {
     public static final int Data_type_id = 1;
@@ -17,12 +17,12 @@ public class IntType implements DataType {
     @Override
     public StackElement initStackVariable(StackElement value, DataStack stack, AssemblyBuilder builder) {
         value.name = "var_int_" + Main.getId();
-        return stack.push(value, builder);
+        return stack.push(stack.push(convertFrom(value, builder, false), builder), builder);
     }
 
     @Override
     public StackElement getStackVariable(StackElement element, AssemblyBuilder builder) {
-        builder.append_ld("HL", "("+StackStart + "-" + (element.location+3)+")");
+        builder.append_ld("HL", "("+ STACK_START + "-" + (element.location+3)+")");
         builder.append_push("HL");
         return element;
     }
@@ -68,31 +68,40 @@ public class IntType implements DataType {
     @Override
     public void init() {
         Operators.put("+", ((builder, right) -> {
-            convertFrom(right, builder, false);
+            convertFrom(right, builder, true);
 
             builder.append_pop("HL");
-            builder.append_pop("DE");
-            builder.append_add("HL", "DE");
+            if(right.is_constant) {
+                builder.append_add("HL", right.Constant_value.toString());
+            }else{
+                builder.append_pop("DE");
+                builder.append_add("HL", "DE");
+            }
             builder.append_push("HL");
             return new StackElement("int_sum_" + Main.getId(), Data_type_id);
         }));
 
         Operators.put("-", ((builder, right) -> {
-            convertFrom(right, builder, false);
+            convertFrom(right, builder, true);
             builder.append_pop("HL");
-            builder.append_pop("DE");
-            builder.append_add("A", "0");
-            builder.append_ex("HL", "DE");
-            builder.append_sbc("HL", "DE");
+            builder.append_or("A", "A");
+            if(right.is_constant) {
+                builder.append_sbc("HL", right.Constant_value.toString());
+            }else{
+                builder.append_pop("DE");
+                builder.append_ex("HL", "DE");
+                builder.append_sbc("HL", "DE");
+            }
             builder.append_push("HL");
             return new StackElement("int_sub_" + Main.getId(), Data_type_id);
         }));
+
     }
 
     @Override
     public void setValue(StackElement variable, StackElement newValue, AssemblyBuilder builder) {
         convertFrom(newValue, builder, false);
         builder.append_pop("HL");
-        builder.append_ld("("+StackStart + "-" + (variable.location+3)+")", "HL");
+        builder.append_ld("("+ STACK_START + "-" + (variable.location+3)+")", "HL");
     }
 }

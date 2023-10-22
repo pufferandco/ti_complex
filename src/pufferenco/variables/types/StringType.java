@@ -1,12 +1,11 @@
 package pufferenco.variables.types;
 
 import pufferenco.AssemblyBuilder;
-import pufferenco.AssemblyLine;
 import pufferenco.DataType;
 import pufferenco.variables.DataStack;
 import pufferenco.variables.StackElement;
 
-import static pufferenco.variables.DataStack.StackStart;
+import static pufferenco.variables.DataStack.STACK_START;
 
 public class StringType implements DataType {
     public static int Data_type_id = 2;
@@ -22,7 +21,7 @@ public class StringType implements DataType {
 
     @Override
     public StackElement getStackVariable(StackElement element, AssemblyBuilder builder) {
-        builder.append_ld("HL", "("+StackStart + "-" + (element.location+3)+")");
+        builder.append_ld("HL", "("+ STACK_START + "-" + (element.location+3)+")");
         builder.append_push("HL");
         return element;
     }
@@ -49,12 +48,12 @@ public class StringType implements DataType {
     public void setValue(StackElement variable, StackElement newValue, AssemblyBuilder builder) {
         newValue = convertFrom(newValue, builder, false);
 
-        builder.append_ld("HL", "("+StackStart + "-" + (variable.location+3)+")");
+        builder.append_ld("HL", "("+ STACK_START + "-" + (variable.location+3)+")");
         builder.append_call("free");
 
         builder.append_pop("HL");
         builder.append_call("string_to_heap");
-        builder.append_ld("("+StackStart + "-" + (variable.location+3)+")", "DE");
+        builder.append_ld("("+ STACK_START + "-" + (variable.location+3)+")", "DE");
 
         newValue.location = variable.location;
     }
