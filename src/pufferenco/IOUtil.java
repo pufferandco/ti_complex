@@ -7,7 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public abstract class IOUtil {
-    public static String readTxt(String path){
+    public static String readTxt(String path) {
         try {
             return Files.readString(Path.of(path));
         } catch (IOException e) {

@@ -13,10 +13,12 @@ public class Main {
 
     public static AssemblyBuilder Constants = new AssemblyBuilder();
     public static Stack<DataStack> VariableStacks = new Stack<>();
-    public static DataStack Call_stack = new DataStack();
+    public static Stack<Function> Function_stack = new Stack<>();
+    public static DataStack Call_stack = new DataStack("");
     final static int OPTIMIZE_LEVEL = 1;
+
     public static void main(String[] args) {
-        DataStack global_stack = new DataStack();
+        DataStack global_stack = new DataStack("stackStart");
         VariableStacks.push(global_stack);
         AssemblyBuilder builder = new AssemblyBuilder();
         init();
@@ -28,8 +30,8 @@ public class Main {
         builder.append((new AssemblyLine("")));
         builder.append_ld("(StackSave)", "SP");
         builder.append_ld("HL", "callStackStart");
-        builder.append_ld("("+DataStack.CallStack +")", "HL");
-        builder.append_ld("SP", DataStack.STACK_START);
+        builder.append_ld("(" + DataStack.CallStack + ")", "HL");
+        builder.append_ld("SP", "stackStart");
         builder.append_call("init");
         builder.append_call("_homeup");
         builder.append_call("_ClrScrnFull");
@@ -47,7 +49,7 @@ public class Main {
         builder.append_tag("ProgramExit");
         builder.append_call("_GetKey");
         builder.append_call("_ClrScrnFull");
-        builder.append_res("donePrgm","(iy+doneFlags)");
+        builder.append_res("donePrgm", "(iy+doneFlags)");
         builder.append_ld("SP", "(StackSave)");
         builder.append_ret();
         builder.append(customAssemblyLine("#include \"asm/api.asm\""));
@@ -55,7 +57,7 @@ public class Main {
         builder.append_db("0,0,0");
         builder.append_tag("CallStack");
         builder.append_db("0,0,0");
-        builder.append(customAssemblyLine(DataStack.STACK_START + " .equ saveSScreen+" + (768 - 256)));
+        builder.append(customAssemblyLine("stackStart" + " .equ saveSScreen+" + (768 - 256)));
         builder.append(customAssemblyLine("callStackStart" + " .equ saveSScreen+768"));
 
 
@@ -65,7 +67,7 @@ public class Main {
                         + Constants.getAssembly());
     }
 
-    public static void tokenizeAndRun(String code, AssemblyBuilder builder){
+    public static void tokenizeAndRun(String code, AssemblyBuilder builder) {
         List<List<Token>> tokenLines = Token.tokenizeLines(code);
         for (List<Token> tokens : tokenLines) {
             builder.append(new AssemblyLine(""));
@@ -75,13 +77,14 @@ public class Main {
         builder.tIC_line++;
     }
 
-    private static void init(){
+    private static void init() {
         NativeFunction.init();
         DataType.staticInit();
     }
 
     private static long id = 0;
-    public static String getId(){
+
+    public static String getId() {
         return String.valueOf(id++);
     }
 }

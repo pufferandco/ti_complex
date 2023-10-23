@@ -16,12 +16,14 @@ public interface DataType {
     int NULL = 3;
     int BOOL = 4;
     int POINTER = 5;
-    static DataType getInstance(int type){
+
+    static DataType getInstance(int type) {
         return TYPES[type];
     }
-    static void staticInit(){
+
+    static void staticInit() {
         for (DataType dataType : TYPES) {
-            if(dataType == null)
+            if (dataType == null)
                 continue;
             dataType.init();
         }
@@ -36,9 +38,10 @@ public interface DataType {
     StackElement convertFrom(StackElement old, AssemblyBuilder builder, boolean keep_constant);
 
     StackElement callOperator(String operator, AssemblyBuilder builder, StackElement right);
+
     void init();
 
-    void setValue(StackElement variable,StackElement newValue, AssemblyBuilder builder);
+    void setValue(StackElement variable, StackElement newValue, AssemblyBuilder builder);
 
     int getId();
 

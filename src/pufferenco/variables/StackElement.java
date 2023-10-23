@@ -2,7 +2,7 @@ package pufferenco.variables;
 
 import pufferenco.Main;
 
-public class StackElement{
+public class StackElement {
     public String name;
     public final int size;
     public final int type;

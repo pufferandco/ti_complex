@@ -34,27 +34,25 @@ public class ExpressionReader {
                 parameter.add(token);
             }
         }
-        if(!parameter.isEmpty())
+        if (!parameter.isEmpty())
             type_list.add(evalExpression(new TokenStream(parameter, builder), builder, false));
         return type_list;
     }
 
     public static StackElement evalExpression(TokenStream stream, AssemblyBuilder builder, boolean allow_constant) {
-        if(stream.isEmpty())
+        if (stream.isEmpty())
             return null;
         StackElement type = null;
 
-        while(stream.isNotEmpty()) {
+        while (stream.isNotEmpty()) {
             Token token = stream.read();
             type = switch (token.type) {
-                case Token.TokenTypes.QUOTE, Token.TokenTypes.DOUBLE_QUOTE
-                        -> evalString(token, stream, builder, type);
-                case Token.TokenTypes.IDENTIFIER, Token.TokenTypes.ARITHMETIC, Token.TokenTypes.AND, Token.TokenTypes.OR, Token.TokenTypes.XOR
-                        -> evalIdentifier(token, stream, builder, type, allow_constant);
-                case Token.TokenTypes.ROUND_BRACKETS
-                        -> evalExpression(new TokenStream(Token.tokenize(token.content), builder), builder, allow_constant);
-                case Token.TokenTypes.TRUE, Token.TokenTypes.FALSE
-                        -> evalBool(token, builder, allow_constant);
+                case Token.TokenTypes.QUOTE, Token.TokenTypes.DOUBLE_QUOTE -> evalString(token, stream, builder, type);
+                case Token.TokenTypes.IDENTIFIER, Token.TokenTypes.ARITHMETIC, Token.TokenTypes.AND, Token.TokenTypes.OR, Token.TokenTypes.XOR ->
+                        evalIdentifier(token, stream, builder, type, allow_constant);
+                case Token.TokenTypes.ROUND_BRACKETS ->
+                        evalExpression(new TokenStream(Token.tokenize(token.content), builder), builder, allow_constant);
+                case Token.TokenTypes.TRUE, Token.TokenTypes.FALSE -> evalBool(token, builder, allow_constant);
 
                 default -> {
                     builder.error("unknown parameter" + token.content);
@@ -63,18 +61,18 @@ public class ExpressionReader {
             };
         }
 
-        if(type == null)
+        if (type == null)
             builder.error("empty parameter");
         return type;
     }
 
-    private static StackElement evalMathematicsExpression(Token operator, TokenStream tokenStream, AssemblyBuilder builder, StackElement prev, boolean allow_constant){
+    private static StackElement evalMathematicsExpression(Token operator, TokenStream tokenStream, AssemblyBuilder builder, StackElement prev, boolean allow_constant) {
         LinkedList<Token> Tokens = new LinkedList<>();
 
-        while(tokenStream.isNotEmpty()){
+        while (tokenStream.isNotEmpty()) {
             Token current = tokenStream.read();
 
-            if(current.type == Token.TokenTypes.ARITHMETIC || current.type == Token.TokenTypes.AND || current.type == Token.TokenTypes.OR || current.type == Token.TokenTypes.XOR){
+            if (current.type == Token.TokenTypes.ARITHMETIC || current.type == Token.TokenTypes.AND || current.type == Token.TokenTypes.OR || current.type == Token.TokenTypes.XOR) {
                 prev = DataType.getInstance(prev.type)
                         .callOperator(
                                 operator.content, builder,
@@ -82,7 +80,7 @@ public class ExpressionReader {
                         );
                 operator = current;
                 Tokens = new LinkedList<>();
-            }else
+            } else
                 Tokens.add(current);
         }
 
@@ -94,7 +92,7 @@ public class ExpressionReader {
     }
 
     private static StackElement evalString(Token token, TokenStream tokenStream, AssemblyBuilder builder, StackElement prev) {
-        if(prev != null)
+        if (prev != null)
             builder.error("cannot have string as second parameter element");
 
         String id = "string_" + getId();
@@ -109,13 +107,13 @@ public class ExpressionReader {
     }
 
     private static StackElement evalIdentifier(Token token, TokenStream tokenStream, AssemblyBuilder builder, StackElement prev, boolean allow_constant) {
-        if(prev == null) {
+        if (prev == null) {
             StackElement byte_type = evalByte(token, builder, allow_constant);
-            if(byte_type != null)
+            if (byte_type != null)
                 return byte_type;
 
             StackElement double_type = evalInt(token, builder, allow_constant);
-            if(double_type != null)
+            if (double_type != null)
                 return double_type;
 
             if (NativeFunction.exists(token.content))
@@ -125,8 +123,8 @@ public class ExpressionReader {
             if (Variable.exists(token.content))
                 return Variable.get(token.content, builder);
 
-        }else{
-            if(token.type == Token.TokenTypes.ARITHMETIC || token.type == Token.TokenTypes.AND || token.type == Token.TokenTypes.OR || token.type == Token.TokenTypes.XOR)
+        } else {
+            if (token.type == Token.TokenTypes.ARITHMETIC || token.type == Token.TokenTypes.AND || token.type == Token.TokenTypes.OR || token.type == Token.TokenTypes.XOR)
                 return evalMathematicsExpression(token, tokenStream, builder, prev, allow_constant);
         }
 
@@ -134,15 +132,15 @@ public class ExpressionReader {
         return null;
     }
 
-    private static StackElement evalByte(Token token, AssemblyBuilder builder, boolean allow_constant){
+    private static StackElement evalByte(Token token, AssemblyBuilder builder, boolean allow_constant) {
         try {
             int number = Integer.parseInt(token.content);
-            if(number < 0 || number > 256)
+            if (number < 0 || number > 256)
                 return null;
 
-            if(allow_constant){
+            if (allow_constant) {
                 return new StackElement("byteC_" + Main.getId(), DataType.BYTE, number);
-            }else {
+            } else {
                 builder.append_ld("H", String.valueOf(number));
                 builder.append_push("HL");
                 return new StackElement("byte_" + Main.getId(), DataType.BYTE);
@@ -152,15 +150,15 @@ public class ExpressionReader {
         }
     }
 
-    private static StackElement evalInt(Token token, AssemblyBuilder builder, boolean allow_constant){
+    private static StackElement evalInt(Token token, AssemblyBuilder builder, boolean allow_constant) {
         try {
             int number = Integer.parseInt(token.content);
-            if(number < 0 || number > 60536)
+            if (number < 0 || number > 60536)
                 return null;
 
-            if(allow_constant){
+            if (allow_constant) {
                 return new StackElement("intC_" + Main.getId(), DataType.INT, number);
-            }else {
+            } else {
                 builder.append_ld("HL", String.valueOf(number));
                 builder.append_push("HL");
                 return new StackElement("int_" + Main.getId(), DataType.INT);
@@ -170,17 +168,17 @@ public class ExpressionReader {
         }
     }
 
-    private static StackElement evalBool(Token token, AssemblyBuilder builder, boolean allow_constant){
-            if(allow_constant){
-                return new StackElement("boolC_" + Main.getId(), DataType.BOOL, token.content);
-            }else {
-                if(token.type == Token.TokenTypes.TRUE)
-                    builder.append_ld("H", "%11111111");
-                else
-                    builder.append_ld("H", "%00000000");
-                builder.append_push("HL");
-                return new StackElement("bool_" + Main.getId(), DataType.BOOL);
-            }
+    private static StackElement evalBool(Token token, AssemblyBuilder builder, boolean allow_constant) {
+        if (allow_constant) {
+            return new StackElement("boolC_" + Main.getId(), DataType.BOOL, token.content);
+        } else {
+            if (token.type == Token.TokenTypes.TRUE)
+                builder.append_ld("H", "%11111111");
+            else
+                builder.append_ld("H", "%00000000");
+            builder.append_push("HL");
+            return new StackElement("bool_" + Main.getId(), DataType.BOOL);
+        }
 
     }
 }

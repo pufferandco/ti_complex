@@ -1,4 +1,7 @@
+printLn("hello");
+var gerard: byte = 52;
 fun hello(id: int){
     print("hello number");
     printLn(id);
 };
+printLn(gerard);

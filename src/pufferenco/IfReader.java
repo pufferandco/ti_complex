@@ -94,12 +94,12 @@ class IfReader {
             builder.append_tag(next_end);
 
             stream.backSpace();
-            while(stream.isNotEmpty()) {
+            while (stream.isNotEmpty()) {
                 Token next_statement = stream.read();
 
                 if (next_statement.type == Token.TokenTypes.ELSE) {
                     Token else_block = stream.read();
-                    if (else_block.type!= Token.TokenTypes.CURLY_BRACKETS) {
+                    if (else_block.type != Token.TokenTypes.CURLY_BRACKETS) {
                         builder.error("no code block following else statement");
                     }
 
@@ -111,7 +111,7 @@ class IfReader {
 
                     header(stream, builder);
                     if_block = stream.read();
-                    if (if_block.type!= Token.TokenTypes.CURLY_BRACKETS) {
+                    if (if_block.type != Token.TokenTypes.CURLY_BRACKETS) {
                         builder.error("no code block following else statement");
                     }
 
@@ -144,7 +144,7 @@ class IfReader {
         StackElement logic_value = ExpressionReader.evalExpression(
                 new TokenStream(Token.tokenize(logic_expression.content), builder), builder, false);
 
-        if (logic_value.type!= DataType.BOOL) {
+        if (logic_value.type != DataType.BOOL) {
             builder.error("if statement requires a boolean");
         }
     }

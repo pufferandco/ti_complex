@@ -7,12 +7,12 @@ import static pufferenco.Main.tokenizeAndRun;
 public class WhileReader {
     static void read(TokenStream stream, AssemblyBuilder builder) {
         Token while_condition = stream.read();
-        if(while_condition.type != Token.TokenTypes.ROUND_BRACKETS) {
+        if (while_condition.type != Token.TokenTypes.ROUND_BRACKETS) {
             builder.error("no condition block following while statement");
         }
 
         Token while_block = stream.read();
-        if (while_block.type!= Token.TokenTypes.CURLY_BRACKETS) {
+        if (while_block.type != Token.TokenTypes.CURLY_BRACKETS) {
             builder.error("no code block following while statement");
         }
         String while_start = "while_start" + Main.getId();

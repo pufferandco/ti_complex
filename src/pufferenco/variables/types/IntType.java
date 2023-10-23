@@ -9,11 +9,11 @@ import pufferenco.variables.StackElement;
 import java.util.HashMap;
 import java.util.function.BiFunction;
 
-import static pufferenco.variables.DataStack.STACK_START;
 
 public class IntType implements DataType {
-    public static final int Data_type_id = 1;
-    public static final HashMap<String, BiFunction<AssemblyBuilder, StackElement, StackElement>> Operators = new HashMap<>();
+    private static final int Data_type_id = 1;
+    private static final HashMap<String, BiFunction<AssemblyBuilder, StackElement, StackElement>> Operators = new HashMap<>();
+
     @Override
     public StackElement initStackVariable(StackElement value, DataStack stack, AssemblyBuilder builder) {
         value.name = "var_int_" + Main.getId();
@@ -22,31 +22,31 @@ public class IntType implements DataType {
 
     @Override
     public StackElement getStackVariable(StackElement element, AssemblyBuilder builder) {
-        builder.append_ld("HL", "("+ STACK_START + "-" + (element.location+3)+")");
+        builder.append_ld("HL", "(" + Main.VariableStacks.peek().stack_start + "-" + (element.location + 3) + ")");
         builder.append_push("HL");
         return element;
     }
 
     @Override
     public StackElement convertFrom(StackElement old, AssemblyBuilder builder, boolean keep_constant) {
-        if(old.type == Data_type_id) {
-            if(old.is_constant && !keep_constant){
+        if (old.type == Data_type_id) {
+            if (old.is_constant && !keep_constant) {
                 old.is_constant = false;
-                try{
+                try {
                     builder.append_ld("HL", String.valueOf(old.Constant_value));
                     builder.append_push("HL");
                     return old;
-                }catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
                     builder.error("constant value is not an integer");
                 }
             }
             return old;
         }
 
-        if(old.type == DataType.BYTE) {
+        if (old.type == DataType.BYTE) {
             builder.append_pop("DE");
-            builder.append_ld("HL","0");
-            builder.append_ld("L","D");
+            builder.append_ld("HL", "0");
+            builder.append_ld("L", "D");
             builder.append_push("HL");
             return new StackElement("converted_int_" + Main.getId(), Data_type_id);
         }
@@ -58,7 +58,7 @@ public class IntType implements DataType {
 
     @Override
     public StackElement callOperator(String operator, AssemblyBuilder builder, StackElement right) {
-        if(!Operators.containsKey(operator))
+        if (!Operators.containsKey(operator))
             builder.error("illegal operator [" + operator + "] with combination: " + DataType.NAMES[Data_type_id] + " and " + DataType.NAMES[right.type]);
 
         return Operators.get(operator).apply(builder, right);
@@ -70,9 +70,9 @@ public class IntType implements DataType {
             convertFrom(right, builder, true);
 
             builder.append_pop("HL");
-            if(right.is_constant) {
+            if (right.is_constant) {
                 builder.append_add("HL", right.Constant_value.toString());
-            }else{
+            } else {
                 builder.append_pop("DE");
                 builder.append_add("HL", "DE");
             }
@@ -84,9 +84,9 @@ public class IntType implements DataType {
             convertFrom(right, builder, true);
             builder.append_pop("HL");
             builder.append_or("A", "A");
-            if(right.is_constant) {
+            if (right.is_constant) {
                 builder.append_sbc("HL", right.Constant_value.toString());
-            }else{
+            } else {
                 builder.append_pop("DE");
                 builder.append_ex("DE", "HL");
                 builder.append_sbc("HL", "DE");
@@ -140,7 +140,7 @@ public class IntType implements DataType {
     public void setValue(StackElement variable, StackElement newValue, AssemblyBuilder builder) {
         convertFrom(newValue, builder, false);
         builder.append_pop("HL");
-        builder.append_ld("("+ STACK_START + "-" + (variable.location+3)+")", "HL");
+        builder.append_ld("(" + Main.VariableStacks.peek().stack_start + "-" + (variable.location + 3) + ")", "HL");
     }
 
     @Override

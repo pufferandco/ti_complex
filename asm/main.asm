@@ -12,6 +12,21 @@
 	call         _ClrScrnFull
 	             
 	             
+	ld           HL,string_1
+	call         _PutS
+	call         _NewLine
+	             
+	ld           H,52
+	push         HL
+	             
+	             
+	ld           HL,(stackStart-3)
+	push         HL
+	pop          DE
+	ld           HL,0
+	ld           L,D
+	call         _DispHL
+	call         _NewLine
 	             
 ProgramExit:
 	call         _GetKey
@@ -27,12 +42,18 @@ CallStack:
 stackStart .equ saveSScreen+512
 callStackStart .equ saveSScreen+768
 
-hello_2:
+hello_5:
+	push         IX                        ; push stack_start
+	push         HL                        ; push current_stack_location
+	ld           (callStack),SP
+	ld           SP,HL
+	ld           IX,0
+	add          IX,SP
 	             
-	ld           HL,string_3
+	ld           HL,string_6
 	call         _PutS
 	             
-	ld           HL,(stackStart-3)
+	ld           HL,(IX-3)
 	push         HL
 	pop          DE
 	ld           HL,0
@@ -40,6 +61,13 @@ hello_2:
 	ld           L,E
 	call         _DispHL
 	call         _NewLine
+null:
+	ld           SP,(callStack)
+	pop          HL
+	pop          IX
+	ret          
 
-string_3:
+string_1:
+	.db          "hello", 0
+string_6:
 	.db          "hello number", 0

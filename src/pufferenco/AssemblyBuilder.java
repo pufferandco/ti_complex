@@ -15,21 +15,23 @@ public class AssemblyBuilder {
     private boolean locked = false;
     public int tIC_line = 0;
 
-    public void append(AssemblyLine line){
-        if(locked)
+    public AssemblyLine append(AssemblyLine line) {
+        if (locked)
             error("attempted to write to locked builder");
 
         lines.add(line);
+        return line;
     }
 
-    public void appendList(List<AssemblyLine> list){
-        if(locked)
+    public void appendList(List<AssemblyLine> list) {
+        if (locked)
             error("attempted to write to locked builder");
 
         lines.addAll(list);
+
     }
 
-    public String getAssembly(){
+    public String getAssembly() {
         locked = true;
         StringBuilder builder = new StringBuilder();
         for (AssemblyLine line : lines) {
@@ -38,59 +40,107 @@ public class AssemblyBuilder {
         return builder.toString();
     }
 
-    public void error(String error_code){
+    public void error(String error_code) {
         throw new RuntimeException("error at " + current_function.peek() + ": " + tIC_line + ": " + error_code);
     }
-    public void add_func(String hint){
+
+    public void add_func(String hint) {
         current_function.push(hint);
         current_line.push(tIC_line);
         tIC_line = 0;
     }
-    public void remove_func(){
+
+    public void remove_func() {
         current_function.pop();
         tIC_line = current_line.pop();
     }
 
-    //public void append_ld(String left, String right, String name){
+    //public AssemblyLine append_ld(String left, String right, String name){
     //    append(new AssemblyLine("ld", left, right));
     //    if(RegisterManager.isRegister(left))
     //        RegisterManager.setValue(left, name);
     //}
-    public void append_ld(String left, String right){
-        append(new AssemblyLine("ld", left, right));
-        if(RegisterManager.isRegister(left))
+    public AssemblyLine append_ld(String left, String right) {
+        if (RegisterManager.isRegister(left))
             RegisterManager.clearValue(left);
+        return append(new AssemblyLine("ld", left, right));
     }
-    public void append_db(String content){
-        append(new AssemblyLine(".db", content));
+
+    public AssemblyLine append_db(String content) {
+        return append(new AssemblyLine(".db", content));
     }
-    public void append_tag(String name){
-        append(customAssemblyLine(name+":"));
+
+    public AssemblyLine append_tag(String name) {
+        return append(customAssemblyLine(name + ":"));
     }
-    public void append_push(String register){append(new AssemblyLine("push", register));}
-    public void append_pop(String register){
-        append(new AssemblyLine("pop", register));
+
+    public AssemblyLine append_push(String register) {
+        return append(new AssemblyLine("push", register));
     }
-    //public void append_pop(String register, String name){
+
+    public AssemblyLine append_pop(String register) {
+        return append(new AssemblyLine("pop", register));
+    }
+
+    //public AssemblyLine append_pop(String register, String name){
     //    append(new AssemblyLine("pop", register));
     //}
-    public void append_call(String pointer){append(new AssemblyLine("call", pointer));}
-    public void append_ret(){append(new AssemblyLine("ret"));}
-    public void append_res(String left, String right){append(new AssemblyLine("res", left, right));}
-    public void append_add(String left, String right){append(new AssemblyLine("add", left, right));}
-    public void append_sub(String left, String right){append(new AssemblyLine("sub", left, right));}
-    public void append_sbc(String left, String right){append(new AssemblyLine("sbc", left, right));}
-    public void append_ex(String left, String right){append(new AssemblyLine("ex", left, right));}
+    public AssemblyLine append_call(String pointer) {
+        return append(new AssemblyLine("call", pointer));
+    }
+
+    public AssemblyLine append_ret() {
+        return append(new AssemblyLine("ret"));
+    }
+
+    public AssemblyLine append_res(String left, String right) {
+        return append(new AssemblyLine("res", left, right));
+    }
+
+    public AssemblyLine append_add(String left, String right) {
+        return append(new AssemblyLine("add", left, right));
+    }
+
+    public AssemblyLine append_sub(String left, String right) {
+        return append(new AssemblyLine("sub", left, right));
+    }
+
+    public AssemblyLine append_sbc(String left, String right) {
+        return append(new AssemblyLine("sbc", left, right));
+    }
+
+    public AssemblyLine append_ex(String left, String right) {
+        return append(new AssemblyLine("ex", left, right));
+    }
 
 
-    public void append_mlt(String rr){append(new AssemblyLine("mlt", rr));}
-    public void append_and(String operand1, String operand2){append(new AssemblyLine("and", operand1, operand2));}
-    public void append_or(String operand1, String operand2){append(new AssemblyLine("or", operand1, operand2));}
-    public void append_xor(String operand1, String operand2){append(new AssemblyLine("xor", operand1, operand2));}
+    public AssemblyLine append_mlt(String rr) {
+        return append(new AssemblyLine("mlt", rr));
+    }
 
-    public void append_jp(String statement, String pointer){append(new AssemblyLine("jp", statement, pointer));}
-    public void append_jp(String pointer){append(new AssemblyLine("jp", pointer));}
-    public void append_cp(String left, String right){append(new AssemblyLine("cp", left, right));}
+    public AssemblyLine append_and(String operand1, String operand2) {
+        return append(new AssemblyLine("and", operand1, operand2));
+    }
+
+    public AssemblyLine append_or(String operand1, String operand2) {
+        return append(new AssemblyLine("or", operand1, operand2));
+    }
+
+    public AssemblyLine append_xor(String operand1, String operand2) {
+        return append(new AssemblyLine("xor", operand1, operand2));
+    }
+
+    public AssemblyLine append_jp(String statement, String pointer) {
+        return append(new AssemblyLine("jp", statement, pointer));
+    }
+
+    public AssemblyLine append_jp(String pointer) {
+        return append(new AssemblyLine("jp", pointer));
+    }
+
+    public AssemblyLine append_cp(String left, String right) {
+        return append(new AssemblyLine("cp", left, right));
+    }
 
 
 }

@@ -9,11 +9,11 @@ import pufferenco.variables.StackElement;
 import java.util.HashMap;
 import java.util.function.BiFunction;
 
-import static pufferenco.variables.DataStack.STACK_START;
 
 public class BooleanType implements DataType {
-    public static final int Data_type_id = 4;
-    public static final HashMap<String, BiFunction<AssemblyBuilder, StackElement, StackElement>> Operators = new HashMap<>();
+    private static final int Data_type_id = 4;
+    private static final HashMap<String, BiFunction<AssemblyBuilder, StackElement, StackElement>> Operators = new HashMap<>();
+
     @Override
     public StackElement initStackVariable(StackElement value, DataStack stack, AssemblyBuilder builder) {
         value.name = "var_bool_" + Main.getId();
@@ -22,7 +22,7 @@ public class BooleanType implements DataType {
 
     @Override
     public StackElement getStackVariable(StackElement element, AssemblyBuilder builder) {
-        builder.append_ld("HL", "("+ STACK_START + "-" + (element.location+3)+")");
+        builder.append_ld("HL", "(" + Main.VariableStacks.peek().stack_start + "-" + (element.location + 3) + ")");
         builder.append_push("HL");
         return element;
     }
@@ -31,7 +31,7 @@ public class BooleanType implements DataType {
     public void setValue(StackElement variable, StackElement newValue, AssemblyBuilder builder) {
         convertFrom(newValue, builder, false);
         builder.append_pop("HL");
-        builder.append_ld("("+ STACK_START + "-" + (variable.location+3)+")", "HL");
+        builder.append_ld("(" + Main.VariableStacks.peek().stack_start + "-" + (variable.location + 3) + ")", "HL");
     }
 
     @Override
@@ -41,13 +41,13 @@ public class BooleanType implements DataType {
 
     @Override
     public StackElement convertFrom(StackElement old, AssemblyBuilder builder, boolean keep_constant) {
-        if(old.type != Data_type_id) {
+        if (old.type != Data_type_id) {
             builder.error("cannot convert " + DataType.NAMES[old.type] + " to bool");
             throw new RuntimeException();
         }
-        if(old.is_constant){
+        if (old.is_constant) {
             old.is_constant = false;
-            if(old.Constant_value.equals("true"))
+            if (old.Constant_value.equals("true"))
                 builder.append_ld("HL", "%11111111");
             else
                 builder.append_ld("HL", "%00000000");
@@ -60,7 +60,7 @@ public class BooleanType implements DataType {
 
     @Override
     public StackElement callOperator(String operator, AssemblyBuilder builder, StackElement right) {
-        if(!Operators.containsKey(operator))
+        if (!Operators.containsKey(operator))
             builder.error("illegal operator [" + operator + "] with combination: boolean and " + DataType.NAMES[right.type]);
 
         return Operators.get(operator).apply(builder, right);
@@ -72,7 +72,7 @@ public class BooleanType implements DataType {
             right = convertFrom(right, builder, false);
             builder.append_pop("HL");
             builder.append_pop("AF");
-            builder.append_and("A","H");
+            builder.append_and("A", "H");
             builder.append_push("AF");
             return right;
         }));
@@ -80,7 +80,7 @@ public class BooleanType implements DataType {
             right = convertFrom(right, builder, false);
             builder.append_pop("HL");
             builder.append_pop("AF");
-            builder.append_or("A","H");
+            builder.append_or("A", "H");
             builder.append_push("AF");
             return right;
         }));
@@ -88,7 +88,7 @@ public class BooleanType implements DataType {
             right = convertFrom(right, builder, false);
             builder.append_pop("HL");
             builder.append_pop("AF");
-            builder.append_xor("A","H");
+            builder.append_xor("A", "H");
             builder.append_push("AF");
             return right;
         }));

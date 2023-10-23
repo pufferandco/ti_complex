@@ -4,32 +4,33 @@ import java.util.HashMap;
 
 public class RegisterManager {
     private static final HashMap<Character, Register> Registers = new HashMap<>();
-    public static void init(){
-        Registers.put('A', new Register('F',"AF"));
-        Registers.put('F', new Register('A',"AF"));
 
-        Registers.put('B', new Register('C',"BC"));
-        Registers.put('C', new Register('B',"BC"));
+    public static void init() {
+        Registers.put('A', new Register('F', "AF"));
+        Registers.put('F', new Register('A', "AF"));
 
-        Registers.put('D', new Register('E',"DE"));
-        Registers.put('E', new Register('D',"DE"));
+        Registers.put('B', new Register('C', "BC"));
+        Registers.put('C', new Register('B', "BC"));
 
-        Registers.put('H', new Register('L',"HL"));
-        Registers.put('L', new Register('H',"HL"));
+        Registers.put('D', new Register('E', "DE"));
+        Registers.put('E', new Register('D', "DE"));
+
+        Registers.put('H', new Register('L', "HL"));
+        Registers.put('L', new Register('H', "HL"));
     }
 
-    public static void setValue(String register, String content){
+    public static void setValue(String register, String content) {
         char[] singulars = register.toCharArray();
 
         char reg_id1 = singulars[0];
         Register register1 = Registers.get(reg_id1);
         register1.Content = content;
-        if(register1.Is_dual){
+        if (register1.Is_dual) {
             Registers.get(register1.Pair).Content = "";
             register1.Is_dual = false;
         }
 
-        if(singulars.length == 1)
+        if (singulars.length == 1)
             return;
 
         char reg_id2 = singulars[0];
@@ -40,16 +41,16 @@ public class RegisterManager {
         register2.Is_dual = true;
     }
 
-    public static boolean isRegister(String register){
+    public static boolean isRegister(String register) {
         char[] singulars = register.toCharArray();
 
-        if(singulars.length == 0 || singulars.length > 2)
+        if (singulars.length == 0 || singulars.length > 2)
             return false;
 
         return Registers.containsKey(singulars[0]) && Registers.containsKey(singulars[1]);
     }
 
-    public static void clearValue(String... registers){
+    public static void clearValue(String... registers) {
         for (String register : registers) {
             char[] singulars = register.toCharArray();
 
@@ -72,14 +73,14 @@ public class RegisterManager {
         }
     }
 
-    public static String getValue(String content){
+    public static String getValue(String content) {
         String[] register_return = new String[1];
 
-        Registers.forEach((character, register)->{
-            if(!register.Content.equals(content))
+        Registers.forEach((character, register) -> {
+            if (!register.Content.equals(content))
                 return;
 
-            if(register.Is_dual)
+            if (register.Is_dual)
                 register_return[0] = register.Paired;
             else
                 register_return[0] = character.toString();
@@ -88,12 +89,13 @@ public class RegisterManager {
         return register_return[0];
     }
 
-    private static class Register{
+    private static class Register {
         final String Paired;
         final char Pair;
         boolean Is_dual = false;
         String Content = "";
-        Register(char pair, String paired){
+
+        Register(char pair, String paired) {
             this.Pair = pair;
             this.Paired = paired;
         }
