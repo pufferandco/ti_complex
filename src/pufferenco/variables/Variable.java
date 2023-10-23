@@ -35,7 +35,7 @@ public class Variable {
         DataType dataType = DataType.TYPES[dataId];
         Variables.get(Variables.size()-1).put(name.content, dataType.initStackVariable(
                 ExpressionReader.evalExpression(stream, builder, false),
-                Main.Variable_stack,
+                Main.VariableStacks.peek(),
                 builder
         ));
     }
@@ -92,6 +92,6 @@ public class Variable {
     }
 
     public Variable(String name, int size, int type){
-        Variables.get(Variables.size()-1).put(name, new StackElement(name, size, type));
+        Variables.get(Variables.size()-1).put(name, new StackElement(name, size));
     }
 }

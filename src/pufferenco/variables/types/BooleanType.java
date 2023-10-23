@@ -17,7 +17,7 @@ public class BooleanType implements DataType {
     @Override
     public StackElement initStackVariable(StackElement value, DataStack stack, AssemblyBuilder builder) {
         value.name = "var_bool_" + Main.getId();
-        return stack.push(stack.push(convertFrom(value, builder, false),builder), builder);
+        return stack.push(convertFrom(value, builder, false), builder);
     }
 
     @Override
@@ -32,6 +32,11 @@ public class BooleanType implements DataType {
         convertFrom(newValue, builder, false);
         builder.append_pop("HL");
         builder.append_ld("("+ STACK_START + "-" + (variable.location+3)+")", "HL");
+    }
+
+    @Override
+    public int getId() {
+        return 4;
     }
 
     @Override

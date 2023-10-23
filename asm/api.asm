@@ -1,6 +1,10 @@
 HEAP_START .equ plotSScreen
 HEAP_SIZE .equ 21945
 MAX_HEAP_ELEMENT_SIZE .equ 65536
+MAX_STRING_SIZE .equ 255
+
+regTRUE .equ %11111111
+regFALSE .equ %00000000
 ; struct heap_header(
 ; boolean(b0) is_used,
 ; boolean(b1) is_last 
@@ -64,7 +68,7 @@ malloc__found_block:
 	dec		HL
 	dec		HL
 	dec		HL
-	set 	0, (HL) 						; header.is_used = true
+	set 	0, (HL) 						; header.is_used = regTRUE
 	
 	pop		BC								; move current_location(STACK -> BC)
 	ret										; return current_location
@@ -75,8 +79,8 @@ malloc__split:
 	dec		HL								;;
 	dec		HL								;;
 	dec		HL								;;
-	res 	1, (HL) 						;; header.is_last = false
-	set 	1, (HL) 						;; header.is_used = true
+	res 	1, (HL) 						;; header.is_last = regFALSE
+	set 	1, (HL) 						;; header.is_used = regTRUE
 	
 	ex		DE, HL							; double(HL) old_size = size
 	
@@ -86,7 +90,7 @@ malloc__split:
 	ld		A, (malloc__required_size+1)	;;
 	ld		E, A							;;
 	
-	sub		A, 0							; carry = false
+	sub		A, 0							; carry = regFALSE
 	push	HL								; copy old_size(HL -> STACK)
 	sbc		HL, DE 							; spliced_size(HL) = old_size - required_size
 
@@ -95,7 +99,7 @@ malloc__split:
 	
 	add		HL, BC							; new_location(HL) = current_location + old_size
 
-	ld		(HL), 0							; new heap_header(*HL) = {is_used = false}
+	ld		(HL), 0							; new heap_header(*HL) = {is_used = regFALSE}
 	inc		HL								; new_location++
 	ld		(HL), D							; heap[new_location] = spliced_size.upper
 	inc		HL								; new_location++
@@ -120,7 +124,7 @@ free:										; (pointer(HL) location) -> null # gets space in memory
 	dec		HL								;;
 	dec		HL								;;
 	
-	set 	0, (HL)							; heap_header(location).is_used = false
+	set 	0, (HL)							; heap_header(location).is_used = regFALSE
 	ret										; return null
 
 
@@ -181,14 +185,14 @@ merge__continue:
 
 get_string_size:							; (pointer(HL) string_ptr) -> double(HL) size 
 	ld 		A, 0							; byte(A) compare_byte = 0
-	ld 		BC, MAX_HEAP_ELEMENT_SIZE		; double(BC) fail_save = MAX_STRING_SIZE
+	ld 		BC, MAX_STRING_SIZE     		; double(BC) fail_save = MAX_STRING_SIZE
 	
 	push 	HL								; pointer(DE) string_start = copy string_ptr
 	pop		DE								;;
 	
 	CPIR									; while(&string_ptr != compare_byte && fail_save != 0){string_ptr++; fail_save--;}
 	
-	add		A, 0							;;  size = string_ptr - string_start
+	or		A   							;;  size = string_ptr - string_start
 	sbc		HL, DE							;; 
 	
 	ret										; return size	
@@ -237,7 +241,7 @@ init:										; initializes stuff
 
 
 print_bool:
-	cp		A, %11111111
+	cp		A, regTRUE
 	jp		Z, print_bool__true
 	ld		HL, false_string
 	call 	_PutS
@@ -256,44 +260,45 @@ false_string:
 
 byte_smaller:
     cp		A, H
-    jr		C, byte_smaller__true
-    ld	    H, %00000000
+    jr		C, H_true_ret
+    ld	    H, regFALSE
     ret
-byte_smaller__true:
-    ld	    H, %11111111
-    ret
-
 
 
 byte_higher:
     cp		A, H
-    jr		NC, byte_higher__true
-    ld	    H, %11111111
-    ret
-byte_higher__true:
-    ld	    H, %00000000
+    jr		Z, H_false_ret
+    jr		C, H_false_ret
+    ld	    H, regTRUE
     ret
 
 
 
 byte_higher_or_equals:
     cp		A, H
-    jr		NC, byte_higher_or_equals__true
-    ld	    H, %00000000
-    ret
-byte_higher_or_equals__true:
-    ld	    H, %11111111
+    jr		NC, H_true_ret
+    ld	    H, regFALSE
     ret
 
 
 
 byte_lower_or_equals:
     cp		A, H
-    jr		C, byte_lower_or_equals__true
-    ld	    H, %11111111
+    jr		Z, H_true_ret
+    jr      C, H_true_ret
+    ld	    H, regFALSE
     ret
-byte_lower_or_equals__true:
-    ld	    H, %00000000
+
+
+
+H_true_ret:
+    ld      H, regTRUE
+    ret
+
+
+
+H_false_ret:
+    ld      H, regFALSE
     ret
 
 
@@ -343,12 +348,9 @@ int_smaller:
     or a
     sbc hl, de
     add hl, de
-    jp  Z, int_smaller__false
-    jp  C, int_smaller__false
-    ld  A, %11111111
+    jp  C, H_true_ret
+    ld  H, regFALSE
     ret
-int_smaller__false:
-    ld  A, %00000000
 
 
 
@@ -356,12 +358,10 @@ int_higher:
     or a
     sbc hl, de
     add hl, de
-    jp  Z, int_smaller__false
-    jp  NC, int_smaller__false
-    ld  A, %11111111
+    jp  Z, H_false_ret
+    jp  NC, H_true_ret
+    ld  H, regFALSE
     ret
-int_smaller__false:
-    ld  A, %00000000
 
 
 
@@ -369,11 +369,9 @@ int_higher_or_equals:
     or a
     sbc hl, de
     add hl, de
-    jp  NC, int_smaller__false
-    ld  A, %11111111
+    jp  NC, H_true_ret
+    ld  H, regFALSE
     ret
-int_higher_or_equals__false:
-    ld  A, %00000000
 
 
 
@@ -381,8 +379,7 @@ int_smaller_or_equals:
     or a
     sbc hl, de
     add hl, de
-    jp  C, int_smaller__false
-    ld  A, %11111111
+    jp  Z, H_true_ret
+    jp  C, H_true_ret
+    ld  H, regFALSE
     ret
-int_smaller_or_equals__false:
-    ld  A, %00000000

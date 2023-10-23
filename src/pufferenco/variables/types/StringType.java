@@ -57,4 +57,9 @@ public class StringType implements DataType {
 
         newValue.location = variable.location;
     }
+
+    @Override
+    public int getId() {
+        return 2;
+    }
 }

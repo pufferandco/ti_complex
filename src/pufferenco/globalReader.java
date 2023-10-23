@@ -1,11 +1,9 @@
 package pufferenco;
 
-import pufferenco.variables.StackElement;
 import pufferenco.variables.Variable;
 
 import java.util.List;
 
-import static pufferenco.Main.Call_stack;
 import static pufferenco.Token.TokenTypes;
 class globalReader {
     static void read(List<Token> tokens, AssemblyBuilder builder){
@@ -29,6 +27,10 @@ class globalReader {
                 }case TokenTypes.WHILE -> {
                     Variable.increase_scope(builder);
                     WhileReader.read(stream, builder);
+                    Variable.decrease_scope();
+                }case TokenTypes.FUN -> {
+                    Variable.increase_scope(builder);
+                    Function.read(stream, builder);
                     Variable.decrease_scope();
                 }
                 case TokenTypes.NEW_LINE -> builder.tIC_line++;

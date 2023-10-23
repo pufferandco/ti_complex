@@ -34,12 +34,14 @@ public class ExpressionReader {
                 parameter.add(token);
             }
         }
-
-        type_list.add(evalExpression(new TokenStream(parameter, builder), builder, false));
+        if(!parameter.isEmpty())
+            type_list.add(evalExpression(new TokenStream(parameter, builder), builder, false));
         return type_list;
     }
 
     public static StackElement evalExpression(TokenStream stream, AssemblyBuilder builder, boolean allow_constant) {
+        if(stream.isEmpty())
+            return null;
         StackElement type = null;
 
         while(stream.isNotEmpty()) {

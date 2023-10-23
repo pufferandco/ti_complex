@@ -17,7 +17,7 @@ public class IntType implements DataType {
     @Override
     public StackElement initStackVariable(StackElement value, DataStack stack, AssemblyBuilder builder) {
         value.name = "var_int_" + Main.getId();
-        return stack.push(stack.push(convertFrom(value, builder, false), builder), builder);
+        return stack.push(convertFrom(value, builder, false), builder);
     }
 
     @Override
@@ -46,8 +46,7 @@ public class IntType implements DataType {
         if(old.type == DataType.BYTE) {
             builder.append_pop("DE");
             builder.append_ld("HL","0");
-            builder.append_ld("H","D");
-            builder.append_ld("L","E");
+            builder.append_ld("L","D");
             builder.append_push("HL");
             return new StackElement("converted_int_" + Main.getId(), Data_type_id);
         }
@@ -89,13 +88,52 @@ public class IntType implements DataType {
                 builder.append_sbc("HL", right.Constant_value.toString());
             }else{
                 builder.append_pop("DE");
-                builder.append_ex("HL", "DE");
+                builder.append_ex("DE", "HL");
                 builder.append_sbc("HL", "DE");
             }
             builder.append_push("HL");
             return new StackElement("int_sub_" + Main.getId(), Data_type_id);
         }));
 
+        Operators.put(">", ((builder, right) -> {
+            convertFrom(right, builder, false);
+            builder.append_pop("HL");
+            builder.append_pop("DE");
+            builder.append_ex("DE", "HL");
+            builder.append_call("int_higher");
+            builder.append_push("HL");
+            return new StackElement("int_sub_" + Main.getId(), DataType.BOOL);
+        }));
+
+        Operators.put("<", ((builder, right) -> {
+            convertFrom(right, builder, false);
+            builder.append_pop("HL");
+            builder.append_pop("DE");
+            builder.append_ex("DE", "HL");
+            builder.append_call("int_smaller");
+            builder.append_push("HL");
+            return new StackElement("int_sub_" + Main.getId(), DataType.BOOL);
+        }));
+
+        Operators.put("=>", ((builder, right) -> {
+            convertFrom(right, builder, false);
+            builder.append_pop("HL");
+            builder.append_pop("DE");
+            builder.append_ex("DE", "HL");
+            builder.append_call("int_higher_or_equals");
+            builder.append_push("HL");
+            return new StackElement("int_sub_" + Main.getId(), DataType.BOOL);
+        }));
+
+        Operators.put("<=", ((builder, right) -> {
+            convertFrom(right, builder, false);
+            builder.append_pop("HL");
+            builder.append_pop("DE");
+            builder.append_ex("DE", "HL");
+            builder.append_call("int_smaller_or_equals");
+            builder.append_push("HL");
+            return new StackElement("int_sub_" + Main.getId(), DataType.BOOL);
+        }));
     }
 
     @Override
@@ -103,5 +141,10 @@ public class IntType implements DataType {
         convertFrom(newValue, builder, false);
         builder.append_pop("HL");
         builder.append_ld("("+ STACK_START + "-" + (variable.location+3)+")", "HL");
+    }
+
+    @Override
+    public int getId() {
+        return 1;
     }
 }

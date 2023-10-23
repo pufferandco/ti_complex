@@ -35,6 +35,11 @@ public class ByteType implements DataType {
     }
 
     @Override
+    public int getId() {
+        return 0;
+    }
+
+    @Override
     public StackElement convertFrom(StackElement old, AssemblyBuilder builder, boolean keep_constant) {
         if(old.type != Data_type_id) {
             builder.error("cannot convert value to byte");
@@ -115,10 +120,10 @@ public class ByteType implements DataType {
         });
 
         Operators.put(">", (AssemblyBuilder builder, StackElement right)->{
-            convertFrom(right, builder, true);
+            convertFrom(right, builder, false);
 
-            builder.append_pop("AF");
             builder.append_pop("HL");
+            builder.append_pop("AF");
             builder.append_call("byte_higher");
             builder.append_push("HL");
 
@@ -126,10 +131,10 @@ public class ByteType implements DataType {
         });
 
         Operators.put("<", (AssemblyBuilder builder, StackElement right)->{
-            convertFrom(right, builder, true);
+            convertFrom(right, builder, false);
 
-            builder.append_pop("AF");
             builder.append_pop("HL");
+            builder.append_pop("AF");
             builder.append_call("byte_smaller");
             builder.append_push("HL");
 
@@ -137,10 +142,10 @@ public class ByteType implements DataType {
         });
 
         Operators.put("=>", (AssemblyBuilder builder, StackElement right)->{
-            convertFrom(right, builder, true);
+            convertFrom(right, builder, false);
 
-            builder.append_pop("AF");
             builder.append_pop("HL");
+            builder.append_pop("AF");
             builder.append_call("byte_higher_or_equals");
             builder.append_push("HL");
 
@@ -148,10 +153,10 @@ public class ByteType implements DataType {
         });
 
         Operators.put("<=", (AssemblyBuilder builder, StackElement right)->{
-            convertFrom(right, builder, true);
+            convertFrom(right, builder, false);
 
-            builder.append_pop("AF");
             builder.append_pop("HL");
+            builder.append_pop("AF");
             builder.append_call("byte_lower_or_equals");
             builder.append_push("HL");
 

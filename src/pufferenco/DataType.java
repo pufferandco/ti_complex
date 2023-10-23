@@ -40,4 +40,6 @@ public interface DataType {
 
     void setValue(StackElement variable,StackElement newValue, AssemblyBuilder builder);
 
+    int getId();
+
 }

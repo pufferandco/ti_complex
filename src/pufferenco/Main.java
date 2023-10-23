@@ -5,16 +5,19 @@ import pufferenco.variables.DataStack;
 import pufferenco.variables.Variable;
 
 import java.util.List;
+import java.util.Stack;
 
 import static pufferenco.AssemblyLine.customAssemblyLine;
 
 public class Main {
 
     public static AssemblyBuilder Constants = new AssemblyBuilder();
-    public static DataStack Variable_stack = new DataStack();
+    public static Stack<DataStack> VariableStacks = new Stack<>();
     public static DataStack Call_stack = new DataStack();
     final static int OPTIMIZE_LEVEL = 1;
     public static void main(String[] args) {
+        DataStack global_stack = new DataStack();
+        VariableStacks.push(global_stack);
         AssemblyBuilder builder = new AssemblyBuilder();
         init();
 
@@ -34,7 +37,10 @@ public class Main {
 
         Variable.increase_scope(builder);
         String code = IOUtil.readTxt("root/main.TIC");
+        builder.add_func("main.asm");
         tokenizeAndRun(code, builder);
+        builder.remove_func();
+
         Variable.decrease_scope();
 
         builder.append((new AssemblyLine("")));
@@ -49,18 +55,20 @@ public class Main {
         builder.append_db("0,0,0");
         builder.append_tag("CallStack");
         builder.append_db("0,0,0");
-        builder.append(customAssemblyLine(DataStack.STACK_START + " .equ saveSScreen+" + (768 - Call_stack.max_size)));
+        builder.append(customAssemblyLine(DataStack.STACK_START + " .equ saveSScreen+" + (768 - 256)));
         builder.append(customAssemblyLine("callStackStart" + " .equ saveSScreen+768"));
 
 
-        IOUtil.writeTxt("asm/main.asm", AssemblyCollapse.optimize(builder, OPTIMIZE_LEVEL).getAssembly() + "\n" + Constants.getAssembly());
+        IOUtil.writeTxt("asm/main.asm",
+                AssemblyCollapse.optimize(builder, OPTIMIZE_LEVEL).getAssembly() + "\n" +
+                        AssemblyCollapse.optimize(Function.FunctionBuilder, OPTIMIZE_LEVEL).getAssembly() + "\n"
+                        + Constants.getAssembly());
     }
 
     public static void tokenizeAndRun(String code, AssemblyBuilder builder){
         List<List<Token>> tokenLines = Token.tokenizeLines(code);
         for (List<Token> tokens : tokenLines) {
             builder.append(new AssemblyLine(""));
-            System.out.println(tokens);
             builder.tIC_line++;
             globalReader.read(tokens, builder);
         }

@@ -1,6 +1,4 @@
-var i: byte = 5;
-while(i > 0) {
-    printLn(i);
-    i = i - 1;
+fun hello(id: int){
+    print("hello number");
+    printLn(id);
 };
-printLn(i);

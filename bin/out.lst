@@ -15,487 +15,448 @@ Listing for file "asm/main.asm"
     3 00:0000 -  -  -  -  .org	userMem-2
     4 D1:A87F EF 7B -  -  	.db          tExtTok,tAsm84CeCmp
     5 D1:A881 -  -  -  -  	             
-    6 D1:A881 ED 73 E6 AA 
+    6 D1:A881 ED 73 6D AA 
               D1 -  -  -  	ld           (StackSave),SP
     7 D1:A886 21 1F ED D0 	ld           HL,callStackStart
-    8 D1:A88A 22 E9 AA D1 	ld           (callStack),HL
-    9 D1:A88E 31 19 ED D0 	ld           SP,stackStart
-   10 D1:A892 CD 19 AA D1 	call         init
+    8 D1:A88A 22 70 AA D1 	ld           (callStack),HL
+    9 D1:A88E 31 1F EC D0 	ld           SP,stackStart
+   10 D1:A892 CD AA A9 D1 	call         init
    11 D1:A896 CD 28 08 02 	call         _homeup
    12 D1:A89A CD 10 08 02 	call         _ClrScrnFull
    13 D1:A89E -  -  -  -  	             
    14 D1:A89E -  -  -  -  	             
-   15 D1:A89E 26 05 -  -  	ld           H,5
-   16 D1:A8A0 E5 -  -  -  	push         HL
-   17 D1:A8A1 -  -  -  -  	             
-   18 D1:A8A1 2A 16 ED D0 	ld           HL,(stackStart-3)
-   19 D1:A8A5 E5 -  -  -  	push         HL
-   20 D1:A8A6 26 00 -  -  	ld           H,0
-   21 D1:A8A8 E5 -  -  -  	push         HL
-   22 D1:A8A9 F1 -  -  -  	pop          AF
-   23 D1:A8AA E1 -  -  -  	pop          HL
-   24 D1:A8AB CD 54 AA D1 	call         byte_higher
-   25 D1:A8AF E5 -  -  -  	push         HL
-   26 D1:A8B0 -  -  -  -  while_start5:
-   27 D1:A8B0 21 00 00 00 	ld           HL,0
-   28 D1:A8B4 39 -  -  -  	add          HL,SP
-   29 D1:A8B5 ED 7B E9 AA 
-              D1 -  -  -  	ld           SP,(callStack)
-   30 D1:A8BA E5 -  -  -  	push         HL
-   31 D1:A8BB ED 73 E9 AA 
-              D1 -  -  -  	ld           (callStack),SP
-   32 D1:A8C0 F9 -  -  -  	ld           SP,HL
-   33 D1:A8C1 F1 -  -  -  	pop          AF
-   34 D1:A8C2 FE FF -  -  	cp           A,%11111111
-   35 D1:A8C4 C2 F9 A8 D1 	jp           NZ,while_end6
-   36 D1:A8C8 -  -  -  -  	             
-   37 D1:A8C8 2A 16 ED D0 	ld           HL,(stackStart-3)
-   38 D1:A8CC E5 -  -  -  	push         HL
-   39 D1:A8CD D1 -  -  -  	pop          DE
-   40 D1:A8CE 21 00 00 00 	ld           HL,0
-   41 D1:A8D2 6A -  -  -  	ld           L,D
-   42 D1:A8D3 CD E0 1E 02 	call         _DispHL
-   43 D1:A8D7 CD F0 07 02 	call         _NewLine
-   44 D1:A8DB -  -  -  -  	             
-   45 D1:A8DB 2A 16 ED D0 	ld           HL,(stackStart-3)
-   46 D1:A8DF E5 -  -  -  	push         HL
-   47 D1:A8E0 26 01 -  -  	ld           H,1
-   48 D1:A8E2 F1 -  -  -  	pop          AF
-   49 D1:A8E3 94 -  -  -  	sub          A,H
-   50 D1:A8E4 67 -  -  -  	ld           H,A
-   51 D1:A8E5 22 16 ED D0 	ld           (stackStart-3),HL
-   52 D1:A8E9 ED 7B E9 AA 
-              D1 -  -  -  	ld           SP,(callStack)
-   53 D1:A8EE E1 -  -  -  	pop          HL
-   54 D1:A8EF ED 73 E9 AA 
-              D1 -  -  -  	ld           (callStack),SP
-   55 D1:A8F4 F9 -  -  -  	ld           SP,HL
-   56 D1:A8F5 C3 B0 A8 D1 	jp           while_start5
-   57 D1:A8F9 -  -  -  -  while_end6:
-   58 D1:A8F9 -  -  -  -  	             
-   59 D1:A8F9 2A 16 ED D0 	ld           HL,(stackStart-3)
-   60 D1:A8FD E5 -  -  -  	push         HL
-   61 D1:A8FE D1 -  -  -  	pop          DE
-   62 D1:A8FF 21 00 00 00 	ld           HL,0
-   63 D1:A903 6A -  -  -  	ld           L,D
-   64 D1:A904 CD E0 1E 02 	call         _DispHL
-   65 D1:A908 CD F0 07 02 	call         _NewLine
-   66 D1:A90C -  -  -  -  	             
-   67 D1:A90C -  -  -  -  ProgramExit:
-   68 D1:A90C CD 8C 0D 02 	call         _GetKey
-   69 D1:A910 CD 10 08 02 	call         _ClrScrnFull
-   70 D1:A914 FD CB 00 AE 	res          donePrgm,(iy+doneFlags)
-   71 D1:A918 ED 7B E6 AA 
+   15 D1:A89E -  -  -  -  	             
+   16 D1:A89E -  -  -  -  ProgramExit:
+   17 D1:A89E CD 8C 0D 02 	call         _GetKey
+   18 D1:A8A2 CD 10 08 02 	call         _ClrScrnFull
+   19 D1:A8A6 FD CB 00 AE 	res          donePrgm,(iy+doneFlags)
+   20 D1:A8AA ED 7B 6D AA 
               D1 -  -  -  	ld           SP,(StackSave)
-   72 D1:A91D C9 -  -  -  	ret          
-   73 D1:A91E -  -  -  -  #include "asm/api.asm"
+   21 D1:A8AF C9 -  -  -  	ret          
+   22 D1:A8B0 -  -  -  -  #include "asm/api.asm"
 Listing for file "C:\Users\sande\IdeaProjects\ti_compile\asm\api.asm"
-    1 D1:A91E -  -  -  -  HEAP_START .equ plotSScreen
-    2 D1:A91E -  -  -  -  HEAP_SIZE .equ 21945
-    3 D1:A91E -  -  -  -  MAX_HEAP_ELEMENT_SIZE .equ 65536
-    4 D1:A91E -  -  -  -  ; struct heap_header(
-    5 D1:A91E -  -  -  -  ; boolean(b0) is_used,
-    6 D1:A91E -  -  -  -  ; boolean(b1) is_last 
-    7 D1:A91E -  -  -  -  ;)
-    8 D1:A91E -  -  -  -  ;
-    9 D1:A91E -  -  -  -  
-   10 D1:A91E 00 -  -  -  	.db 0
-   11 D1:A91F -  -  -  -  malloc__required_size:
-   12 D1:A91F 00 00 00 -  	.db 0, 0, 0
-   13 D1:A922 -  -  -  -  malloc:			; (double(BC) required_size) -> pointer(BC) # gets space in memory
-   14 D1:A922 ED 43 1E A9 
+    1 D1:A8B0 -  -  -  -  HEAP_START .equ plotSScreen
+    2 D1:A8B0 -  -  -  -  HEAP_SIZE .equ 21945
+    3 D1:A8B0 -  -  -  -  MAX_HEAP_ELEMENT_SIZE .equ 65536
+    4 D1:A8B0 -  -  -  -  MAX_STRING_SIZE .equ 255
+    5 D1:A8B0 -  -  -  -  
+    6 D1:A8B0 -  -  -  -  regTRUE .equ %11111111
+    7 D1:A8B0 -  -  -  -  regFALSE .equ %00000000
+    8 D1:A8B0 -  -  -  -  ; struct heap_header(
+    9 D1:A8B0 -  -  -  -  ; boolean(b0) is_used,
+   10 D1:A8B0 -  -  -  -  ; boolean(b1) is_last 
+   11 D1:A8B0 -  -  -  -  ;)
+   12 D1:A8B0 -  -  -  -  ;
+   13 D1:A8B0 -  -  -  -  
+   14 D1:A8B0 00 -  -  -  	.db 0
+   15 D1:A8B1 -  -  -  -  malloc__required_size:
+   16 D1:A8B1 00 00 00 -  	.db 0, 0, 0
+   17 D1:A8B4 -  -  -  -  malloc:			; (double(BC) required_size) -> pointer(BC) # gets space in memory
+   18 D1:A8B4 ED 43 B0 A8 
               D1 -  -  -  	ld		(malloc__required_size-1), BC 	; move requred_size(BC -> RAM)
-   15 D1:A927 21 66 94 D0 	ld		HL, HEAP_START					; pointer(HL) current_location = HEAP_START
-   16 D1:A92B -  -  -  -  	
-   17 D1:A92B -  -  -  -  malloc__loop:
-   18 D1:A92B 46 -  -  -  	ld  	B, (HL)							; heap_header(B) header = &current_location
-   19 D1:A92C -  -  -  -  	
-   20 D1:A92C 23 -  -  -  	inc 	HL								; current_location++
-   21 D1:A92D 11 00 00 00 	ld		DE, 0							; double(DE) size = 0;
-   22 D1:A931 56 -  -  -  	ld		D, (HL)							; size.upper = &current_location
-   23 D1:A932 23 -  -  -  	inc		HL								; current_location++
-   24 D1:A933 5E -  -  -  	ld		E, (HL)							; size.lower = &current_location
-   25 D1:A934 23 -  -  -  	inc		HL								; current_location++
-   26 D1:A935 E5 -  -  -  	push	HL								; move current_location(HL -> STACK)
-   27 D1:A936 -  -  -  -  	
-   28 D1:A936 CB 40 -  -  	bit 	0, B							; if(not header.is_used):
-   29 D1:A938 CA 48 A9 D1 	jp 		Z, malloc__found_block			;;	goto $found_block
-   30 D1:A93C -  -  -  -  								
-   31 D1:A93C -  -  -  -  malloc__goto_next:					
-   32 D1:A93C E1 -  -  -  	pop		HL								; move current_location(STACK -> HL)
-   33 D1:A93D -  -  -  -  	
-   34 D1:A93D CB 48 -  -  	bit 	1, B							; if(header.is_last):
-   35 D1:A93F CA 98 A9 D1 	jp 		Z, malloc__out_of_space			;;	goto $out_of_space
-   36 D1:A943 -  -  -  -  	
-   37 D1:A943 19 -  -  -  	add		HL, DE							; current_location += size
-   38 D1:A944 C3 2B A9 D1 	jp 		malloc__loop					; goto $loop	
-   39 D1:A948 -  -  -  -  
-   40 D1:A948 -  -  -  -  malloc__found_block:			
-   41 D1:A948 21 1F A9 D1 	ld 		HL, malloc__required_size		; *double(HL) *minimum_size = required_size
-   42 D1:A94C -  -  -  -  	
-   43 D1:A94C 7A -  -  -  	ld		A, D							; copy size.upper(D -> A)
-   44 D1:A94D BE -  -  -  	cp 		A, (HL)							; if(size.upper < required_size.upper)
-   45 D1:A94E DA 3C A9 D1 	jp		C, malloc__goto_next			;;	goto $goto_next 
-   46 D1:A952 -  -  -  -  	
-   47 D1:A952 23 -  -  -  	inc		HL								; *minimum_size++
-   48 D1:A953 7B -  -  -  	ld		A, E							; copy size.upper(E -> A)
-   49 D1:A954 BE -  -  -  	cp 		A, (HL)							; if(size.lower < required_size.lower)
-   50 D1:A955 DA 3C A9 D1 	jp		C, malloc__goto_next			;;	goto $goto_next 
-   51 D1:A959 -  -  -  -  	
-   52 D1:A959 2B -  -  -  	dec		HL								; *minimum_size--
-   53 D1:A95A 7A -  -  -  	ld		A, D							; copy size.upper(D -> A)
-   54 D1:A95B BE -  -  -  	cp 		A, (HL)							; if(size.upper != required_size.upper)
-   55 D1:A95C C2 70 A9 D1 	jp		NZ, malloc__split				;;	goto $split
-   56 D1:A960 -  -  -  -  	
-   57 D1:A960 23 -  -  -  	inc		HL								; *minimum_size++
-   58 D1:A961 7B -  -  -  	ld		A, E							; copy size.upper(E -> A)
-   59 D1:A962 BE -  -  -  	cp 		A, (HL)							; if(size.lower == required_size.lower)
-   60 D1:A963 C2 70 A9 D1 	jp		NZ, malloc__split				;;	goto $split
-   61 D1:A967 -  -  -  -  	
-   62 D1:A967 E1 -  -  -  	pop		HL								; copy current_location(STACK -> HL)
-   63 D1:A968 E5 -  -  -  	push	HL
-   64 D1:A969 2B -  -  -  	dec		HL
-   65 D1:A96A 2B -  -  -  	dec		HL
-   66 D1:A96B 2B -  -  -  	dec		HL
-   67 D1:A96C CB C6 -  -  	set 	0, (HL) 						; header.is_used = true
-   68 D1:A96E -  -  -  -  	
-   69 D1:A96E C1 -  -  -  	pop		BC								; move current_location(STACK -> BC)
-   70 D1:A96F C9 -  -  -  	ret										; return current_location
-   71 D1:A970 -  -  -  -  	
-   72 D1:A970 -  -  -  -  malloc__split:
-   73 D1:A970 E1 -  -  -  	pop		HL								; copy current_location(STACK -> HL)
-   74 D1:A971 E5 -  -  -  	push	HL								;;
-   75 D1:A972 2B -  -  -  	dec		HL								;;
-   76 D1:A973 2B -  -  -  	dec		HL								;;
-   77 D1:A974 2B -  -  -  	dec		HL								;;
-   78 D1:A975 CB 8E -  -  	res 	1, (HL) 						;; header.is_last = false
-   79 D1:A977 CB CE -  -  	set 	1, (HL) 						;; header.is_used = true
-   80 D1:A979 -  -  -  -  	
-   81 D1:A979 EB -  -  -  	ex		DE, HL							; double(HL) old_size = size
-   82 D1:A97A -  -  -  -  	
-   83 D1:A97A 11 00 00 00 	ld		DE, 0							;; move required_size(RAM -> DE)
-   84 D1:A97E 3A 1F A9 D1 	ld		A, (malloc__required_size)		;; 
-   85 D1:A982 57 -  -  -  	ld		D, A							;;
-   86 D1:A983 3A 20 A9 D1 	ld		A, (malloc__required_size+1)	;;
-   87 D1:A987 5F -  -  -  	ld		E, A							;;
-   88 D1:A988 -  -  -  -  	
-   89 D1:A988 D6 00 -  -  	sub		A, 0							; carry = false
-   90 D1:A98A E5 -  -  -  	push	HL								; copy old_size(HL -> STACK)
-   91 D1:A98B ED 52 -  -  	sbc		HL, DE 							; spliced_size(HL) = old_size - required_size
-   92 D1:A98D -  -  -  -  
-   93 D1:A98D EB -  -  -  	ex		DE, HL							; move spliced_size(HL -> DE)
-   94 D1:A98E E1 -  -  -  	pop 	HL								; move old_size(STACK -> HL)
-   95 D1:A98F -  -  -  -  	
-   96 D1:A98F 09 -  -  -  	add		HL, BC							; new_location(HL) = current_location + old_size
-   97 D1:A990 -  -  -  -  
-   98 D1:A990 36 00 -  -  	ld		(HL), 0							; new heap_header(*HL) = {is_used = false}
-   99 D1:A992 23 -  -  -  	inc		HL								; new_location++
-  100 D1:A993 72 -  -  -  	ld		(HL), D							; heap[new_location] = spliced_size.upper
-  101 D1:A994 23 -  -  -  	inc		HL								; new_location++
-  102 D1:A995 73 -  -  -  	ld		(HL), E							; heap[new_location] = spliced_size.lower
-  103 D1:A996 -  -  -  -  
-  104 D1:A996 -  -  -  -  	
-  105 D1:A996 C1 -  -  -  	pop		BC								; move old_location(STACK -> BC)
-  106 D1:A997 C9 -  -  -  	ret 									; return old_location(BC)
-  107 D1:A998 -  -  -  -  	
-  108 D1:A998 -  -  -  -  malloc__out_of_space:
-  109 D1:A998 21 A4 A9 D1 	ld		HL, malloc__space_error_message ; string(HL) error_message = "out of memory!"
-  110 D1:A99C CD C0 07 02 	call	_PutS
-  111 D1:A9A0 C3 0C A9 D1 	jp		ProgramExit
-  112 D1:A9A4 -  -  -  -  	
-  113 D1:A9A4 -  -  -  -  malloc__space_error_message:
-  114 D1:A9A4 6F 75 74 20 
+   19 D1:A8B9 21 66 94 D0 	ld		HL, HEAP_START					; pointer(HL) current_location = HEAP_START
+   20 D1:A8BD -  -  -  -  	
+   21 D1:A8BD -  -  -  -  malloc__loop:
+   22 D1:A8BD 46 -  -  -  	ld  	B, (HL)							; heap_header(B) header = &current_location
+   23 D1:A8BE -  -  -  -  	
+   24 D1:A8BE 23 -  -  -  	inc 	HL								; current_location++
+   25 D1:A8BF 11 00 00 00 	ld		DE, 0							; double(DE) size = 0;
+   26 D1:A8C3 56 -  -  -  	ld		D, (HL)							; size.upper = &current_location
+   27 D1:A8C4 23 -  -  -  	inc		HL								; current_location++
+   28 D1:A8C5 5E -  -  -  	ld		E, (HL)							; size.lower = &current_location
+   29 D1:A8C6 23 -  -  -  	inc		HL								; current_location++
+   30 D1:A8C7 E5 -  -  -  	push	HL								; move current_location(HL -> STACK)
+   31 D1:A8C8 -  -  -  -  	
+   32 D1:A8C8 CB 40 -  -  	bit 	0, B							; if(not header.is_used):
+   33 D1:A8CA CA DA A8 D1 	jp 		Z, malloc__found_block			;;	goto $found_block
+   34 D1:A8CE -  -  -  -  								
+   35 D1:A8CE -  -  -  -  malloc__goto_next:					
+   36 D1:A8CE E1 -  -  -  	pop		HL								; move current_location(STACK -> HL)
+   37 D1:A8CF -  -  -  -  	
+   38 D1:A8CF CB 48 -  -  	bit 	1, B							; if(header.is_last):
+   39 D1:A8D1 CA 2A A9 D1 	jp 		Z, malloc__out_of_space			;;	goto $out_of_space
+   40 D1:A8D5 -  -  -  -  	
+   41 D1:A8D5 19 -  -  -  	add		HL, DE							; current_location += size
+   42 D1:A8D6 C3 BD A8 D1 	jp 		malloc__loop					; goto $loop	
+   43 D1:A8DA -  -  -  -  
+   44 D1:A8DA -  -  -  -  malloc__found_block:			
+   45 D1:A8DA 21 B1 A8 D1 	ld 		HL, malloc__required_size		; *double(HL) *minimum_size = required_size
+   46 D1:A8DE -  -  -  -  	
+   47 D1:A8DE 7A -  -  -  	ld		A, D							; copy size.upper(D -> A)
+   48 D1:A8DF BE -  -  -  	cp 		A, (HL)							; if(size.upper < required_size.upper)
+   49 D1:A8E0 DA CE A8 D1 	jp		C, malloc__goto_next			;;	goto $goto_next 
+   50 D1:A8E4 -  -  -  -  	
+   51 D1:A8E4 23 -  -  -  	inc		HL								; *minimum_size++
+   52 D1:A8E5 7B -  -  -  	ld		A, E							; copy size.upper(E -> A)
+   53 D1:A8E6 BE -  -  -  	cp 		A, (HL)							; if(size.lower < required_size.lower)
+   54 D1:A8E7 DA CE A8 D1 	jp		C, malloc__goto_next			;;	goto $goto_next 
+   55 D1:A8EB -  -  -  -  	
+   56 D1:A8EB 2B -  -  -  	dec		HL								; *minimum_size--
+   57 D1:A8EC 7A -  -  -  	ld		A, D							; copy size.upper(D -> A)
+   58 D1:A8ED BE -  -  -  	cp 		A, (HL)							; if(size.upper != required_size.upper)
+   59 D1:A8EE C2 02 A9 D1 	jp		NZ, malloc__split				;;	goto $split
+   60 D1:A8F2 -  -  -  -  	
+   61 D1:A8F2 23 -  -  -  	inc		HL								; *minimum_size++
+   62 D1:A8F3 7B -  -  -  	ld		A, E							; copy size.upper(E -> A)
+   63 D1:A8F4 BE -  -  -  	cp 		A, (HL)							; if(size.lower == required_size.lower)
+   64 D1:A8F5 C2 02 A9 D1 	jp		NZ, malloc__split				;;	goto $split
+   65 D1:A8F9 -  -  -  -  	
+   66 D1:A8F9 E1 -  -  -  	pop		HL								; copy current_location(STACK -> HL)
+   67 D1:A8FA E5 -  -  -  	push	HL
+   68 D1:A8FB 2B -  -  -  	dec		HL
+   69 D1:A8FC 2B -  -  -  	dec		HL
+   70 D1:A8FD 2B -  -  -  	dec		HL
+   71 D1:A8FE CB C6 -  -  	set 	0, (HL) 						; header.is_used = regTRUE
+   72 D1:A900 -  -  -  -  	
+   73 D1:A900 C1 -  -  -  	pop		BC								; move current_location(STACK -> BC)
+   74 D1:A901 C9 -  -  -  	ret										; return current_location
+   75 D1:A902 -  -  -  -  	
+   76 D1:A902 -  -  -  -  malloc__split:
+   77 D1:A902 E1 -  -  -  	pop		HL								; copy current_location(STACK -> HL)
+   78 D1:A903 E5 -  -  -  	push	HL								;;
+   79 D1:A904 2B -  -  -  	dec		HL								;;
+   80 D1:A905 2B -  -  -  	dec		HL								;;
+   81 D1:A906 2B -  -  -  	dec		HL								;;
+   82 D1:A907 CB 8E -  -  	res 	1, (HL) 						;; header.is_last = regFALSE
+   83 D1:A909 CB CE -  -  	set 	1, (HL) 						;; header.is_used = regTRUE
+   84 D1:A90B -  -  -  -  	
+   85 D1:A90B EB -  -  -  	ex		DE, HL							; double(HL) old_size = size
+   86 D1:A90C -  -  -  -  	
+   87 D1:A90C 11 00 00 00 	ld		DE, 0							;; move required_size(RAM -> DE)
+   88 D1:A910 3A B1 A8 D1 	ld		A, (malloc__required_size)		;; 
+   89 D1:A914 57 -  -  -  	ld		D, A							;;
+   90 D1:A915 3A B2 A8 D1 	ld		A, (malloc__required_size+1)	;;
+   91 D1:A919 5F -  -  -  	ld		E, A							;;
+   92 D1:A91A -  -  -  -  	
+   93 D1:A91A D6 00 -  -  	sub		A, 0							; carry = regFALSE
+   94 D1:A91C E5 -  -  -  	push	HL								; copy old_size(HL -> STACK)
+   95 D1:A91D ED 52 -  -  	sbc		HL, DE 							; spliced_size(HL) = old_size - required_size
+   96 D1:A91F -  -  -  -  
+   97 D1:A91F EB -  -  -  	ex		DE, HL							; move spliced_size(HL -> DE)
+   98 D1:A920 E1 -  -  -  	pop 	HL								; move old_size(STACK -> HL)
+   99 D1:A921 -  -  -  -  	
+  100 D1:A921 09 -  -  -  	add		HL, BC							; new_location(HL) = current_location + old_size
+  101 D1:A922 -  -  -  -  
+  102 D1:A922 36 00 -  -  	ld		(HL), 0							; new heap_header(*HL) = {is_used = regFALSE}
+  103 D1:A924 23 -  -  -  	inc		HL								; new_location++
+  104 D1:A925 72 -  -  -  	ld		(HL), D							; heap[new_location] = spliced_size.upper
+  105 D1:A926 23 -  -  -  	inc		HL								; new_location++
+  106 D1:A927 73 -  -  -  	ld		(HL), E							; heap[new_location] = spliced_size.lower
+  107 D1:A928 -  -  -  -  
+  108 D1:A928 -  -  -  -  	
+  109 D1:A928 C1 -  -  -  	pop		BC								; move old_location(STACK -> BC)
+  110 D1:A929 C9 -  -  -  	ret 									; return old_location(BC)
+  111 D1:A92A -  -  -  -  	
+  112 D1:A92A -  -  -  -  malloc__out_of_space:
+  113 D1:A92A 21 36 A9 D1 	ld		HL, malloc__space_error_message ; string(HL) error_message = "out of memory!"
+  114 D1:A92E CD C0 07 02 	call	_PutS
+  115 D1:A932 C3 9E A8 D1 	jp		ProgramExit
+  116 D1:A936 -  -  -  -  	
+  117 D1:A936 -  -  -  -  malloc__space_error_message:
+  118 D1:A936 6F 75 74 20 
               6F 66 20 6D 
               65 6D 6F 72 
               79 21 00 -  	.db 	"out of memory!", 0
-  115 D1:A9B3 -  -  -  -  
-  116 D1:A9B3 -  -  -  -  
-  117 D1:A9B3 -  -  -  -  
-  118 D1:A9B3 -  -  -  -  free:										; (pointer(HL) location) -> null # gets space in memory
-  119 D1:A9B3 2B -  -  -  	dec		HL								; location -= 3
-  120 D1:A9B4 2B -  -  -  	dec		HL								;;
-  121 D1:A9B5 2B -  -  -  	dec		HL								;;
-  122 D1:A9B6 -  -  -  -  	
-  123 D1:A9B6 CB C6 -  -  	set 	0, (HL)							; heap_header(location).is_used = false
-  124 D1:A9B8 C9 -  -  -  	ret										; return null
-  125 D1:A9B9 -  -  -  -  
-  126 D1:A9B9 -  -  -  -  
-  127 D1:A9B9 -  -  -  -  
-  128 D1:A9B9 -  -  -  -  merge:										; () -> null # gets space in memory
-  129 D1:A9B9 21 66 94 D0 	ld		HL, HEAP_START					; pointer(HL) current_location = HEAP_START
-  130 D1:A9BD 46 -  -  -  	ld		B, (HL)							; heap_header(B) header = &current_location
-  131 D1:A9BE 11 00 00 00 	ld		DE, 0							; double(DE) size = 0
-  132 D1:A9C2 01 00 00 00 	ld		BC, 0							; double(BC) new_size = 0
-  133 D1:A9C6 -  -  -  -  
-  134 D1:A9C6 -  -  -  -  merge__loop:
-  135 D1:A9C6 CB 48 -  -  	bit 	1, B							; if(header.is_last):
-  136 D1:A9C8 C8 -  -  -  	ret 	Z								;;	return null
-  137 D1:A9C9 -  -  -  -  	
-  138 D1:A9C9 E5 -  -  -  	push	HL								; pointer(STACK) old_location = copy current_location
-  139 D1:A9CA -  -  -  -  	
-  140 D1:A9CA 23 -  -  -  	inc		HL								; current_location++
-  141 D1:A9CB 56 -  -  -  	ld		D, (HL)							; size.upper = &current_location
-  142 D1:A9CC 23 -  -  -  	inc		HL								; current_location++
-  143 D1:A9CD 5E -  -  -  	ld		E, (HL)							; size.lower = &current_location
-  144 D1:A9CE -  -  -  -  	
-  145 D1:A9CE 19 -  -  -  	add		HL, DE							; current_location += size
-  146 D1:A9CF -  -  -  -  	
-  147 D1:A9CF CB 40 -  -  	bit 	0, B							; if(header.is_used):
-  148 D1:A9D1 CA EE A9 D1 	jp 		Z, merge__continue				;;	goto $continue
-  149 D1:A9D5 -  -  -  -  	
-  150 D1:A9D5 46 -  -  -  	ld		B, (HL)							; header = &current_location
-  151 D1:A9D6 -  -  -  -  	
-  152 D1:A9D6 CB 40 -  -  	bit 	0, B							; if(header.is_used):
-  153 D1:A9D8 CA EE A9 D1 	jp 		Z, merge__continue				;;	goto $continue
-  154 D1:A9DC -  -  -  -  	
-  155 D1:A9DC 23 -  -  -  	inc		HL								; current_location++
-  156 D1:A9DD 46 -  -  -  	ld		B, (HL)							; new_size.upper = &current_location
-  157 D1:A9DE 23 -  -  -  	inc		HL								; current_location++
-  158 D1:A9DF 4E -  -  -  	ld		C, (HL)							; new_size.lower = &current_location
-  159 D1:A9E0 -  -  -  -  	
-  160 D1:A9E0 EB -  -  -  	ex		DE, HL							; move current_location(HL -> DE), move size(DE -> HL)
-  161 D1:A9E1 09 -  -  -  	add		HL, BC							; new_size += size
-  162 D1:A9E2 EB -  -  -  	ex		DE, HL							; move size(HL -> DE)
-  163 D1:A9E3 -  -  -  -  	
-  164 D1:A9E3 E1 -  -  -  	pop		HL								; move old_location(STACK -> HL)
-  165 D1:A9E4 -  -  -  -  	
-  166 D1:A9E4 23 -  -  -  	inc		HL								; old_location += size
-  167 D1:A9E5 72 -  -  -  	ld		(HL), D 						; new_size.upper = &current_location
-  168 D1:A9E6 23 -  -  -  	inc		HL								; old_location += size
-  169 D1:A9E7 73 -  -  -  	ld		(HL), E 						; new_size.lower = &current_location
-  170 D1:A9E8 -  -  -  -  	
-  171 D1:A9E8 2B -  -  -  	dec		HL								; current_location = old_location-2
-  172 D1:A9E9 2B -  -  -  	dec		HL								;;
-  173 D1:A9EA -  -  -  -  	
-  174 D1:A9EA C3 C6 A9 D1 	jp		merge__loop						; goto $loop
-  175 D1:A9EE -  -  -  -  	
-  176 D1:A9EE -  -  -  -  merge__continue:
-  177 D1:A9EE D1 -  -  -  	pop		DE								; delete(STACK) old_location
-  178 D1:A9EF C9 -  -  -  	ret										; return null	
-  179 D1:A9F0 -  -  -  -  	
-  180 D1:A9F0 -  -  -  -  
-  181 D1:A9F0 -  -  -  -  
-  182 D1:A9F0 -  -  -  -  get_string_size:							; (pointer(HL) string_ptr) -> double(HL) size 
-  183 D1:A9F0 3E 00 -  -  	ld 		A, 0							; byte(A) compare_byte = 0
-  184 D1:A9F2 01 00 00 01 	ld 		BC, MAX_HEAP_ELEMENT_SIZE		; double(BC) fail_save = MAX_STRING_SIZE
-  185 D1:A9F6 -  -  -  -  	
-  186 D1:A9F6 E5 -  -  -  	push 	HL								; pointer(DE) string_start = copy string_ptr
-  187 D1:A9F7 D1 -  -  -  	pop		DE								;;
-  188 D1:A9F8 -  -  -  -  	
-  189 D1:A9F8 ED B1 -  -  	CPIR									; while(&string_ptr != compare_byte && fail_save != 0){string_ptr++; fail_save--;}
-  190 D1:A9FA -  -  -  -  	
-  191 D1:A9FA C6 00 -  -  	add		A, 0							;;  size = string_ptr - string_start
-  192 D1:A9FC ED 52 -  -  	sbc		HL, DE							;; 
-  193 D1:A9FE -  -  -  -  	
-  194 D1:A9FE C9 -  -  -  	ret										; return size	
-  195 D1:A9FF -  -  -  -  	
-  196 D1:A9FF -  -  -  -  
-  197 D1:A9FF -  -  -  -  
-  198 D1:A9FF -  -  -  -  string_to_heap:								; (string(HL) String) -> pointer(DE) heap_pointer
-  199 D1:A9FF E5 -  -  -  	push	HL								; copy String(HL -> STACK)
-  200 D1:AA00 -  -  -  -  	
-  201 D1:AA00 CD F0 A9 D1 	call	get_string_size					;double(HL) string_size = get_string_size(String)
-  202 D1:AA04 -  -  -  -  	
-  203 D1:AA04 01 00 00 00 	ld		BC, 0							; move string_size(HL -> BC)
-  204 D1:AA08 44 -  -  -  	ld		B,	H							;;
-  205 D1:AA09 4D -  -  -  	ld		C,	L							;;
-  206 D1:AA0A C5 -  -  -  	push	BC								; copy string_size(BC -> STACK)
-  207 D1:AA0B -  -  -  -  
-  208 D1:AA0B 03 -  -  -  	inc		BC
-  209 D1:AA0C -  -  -  -  	
-  210 D1:AA0C CD 22 A9 D1 	call	malloc							; pointer(BC) heap_location = malloc(string_size)
-  211 D1:AA10 -  -  -  -  	
-  212 D1:AA10 C5 -  -  -  	push	BC								; move heap_location(BC -> DE)
-  213 D1:AA11 D1 -  -  -  	pop		DE								;;
-  214 D1:AA12 C1 -  -  -  	pop		BC								; move string_size(STACK -> BC)
-  215 D1:AA13 E1 -  -  -  	pop		HL								; move String(STACK -> HL)
-  216 D1:AA14 D5 -  -  -  	push	DE								; pointer(STACK) new_pointer = heap_location(DE)
-  217 D1:AA15 -  -  -  -  	
-  218 D1:AA15 ED B0 -  -  	LDIR									; while(string_size != 0){
-  219 D1:AA17 -  -  -  -  	;LDIR									;;	&heap_location = &String
-  220 D1:AA17 -  -  -  -  	;LDIR									;;	heap_location
-  221 D1:AA17 -  -  -  -  	;LDIR									;;	String++
-  222 D1:AA17 -  -  -  -  	;LDIR									;; 	string_size--
-  223 D1:AA17 -  -  -  -  	;LDIR									;;}
-  224 D1:AA17 -  -  -  -  	
-  225 D1:AA17 D1 -  -  -  	pop		DE 								; return new_pointer
-  226 D1:AA18 C9 -  -  -  	ret										;;
-  227 D1:AA19 -  -  -  -  
-  228 D1:AA19 -  -  -  -  
-  229 D1:AA19 -  -  -  -  
-  230 D1:AA19 -  -  -  -  init:										; initializes stuff
-  231 D1:AA19 3E 40 -  -  	ld		A, %01000000
-  232 D1:AA1B 32 66 94 D0 	ld		(HEAP_START), a
-  233 D1:AA1F 21 B9 55 00 	ld		HL, HEAP_SIZE
-  234 D1:AA23 22 67 94 D0 	ld		(HEAP_START+1), HL
-  235 D1:AA27 C9 -  -  -  	ret
-  236 D1:AA28 -  -  -  -  
-  237 D1:AA28 -  -  -  -  
-  238 D1:AA28 -  -  -  -  
-  239 D1:AA28 -  -  -  -  print_bool:
-  240 D1:AA28 FE FF -  -  	cp		A, %11111111
-  241 D1:AA2A CA 37 AA D1 	jp		Z, print_bool__true
-  242 D1:AA2E 21 45 AA D1 	ld		HL, false_string
-  243 D1:AA32 CD C0 07 02 	call 	_PutS
-  244 D1:AA36 C9 -  -  -  	ret
-  245 D1:AA37 -  -  -  -  print_bool__true:
-  246 D1:AA37 21 40 AA D1 	ld		HL, true_string
-  247 D1:AA3B CD C0 07 02 	call 	_PutS
-  248 D1:AA3F C9 -  -  -  	ret
-  249 D1:AA40 -  -  -  -  
-  250 D1:AA40 -  -  -  -  true_string:
-  251 D1:AA40 74 72 75 65 
+  119 D1:A945 -  -  -  -  
+  120 D1:A945 -  -  -  -  
+  121 D1:A945 -  -  -  -  
+  122 D1:A945 -  -  -  -  free:										; (pointer(HL) location) -> null # gets space in memory
+  123 D1:A945 2B -  -  -  	dec		HL								; location -= 3
+  124 D1:A946 2B -  -  -  	dec		HL								;;
+  125 D1:A947 2B -  -  -  	dec		HL								;;
+  126 D1:A948 -  -  -  -  	
+  127 D1:A948 CB C6 -  -  	set 	0, (HL)							; heap_header(location).is_used = regFALSE
+  128 D1:A94A C9 -  -  -  	ret										; return null
+  129 D1:A94B -  -  -  -  
+  130 D1:A94B -  -  -  -  
+  131 D1:A94B -  -  -  -  
+  132 D1:A94B -  -  -  -  merge:										; () -> null # gets space in memory
+  133 D1:A94B 21 66 94 D0 	ld		HL, HEAP_START					; pointer(HL) current_location = HEAP_START
+  134 D1:A94F 46 -  -  -  	ld		B, (HL)							; heap_header(B) header = &current_location
+  135 D1:A950 11 00 00 00 	ld		DE, 0							; double(DE) size = 0
+  136 D1:A954 01 00 00 00 	ld		BC, 0							; double(BC) new_size = 0
+  137 D1:A958 -  -  -  -  
+  138 D1:A958 -  -  -  -  merge__loop:
+  139 D1:A958 CB 48 -  -  	bit 	1, B							; if(header.is_last):
+  140 D1:A95A C8 -  -  -  	ret 	Z								;;	return null
+  141 D1:A95B -  -  -  -  	
+  142 D1:A95B E5 -  -  -  	push	HL								; pointer(STACK) old_location = copy current_location
+  143 D1:A95C -  -  -  -  	
+  144 D1:A95C 23 -  -  -  	inc		HL								; current_location++
+  145 D1:A95D 56 -  -  -  	ld		D, (HL)							; size.upper = &current_location
+  146 D1:A95E 23 -  -  -  	inc		HL								; current_location++
+  147 D1:A95F 5E -  -  -  	ld		E, (HL)							; size.lower = &current_location
+  148 D1:A960 -  -  -  -  	
+  149 D1:A960 19 -  -  -  	add		HL, DE							; current_location += size
+  150 D1:A961 -  -  -  -  	
+  151 D1:A961 CB 40 -  -  	bit 	0, B							; if(header.is_used):
+  152 D1:A963 CA 80 A9 D1 	jp 		Z, merge__continue				;;	goto $continue
+  153 D1:A967 -  -  -  -  	
+  154 D1:A967 46 -  -  -  	ld		B, (HL)							; header = &current_location
+  155 D1:A968 -  -  -  -  	
+  156 D1:A968 CB 40 -  -  	bit 	0, B							; if(header.is_used):
+  157 D1:A96A CA 80 A9 D1 	jp 		Z, merge__continue				;;	goto $continue
+  158 D1:A96E -  -  -  -  	
+  159 D1:A96E 23 -  -  -  	inc		HL								; current_location++
+  160 D1:A96F 46 -  -  -  	ld		B, (HL)							; new_size.upper = &current_location
+  161 D1:A970 23 -  -  -  	inc		HL								; current_location++
+  162 D1:A971 4E -  -  -  	ld		C, (HL)							; new_size.lower = &current_location
+  163 D1:A972 -  -  -  -  	
+  164 D1:A972 EB -  -  -  	ex		DE, HL							; move current_location(HL -> DE), move size(DE -> HL)
+  165 D1:A973 09 -  -  -  	add		HL, BC							; new_size += size
+  166 D1:A974 EB -  -  -  	ex		DE, HL							; move size(HL -> DE)
+  167 D1:A975 -  -  -  -  	
+  168 D1:A975 E1 -  -  -  	pop		HL								; move old_location(STACK -> HL)
+  169 D1:A976 -  -  -  -  	
+  170 D1:A976 23 -  -  -  	inc		HL								; old_location += size
+  171 D1:A977 72 -  -  -  	ld		(HL), D 						; new_size.upper = &current_location
+  172 D1:A978 23 -  -  -  	inc		HL								; old_location += size
+  173 D1:A979 73 -  -  -  	ld		(HL), E 						; new_size.lower = &current_location
+  174 D1:A97A -  -  -  -  	
+  175 D1:A97A 2B -  -  -  	dec		HL								; current_location = old_location-2
+  176 D1:A97B 2B -  -  -  	dec		HL								;;
+  177 D1:A97C -  -  -  -  	
+  178 D1:A97C C3 58 A9 D1 	jp		merge__loop						; goto $loop
+  179 D1:A980 -  -  -  -  	
+  180 D1:A980 -  -  -  -  merge__continue:
+  181 D1:A980 D1 -  -  -  	pop		DE								; delete(STACK) old_location
+  182 D1:A981 C9 -  -  -  	ret										; return null	
+  183 D1:A982 -  -  -  -  	
+  184 D1:A982 -  -  -  -  
+  185 D1:A982 -  -  -  -  
+  186 D1:A982 -  -  -  -  get_string_size:							; (pointer(HL) string_ptr) -> double(HL) size 
+  187 D1:A982 3E 00 -  -  	ld 		A, 0							; byte(A) compare_byte = 0
+  188 D1:A984 01 FF 00 00 	ld 		BC, MAX_STRING_SIZE     		; double(BC) fail_save = MAX_STRING_SIZE
+  189 D1:A988 -  -  -  -  	
+  190 D1:A988 E5 -  -  -  	push 	HL								; pointer(DE) string_start = copy string_ptr
+  191 D1:A989 D1 -  -  -  	pop		DE								;;
+  192 D1:A98A -  -  -  -  	
+  193 D1:A98A ED B1 -  -  	CPIR									; while(&string_ptr != compare_byte && fail_save != 0){string_ptr++; fail_save--;}
+  194 D1:A98C -  -  -  -  	
+  195 D1:A98C B7 -  -  -  	or		A   							;;  size = string_ptr - string_start
+  196 D1:A98D ED 52 -  -  	sbc		HL, DE							;; 
+  197 D1:A98F -  -  -  -  	
+  198 D1:A98F C9 -  -  -  	ret										; return size	
+  199 D1:A990 -  -  -  -  	
+  200 D1:A990 -  -  -  -  
+  201 D1:A990 -  -  -  -  
+  202 D1:A990 -  -  -  -  string_to_heap:								; (string(HL) String) -> pointer(DE) heap_pointer
+  203 D1:A990 E5 -  -  -  	push	HL								; copy String(HL -> STACK)
+  204 D1:A991 -  -  -  -  	
+  205 D1:A991 CD 82 A9 D1 	call	get_string_size					;double(HL) string_size = get_string_size(String)
+  206 D1:A995 -  -  -  -  	
+  207 D1:A995 01 00 00 00 	ld		BC, 0							; move string_size(HL -> BC)
+  208 D1:A999 44 -  -  -  	ld		B,	H							;;
+  209 D1:A99A 4D -  -  -  	ld		C,	L							;;
+  210 D1:A99B C5 -  -  -  	push	BC								; copy string_size(BC -> STACK)
+  211 D1:A99C -  -  -  -  
+  212 D1:A99C 03 -  -  -  	inc		BC
+  213 D1:A99D -  -  -  -  	
+  214 D1:A99D CD B4 A8 D1 	call	malloc							; pointer(BC) heap_location = malloc(string_size)
+  215 D1:A9A1 -  -  -  -  	
+  216 D1:A9A1 C5 -  -  -  	push	BC								; move heap_location(BC -> DE)
+  217 D1:A9A2 D1 -  -  -  	pop		DE								;;
+  218 D1:A9A3 C1 -  -  -  	pop		BC								; move string_size(STACK -> BC)
+  219 D1:A9A4 E1 -  -  -  	pop		HL								; move String(STACK -> HL)
+  220 D1:A9A5 D5 -  -  -  	push	DE								; pointer(STACK) new_pointer = heap_location(DE)
+  221 D1:A9A6 -  -  -  -  	
+  222 D1:A9A6 ED B0 -  -  	LDIR									; while(string_size != 0){
+  223 D1:A9A8 -  -  -  -  	;LDIR									;;	&heap_location = &String
+  224 D1:A9A8 -  -  -  -  	;LDIR									;;	heap_location
+  225 D1:A9A8 -  -  -  -  	;LDIR									;;	String++
+  226 D1:A9A8 -  -  -  -  	;LDIR									;; 	string_size--
+  227 D1:A9A8 -  -  -  -  	;LDIR									;;}
+  228 D1:A9A8 -  -  -  -  	
+  229 D1:A9A8 D1 -  -  -  	pop		DE 								; return new_pointer
+  230 D1:A9A9 C9 -  -  -  	ret										;;
+  231 D1:A9AA -  -  -  -  
+  232 D1:A9AA -  -  -  -  
+  233 D1:A9AA -  -  -  -  
+  234 D1:A9AA -  -  -  -  init:										; initializes stuff
+  235 D1:A9AA 3E 40 -  -  	ld		A, %01000000
+  236 D1:A9AC 32 66 94 D0 	ld		(HEAP_START), a
+  237 D1:A9B0 21 B9 55 00 	ld		HL, HEAP_SIZE
+  238 D1:A9B4 22 67 94 D0 	ld		(HEAP_START+1), HL
+  239 D1:A9B8 C9 -  -  -  	ret
+  240 D1:A9B9 -  -  -  -  
+  241 D1:A9B9 -  -  -  -  
+  242 D1:A9B9 -  -  -  -  
+  243 D1:A9B9 -  -  -  -  print_bool:
+  244 D1:A9B9 FE FF -  -  	cp		A, regTRUE
+  245 D1:A9BB CA C8 A9 D1 	jp		Z, print_bool__true
+  246 D1:A9BF 21 D6 A9 D1 	ld		HL, false_string
+  247 D1:A9C3 CD C0 07 02 	call 	_PutS
+  248 D1:A9C7 C9 -  -  -  	ret
+  249 D1:A9C8 -  -  -  -  print_bool__true:
+  250 D1:A9C8 21 D1 A9 D1 	ld		HL, true_string
+  251 D1:A9CC CD C0 07 02 	call 	_PutS
+  252 D1:A9D0 C9 -  -  -  	ret
+  253 D1:A9D1 -  -  -  -  
+  254 D1:A9D1 -  -  -  -  true_string:
+  255 D1:A9D1 74 72 75 65 
               00 -  -  -  	.db "true",0
-  252 D1:AA45 -  -  -  -  false_string:
-  253 D1:AA45 66 61 6C 73 
+  256 D1:A9D6 -  -  -  -  false_string:
+  257 D1:A9D6 66 61 6C 73 
               65 00 -  -  	.db "false",0
-  254 D1:AA4B -  -  -  -  
-  255 D1:AA4B -  -  -  -  
-  256 D1:AA4B -  -  -  -  
-  257 D1:AA4B -  -  -  -  byte_smaller:
-  258 D1:AA4B BC -  -  -      cp		A, H
-  259 D1:AA4C 38 03 -  -      jr		C, byte_smaller__true
-  260 D1:AA4E 26 00 -  -      ld	    H, %00000000
-  261 D1:AA50 C9 -  -  -      ret
-  262 D1:AA51 -  -  -  -  byte_smaller__true:
-  263 D1:AA51 26 FF -  -      ld	    H, %11111111
-  264 D1:AA53 C9 -  -  -      ret
-  265 D1:AA54 -  -  -  -  
-  266 D1:AA54 -  -  -  -  
-  267 D1:AA54 -  -  -  -  
-  268 D1:AA54 -  -  -  -  byte_higher:
-  269 D1:AA54 BC -  -  -      cp		A, H
-  270 D1:AA55 30 03 -  -      jr		NC, byte_higher__true
-  271 D1:AA57 26 FF -  -      ld	    H, %11111111
-  272 D1:AA59 C9 -  -  -      ret
-  273 D1:AA5A -  -  -  -  byte_higher__true:
-  274 D1:AA5A 26 00 -  -      ld	    H, %00000000
-  275 D1:AA5C C9 -  -  -      ret
-  276 D1:AA5D -  -  -  -  
-  277 D1:AA5D -  -  -  -  
-  278 D1:AA5D -  -  -  -  
-  279 D1:AA5D -  -  -  -  byte_higher_or_equals:
-  280 D1:AA5D BC -  -  -      cp		A, H
-  281 D1:AA5E 30 03 -  -      jr		NC, byte_higher_or_equals__true
-  282 D1:AA60 26 00 -  -      ld	    H, %00000000
-  283 D1:AA62 C9 -  -  -      ret
-  284 D1:AA63 -  -  -  -  byte_higher_or_equals__true:
-  285 D1:AA63 26 FF -  -      ld	    H, %11111111
-  286 D1:AA65 C9 -  -  -      ret
-  287 D1:AA66 -  -  -  -  
-  288 D1:AA66 -  -  -  -  
-  289 D1:AA66 -  -  -  -  
-  290 D1:AA66 -  -  -  -  byte_lower_or_equals:
-  291 D1:AA66 BC -  -  -      cp		A, H
-  292 D1:AA67 38 03 -  -      jr		C, byte_lower_or_equals__true
-  293 D1:AA69 26 FF -  -      ld	    H, %11111111
-  294 D1:AA6B C9 -  -  -      ret
-  295 D1:AA6C -  -  -  -  byte_lower_or_equals__true:
-  296 D1:AA6C 26 00 -  -      ld	    H, %00000000
-  297 D1:AA6E C9 -  -  -      ret
-  298 D1:AA6F -  -  -  -  
-  299 D1:AA6F -  -  -  -  
-  300 D1:AA6F -  -  -  -  
-  301 D1:AA6F -  -  -  -  stack_to_call_stack:       ; append_to_call_stack()
-  302 D1:AA6F 21 00 00 00     ld      HL, 0           ; pointer(HL) old_stack = StackPointer
-  303 D1:AA73 39 -  -  -      add     HL, SP          ;;
-  304 D1:AA74 -  -  -  -  
-  305 D1:AA74 ED 7B E9 AA 
+  258 D1:A9DC -  -  -  -  
+  259 D1:A9DC -  -  -  -  
+  260 D1:A9DC -  -  -  -  
+  261 D1:A9DC -  -  -  -  byte_smaller:
+  262 D1:A9DC BC -  -  -      cp		A, H
+  263 D1:A9DD 38 19 -  -      jr		C, H_true_ret
+  264 D1:A9DF 26 00 -  -      ld	    H, regFALSE
+  265 D1:A9E1 C9 -  -  -      ret
+  266 D1:A9E2 -  -  -  -  
+  267 D1:A9E2 -  -  -  -  
+  268 D1:A9E2 -  -  -  -  byte_higher:
+  269 D1:A9E2 BC -  -  -      cp		A, H
+  270 D1:A9E3 28 16 -  -      jr		Z, H_false_ret
+  271 D1:A9E5 38 14 -  -      jr		C, H_false_ret
+  272 D1:A9E7 26 FF -  -      ld	    H, regTRUE
+  273 D1:A9E9 C9 -  -  -      ret
+  274 D1:A9EA -  -  -  -  
+  275 D1:A9EA -  -  -  -  
+  276 D1:A9EA -  -  -  -  
+  277 D1:A9EA -  -  -  -  byte_higher_or_equals:
+  278 D1:A9EA BC -  -  -      cp		A, H
+  279 D1:A9EB 30 0B -  -      jr		NC, H_true_ret
+  280 D1:A9ED 26 00 -  -      ld	    H, regFALSE
+  281 D1:A9EF C9 -  -  -      ret
+  282 D1:A9F0 -  -  -  -  
+  283 D1:A9F0 -  -  -  -  
+  284 D1:A9F0 -  -  -  -  
+  285 D1:A9F0 -  -  -  -  byte_lower_or_equals:
+  286 D1:A9F0 BC -  -  -      cp		A, H
+  287 D1:A9F1 28 05 -  -      jr		Z, H_true_ret
+  288 D1:A9F3 38 03 -  -      jr      C, H_true_ret
+  289 D1:A9F5 26 00 -  -      ld	    H, regFALSE
+  290 D1:A9F7 C9 -  -  -      ret
+  291 D1:A9F8 -  -  -  -  
+  292 D1:A9F8 -  -  -  -  
+  293 D1:A9F8 -  -  -  -  
+  294 D1:A9F8 -  -  -  -  H_true_ret:
+  295 D1:A9F8 26 FF -  -      ld      H, regTRUE
+  296 D1:A9FA C9 -  -  -      ret
+  297 D1:A9FB -  -  -  -  
+  298 D1:A9FB -  -  -  -  
+  299 D1:A9FB -  -  -  -  
+  300 D1:A9FB -  -  -  -  H_false_ret:
+  301 D1:A9FB 26 00 -  -      ld      H, regFALSE
+  302 D1:A9FD C9 -  -  -      ret
+  303 D1:A9FE -  -  -  -  
+  304 D1:A9FE -  -  -  -  
+  305 D1:A9FE -  -  -  -  
+  306 D1:A9FE -  -  -  -  stack_to_call_stack:       ; append_to_call_stack()
+  307 D1:A9FE 21 00 00 00     ld      HL, 0           ; pointer(HL) old_stack = StackPointer
+  308 D1:AA02 39 -  -  -      add     HL, SP          ;;
+  309 D1:AA03 -  -  -  -  
+  310 D1:AA03 ED 7B 70 AA 
               D1 -  -  -      ld      SP, (CallStack) ; StackPointer(SP) = CallStack
-  306 D1:AA79 E5 -  -  -      push    HL              ; move old_stack(HL -> STACK)
-  307 D1:AA7A ED 73 E9 AA 
+  311 D1:AA08 E5 -  -  -      push    HL              ; move old_stack(HL -> STACK)
+  312 D1:AA09 ED 73 70 AA 
               D1 -  -  -      ld      (CallStack), SP ; StackPointer(SP) = CallStack
-  308 D1:AA7F -  -  -  -  
-  309 D1:AA7F F9 -  -  -      ld      SP, HL
-  310 D1:AA80 C9 -  -  -      ret
-  311 D1:AA81 -  -  -  -  
-  312 D1:AA81 -  -  -  -  
-  313 D1:AA81 -  -  -  -  
-  314 D1:AA81 -  -  -  -  snapshot_to_call_stack:       ; append_to_call_stack(pointer(DE) return_pointer)
-  315 D1:AA81 DD 21 00 00 
+  313 D1:AA0E -  -  -  -  
+  314 D1:AA0E F9 -  -  -      ld      SP, HL
+  315 D1:AA0F C9 -  -  -      ret
+  316 D1:AA10 -  -  -  -  
+  317 D1:AA10 -  -  -  -  
+  318 D1:AA10 -  -  -  -  
+  319 D1:AA10 -  -  -  -  snapshot_to_call_stack:       ; append_to_call_stack(pointer(DE) return_pointer)
+  320 D1:AA10 DD 21 00 00 
               00 -  -  -      ld      IX, 0           ; pointer(HL) old_stack = StackPointer
-  316 D1:AA86 DD 39 -  -      add     IX, SP          ;;
-  317 D1:AA88 -  -  -  -  
-  318 D1:AA88 ED 7B E9 AA 
+  321 D1:AA15 DD 39 -  -      add     IX, SP          ;;
+  322 D1:AA17 -  -  -  -  
+  323 D1:AA17 ED 7B 70 AA 
               D1 -  -  -      ld      SP, (CallStack) ; StackPointer(SP) = CallStack
-  319 D1:AA8D DD E5 -  -      push    IX              ; move old_stack(HL -> STACK)
-  320 D1:AA8F D5 -  -  -      push    DE              ; move return_pointer(DE -> STACK)
-  321 D1:AA90 ED 73 E9 AA 
+  324 D1:AA1C DD E5 -  -      push    IX              ; move old_stack(HL -> STACK)
+  325 D1:AA1E D5 -  -  -      push    DE              ; move return_pointer(DE -> STACK)
+  326 D1:AA1F ED 73 70 AA 
               D1 -  -  -      ld      (CallStack), SP ; StackPointer(SP) = CallStack
-  322 D1:AA95 -  -  -  -  
-  323 D1:AA95 F9 -  -  -      ld      SP, HL
-  324 D1:AA96 C9 -  -  -      ret
-  325 D1:AA97 -  -  -  -  
-  326 D1:AA97 -  -  -  -  
-  327 D1:AA97 -  -  -  -  
-  328 D1:AA97 -  -  -  -  snapshot_from_call_stack:   ; append_to_call_stack(pointer(DE) return_pointer)
-  329 D1:AA97 21 00 00 00     ld      HL, 0           ; pointer(HL) old_stack = StackPointer
-  330 D1:AA9B 39 -  -  -      add     HL, SP          ;;
-  331 D1:AA9C -  -  -  -  
-  332 D1:AA9C ED 7B E9 AA 
+  327 D1:AA24 -  -  -  -  
+  328 D1:AA24 F9 -  -  -      ld      SP, HL
+  329 D1:AA25 C9 -  -  -      ret
+  330 D1:AA26 -  -  -  -  
+  331 D1:AA26 -  -  -  -  
+  332 D1:AA26 -  -  -  -  
+  333 D1:AA26 -  -  -  -  snapshot_from_call_stack:   ; append_to_call_stack(pointer(DE) return_pointer)
+  334 D1:AA26 21 00 00 00     ld      HL, 0           ; pointer(HL) old_stack = StackPointer
+  335 D1:AA2A 39 -  -  -      add     HL, SP          ;;
+  336 D1:AA2B -  -  -  -  
+  337 D1:AA2B ED 7B 70 AA 
               D1 -  -  -      ld      SP, (CallStack) ; StackPointer(SP) = CallStack
-  333 D1:AAA1 C1 -  -  -      pop     BC              ; move return_pointer(DE -> STACK)
-  334 D1:AAA2 E1 -  -  -      pop     HL              ; move old_stack(HL -> STACK)
-  335 D1:AAA3 ED 73 E9 AA 
+  338 D1:AA30 C1 -  -  -      pop     BC              ; move return_pointer(DE -> STACK)
+  339 D1:AA31 E1 -  -  -      pop     HL              ; move old_stack(HL -> STACK)
+  340 D1:AA32 ED 73 70 AA 
               D1 -  -  -      ld      (CallStack), SP ; StackPointer(SP) = CallStack
-  336 D1:AAA8 -  -  -  -  
-  337 D1:AAA8 F9 -  -  -      ld      SP, HL
-  338 D1:AAA9 C9 -  -  -      ret
-  339 D1:AAAA -  -  -  -  
-  340 D1:AAAA -  -  -  -  
-  341 D1:AAAA -  -  -  -  
-  342 D1:AAAA -  -  -  -  int_smaller:
-  343 D1:AAAA B7 -  -  -      or a
-  344 D1:AAAB ED 52 -  -      sbc hl, de
-  345 D1:AAAD 19 -  -  -      add hl, de
-  346 D1:AAAE CA CA AA D1     jp  Z, int_smaller__false
-  347 D1:AAB2 DA CA AA D1     jp  C, int_smaller__false
-  348 D1:AAB6 3E FF -  -      ld  A, %11111111
-  349 D1:AAB8 C9 -  -  -      ret
-  350 D1:AAB9 -  -  -  -  int_smaller__false:
-  351 D1:AAB9 3E 00 -  -      ld  A, %00000000
-  352 D1:AABB -  -  -  -  
-  353 D1:AABB -  -  -  -  
-  354 D1:AABB -  -  -  -  
-  355 D1:AABB -  -  -  -  int_higher:
-  356 D1:AABB B7 -  -  -      or a
-  357 D1:AABC ED 52 -  -      sbc hl, de
-  358 D1:AABE 19 -  -  -      add hl, de
-  359 D1:AABF CA B9 AA D1     jp  Z, int_smaller__false
-  360 D1:AAC3 D2 B9 AA D1     jp  NC, int_smaller__false
-  361 D1:AAC7 3E FF -  -      ld  A, %11111111
-  362 D1:AAC9 C9 -  -  -      ret
-  363 D1:AACA -  -  -  -  int_smaller__false:
-  364 D1:AACA 3E 00 -  -      ld  A, %00000000
-  365 D1:AACC -  -  -  -  
-  366 D1:AACC -  -  -  -  
-  367 D1:AACC -  -  -  -  
-  368 D1:AACC -  -  -  -  int_higher_or_equals:
-  369 D1:AACC B7 -  -  -      or a
-  370 D1:AACD ED 52 -  -      sbc hl, de
-  371 D1:AACF 19 -  -  -      add hl, de
-  372 D1:AAD0 D2 CA AA D1     jp  NC, int_smaller__false
-  373 D1:AAD4 3E FF -  -      ld  A, %11111111
-  374 D1:AAD6 C9 -  -  -      ret
-  375 D1:AAD7 -  -  -  -  int_higher_or_equals__false:
-  376 D1:AAD7 3E 00 -  -      ld  A, %00000000
-  377 D1:AAD9 -  -  -  -  
-  378 D1:AAD9 -  -  -  -  
-  379 D1:AAD9 -  -  -  -  
-  380 D1:AAD9 -  -  -  -  int_smaller_or_equals:
-  381 D1:AAD9 B7 -  -  -      or a
-  382 D1:AADA ED 52 -  -      sbc hl, de
-  383 D1:AADC 19 -  -  -      add hl, de
-  384 D1:AADD DA CA AA D1     jp  C, int_smaller__false
-  385 D1:AAE1 3E FF -  -      ld  A, %11111111
-  386 D1:AAE3 C9 -  -  -      ret
-  387 D1:AAE4 -  -  -  -  int_smaller_or_equals__false:
-  388 D1:AAE4 3E 00 -  -      ld  A, %00000000
+  341 D1:AA37 -  -  -  -  
+  342 D1:AA37 F9 -  -  -      ld      SP, HL
+  343 D1:AA38 C9 -  -  -      ret
+  344 D1:AA39 -  -  -  -  
+  345 D1:AA39 -  -  -  -  
+  346 D1:AA39 -  -  -  -  
+  347 D1:AA39 -  -  -  -  int_smaller:
+  348 D1:AA39 B7 -  -  -      or a
+  349 D1:AA3A ED 52 -  -      sbc hl, de
+  350 D1:AA3C 19 -  -  -      add hl, de
+  351 D1:AA3D DA F8 A9 D1     jp  C, H_true_ret
+  352 D1:AA41 26 00 -  -      ld  H, regFALSE
+  353 D1:AA43 C9 -  -  -      ret
+  354 D1:AA44 -  -  -  -  
+  355 D1:AA44 -  -  -  -  
+  356 D1:AA44 -  -  -  -  
+  357 D1:AA44 -  -  -  -  int_higher:
+  358 D1:AA44 B7 -  -  -      or a
+  359 D1:AA45 ED 52 -  -      sbc hl, de
+  360 D1:AA47 19 -  -  -      add hl, de
+  361 D1:AA48 CA FB A9 D1     jp  Z, H_false_ret
+  362 D1:AA4C D2 F8 A9 D1     jp  NC, H_true_ret
+  363 D1:AA50 26 00 -  -      ld  H, regFALSE
+  364 D1:AA52 C9 -  -  -      ret
+  365 D1:AA53 -  -  -  -  
+  366 D1:AA53 -  -  -  -  
+  367 D1:AA53 -  -  -  -  
+  368 D1:AA53 -  -  -  -  int_higher_or_equals:
+  369 D1:AA53 B7 -  -  -      or a
+  370 D1:AA54 ED 52 -  -      sbc hl, de
+  371 D1:AA56 19 -  -  -      add hl, de
+  372 D1:AA57 D2 F8 A9 D1     jp  NC, H_true_ret
+  373 D1:AA5B 26 00 -  -      ld  H, regFALSE
+  374 D1:AA5D C9 -  -  -      ret
+  375 D1:AA5E -  -  -  -  
+  376 D1:AA5E -  -  -  -  
+  377 D1:AA5E -  -  -  -  
+  378 D1:AA5E -  -  -  -  int_smaller_or_equals:
+  379 D1:AA5E B7 -  -  -      or a
+  380 D1:AA5F ED 52 -  -      sbc hl, de
+  381 D1:AA61 19 -  -  -      add hl, de
+  382 D1:AA62 CA F8 A9 D1     jp  Z, H_true_ret
+  383 D1:AA66 DA F8 A9 D1     jp  C, H_true_ret
+  384 D1:AA6A 26 00 -  -      ld  H, regFALSE
+  385 D1:AA6C C9 -  -  -      ret
 Listing for file "asm/main.asm"
-   74 D1:AAE6 -  -  -  -  StackSave:
-   75 D1:AAE6 00 00 00 -  	.db          0,0,0
-   76 D1:AAE9 -  -  -  -  CallStack:
-   77 D1:AAE9 00 00 00 -  	.db          0,0,0
-   78 D1:AAEC -  -  -  -  stackStart .equ saveSScreen+762
-   79 D1:AAEC -  -  -  -  callStackStart .equ saveSScreen+768
-   80 D1:AAEC -  -  -  -  
+   23 D1:AA6D -  -  -  -  StackSave:
+   24 D1:AA6D 00 00 00 -  	.db          0,0,0
+   25 D1:AA70 -  -  -  -  CallStack:
+   26 D1:AA70 00 00 00 -  	.db          0,0,0
+   27 D1:AA73 -  -  -  -  stackStart .equ saveSScreen+512
+   28 D1:AA73 -  -  -  -  callStackStart .equ saveSScreen+768
+   29 D1:AA73 -  -  -  -  
+   30 D1:AA73 -  -  -  -  hello_2:
+   31 D1:AA73 -  -  -  -  	             
+   32 D1:AA73 21 8F AA D1 	ld           HL,string_3
+   33 D1:AA77 CD C0 07 02 	call         _PutS
+   34 D1:AA7B -  -  -  -  	             
+   35 D1:AA7B 2A 1C EC D0 	ld           HL,(stackStart-3)
+   36 D1:AA7F E5 -  -  -  	push         HL
+   37 D1:AA80 D1 -  -  -  	pop          DE
+   38 D1:AA81 21 00 00 00 	ld           HL,0
+   39 D1:AA85 62 -  -  -  	ld           H,D
+   40 D1:AA86 6B -  -  -  	ld           L,E
+   41 D1:AA87 CD E0 1E 02 	call         _DispHL
+   42 D1:AA8B CD F0 07 02 	call         _NewLine
+   43 D1:AA8F -  -  -  -  
+   44 D1:AA8F -  -  -  -  string_3:
+   45 D1:AA8F 68 65 6C 6C 
+              6F 20 6E 75 
+              6D 62 65 72 
+              00 -  -  -  	.db          "hello number", 0

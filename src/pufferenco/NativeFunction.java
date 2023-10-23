@@ -42,7 +42,6 @@ public class NativeFunction {
                 new AssemblyLine("ld", "HL", "0"),
                 new AssemblyLine("ld", "H", "D"),
                 new AssemblyLine("ld", "L", "E"),
-                new AssemblyLine("call", "_DispHL"),
                 new AssemblyLine("call", "_DispHL")
         ));
         new NativeFunction("printLn", new int[]{INT}, NULL, List.of(
@@ -73,6 +72,18 @@ public class NativeFunction {
                 new AssemblyLine("CPL"),
                 new AssemblyLine("push", "AF")
         ));
+        new NativeFunction("pause", new int[]{}, NULL, List.of(
+                new AssemblyLine("call", "_GetKey")
+        ));
+        new NativeFunction("setCursor", new int[]{BYTE, BYTE}, NULL, List.of(
+                new AssemblyLine("ld", "HL", "0"),
+                new AssemblyLine("pop", "DE"),
+                new AssemblyLine("ld", "H", "D"),
+                new AssemblyLine("ld", "(curRow)", "HL"),
+                new AssemblyLine("pop", "DE"),
+                new AssemblyLine("ld", "H", "D"),
+                new AssemblyLine("ld", "(curCol)", "HL")
+                ));
     }
 
     public static StackElement exec(String name, List<StackElement> params, AssemblyBuilder builder, boolean returns){
