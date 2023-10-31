@@ -41,24 +41,28 @@ compare_lower_then = expresion, "<", expresion;
 compare_lower_or_equel_to = expresion, "<=", expresion;
 
 
-logic_node =  {" "},(boolean | identifier | function_call | logic_expresion),{" "};
+logic_node =  s,(boolean | identifier | function_call | logic_expresion),s;
 logic_expresion = logic_and | logic_or | logic_not | compare_equel | compare_not_equel | compare_higher_then | compare_higher_or_equel_to | compare_lower_then | compare_lower_or_equel_to;
 
-expresion = {" "},(identifier | digit | string | function_call | boolean | logic_expresion | math_expresion),{" "};
+pointer_get = identifier, s, "->", s, identifier
+
+expresion = s,(identifier | digit | string | function_call | boolean | logic_expresion | math_expresion),s;
 
 function_parameters = "(",{" "}, {parameter,{" "}, ",",{" "}}, parameter,{" "}, ")" | "(",{" "},")";
 
 function_call = s,identifier, function_parameters,s;
 
-function_create = "fun",  identifier, "(", {identifier, ":", identifier, ","}, identifier, ":", identifier, ")", [s, "->", s, identifier], function_block
+function_create = "fun",  identifier, "(", {identifier, ":", identifier, ","}, identifier, ":", identifier, ")", [s, "->", s, identifier], s, "{", s, {sub_code_line}, s, "}"
 
-function_block = "{", s, {sub_code_line}, s, "};";
-
-code_line =
+code_line = 
 while_code_line =
 function_code_line =
 if_code_line = 
 global_code_line = sub_code_line | function_create | 
 
-var_init = identifier, s, ":", s, identifer, s, "=", s, expresion, s, ";", s
-var_reasign = identifer,
+var_init = identifier, s, ":", s, identifer, s, "=", expresion
+var_reasign = identifer, s, "=" expresion
+
+while_loop = "while(", logic_node, ")", s, "{", s, {sub_code_line}, s, "}"
+
+if_block
