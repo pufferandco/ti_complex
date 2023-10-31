@@ -1,8 +1,12 @@
+(* new lines such as \n are completely ignored *)
 non_zero = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+
+S = " ", {" "};
+s = {" "};
 
 digit = "0" | non_zero;
 
-number = non_zero, {digit}
+number = non_zero, {digit};
 
 letter = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | 	"l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z";
 
@@ -29,12 +33,12 @@ logic_and = logic_node, " and ",logic_node
 logic_or = logic_node, " or ", logic_node
 logic_not = "!",logic_node
 
-compare_equel = expresion, "==", expresion
-compare_not_equel = expresion, "!=", expresion
-compare_higher_then = expresion, ">", expresion
-compare_higher_or_equel_to = expresion, "=>", expresion
-compare_lower_then = expresion, "<", expresion
-compare_lower_or_equel_to = expresion, "<=", expresion
+compare_equel = expresion, "==", expresion;
+compare_not_equel = expresion, "!=", expresion;
+compare_higher_then = expresion, ">", expresion;
+compare_higher_or_equel_to = expresion, "=>", expresion;
+compare_lower_then = expresion, "<", expresion;
+compare_lower_or_equel_to = expresion, "<=", expresion;
 
 
 logic_node =  {" "},(boolean | identifier | function_call | logic_expresion),{" "};
@@ -44,6 +48,17 @@ expresion = {" "},(identifier | digit | string | function_call | boolean | logic
 
 function_parameters = "(",{" "}, {parameter,{" "}, ",",{" "}}, parameter,{" "}, ")" | "(",{" "},")";
 
-function_call = {" "},identifier, function_parameters,{" "}
+function_call = s,identifier, function_parameters,s;
 
-function_create = "fun", identifier, "(", {identifier, ":", identifier, ","}, identifier, ":", identifier, ")"
+function_create = "fun",  identifier, "(", {identifier, ":", identifier, ","}, identifier, ":", identifier, ")", [s, "->", s, identifier], function_block
+
+function_block = "{", s, {sub_code_line}, s, "};";
+
+code_line =
+while_code_line =
+function_code_line =
+if_code_line = 
+global_code_line = sub_code_line | function_create | 
+
+var_init = identifier, s, ":", s, identifer, s, "=", s, expresion, s, ";", s
+var_reasign = identifer,
