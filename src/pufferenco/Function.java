@@ -6,15 +6,41 @@ import pufferenco.variables.Variable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static pufferenco.Main.Function_stack;
+import java.util.List;
+import java.util.Stack;
 
 public class Function {
     private static final HashMap<String, ArrayList<Function>> Functions = new HashMap<>();
+    public static final Stack<Integer> Function_depth_stack = new Stack<>();
     public static AssemblyBuilder FunctionBuilder = new AssemblyBuilder();
 
     public static boolean exists(String name) {
         return Functions.containsKey(name);
+    }
+
+    public static StackElement exec(String name, List<StackElement> params, AssemblyBuilder builder, boolean return_value) {
+        ArrayList<Function> functions = Functions.get(name);
+        outer:
+        for (Function function : functions) {
+            if (function.parameters.size() != params.size())
+                continue;
+            for (int i = 0; i < function.parameters.size(); i++) {
+                if (function.parameters.get(i).type.getId() != params.get(i).type)
+                    continue outer;
+            }
+            function.call(builder, return_value);
+            if (return_value)
+                return new StackElement("name_return_value_" + Main.getId(), function.return_type);
+            return null;
+        }
+        StringBuilder string_params = new StringBuilder();
+        for (int i = 0; i < params.size(); i++) {
+            string_params.append(DataType.NAMES[params.get(i).type]);
+            if (i!= params.size() - 1)
+                string_params.append(", ");
+        }
+        builder.error("function not found: " + name + "(" + string_params + ")");
+        throw new IllegalStateException();
     }
 
     public static void read(TokenStream stream, AssemblyBuilder builder) {
@@ -26,6 +52,7 @@ public class Function {
         Token params_token = stream.read();
         if (params_token.type != Token.TokenTypes.ROUND_BRACKETS)
             builder.error("expected round brackets after fun name");
+
 
         ArrayList<ArrayList<Token>> param_tokens = new ArrayList<>();
         ArrayList<Token> current_param_token = new ArrayList<>();
@@ -39,11 +66,12 @@ public class Function {
             }
             current_param_token.add(current_token);
         }
-        param_tokens.add(current_param_token);
+        if(!current_param_token.isEmpty())
+            param_tokens.add(current_param_token);
 
         ArrayList<Parameter> parameters = new ArrayList<>();
+
         for (ArrayList<Token> param : param_tokens) {
-            System.out.println(param);
             if (param.size() != 3)
                 builder.error("invalid function parameter: should be <name>: <type>");
 
@@ -58,9 +86,12 @@ public class Function {
             parameters.add(new Parameter(param_name.content, DataType.getInstance(type)));
         }
 
+        DataStack stack = new DataStack("IX");
+        Main.VariableStacks.push(stack);
+
         int return_type = DataType.NULL;
         if (stream.read().content.equals("->")) {
-            return_type = ArrayUtil.inArray(stream.read(), DataType.NAMES);
+            return_type = ArrayUtil.inArray(stream.read().content, DataType.NAMES);
             if (return_type == -1)
                 builder.error("invalid return type");
         } else
@@ -83,56 +114,71 @@ public class Function {
     int return_type;
     String assembly_name;
     String end_tag;
-    DataStack stack = new DataStack("IX");
+    DataStack stack;
 
     Function(String name, ArrayList<Parameter> parameters, int return_type, Token code_block) {
         this.name = name;
         this.parameters = parameters;
         this.return_type = return_type;
         this.assembly_name = name + "_" + Main.getId();
+        this.end_tag = name + "_end_" + Main.getId();
 
-        Function_stack.push(this);
+
         FunctionBuilder.add_func(name);
-        Main.VariableStacks.push(stack);
-
+        Function_depth_stack.push(0);
         FunctionBuilder.append_tag(assembly_name);
+        Main.Function_stack.push(this);
 
         for (Parameter parameter : parameters) {
-            Variable.Variables.get(Variable.Variables.size() - 1).put(parameter.name, new StackElement(parameter.name, parameter.type.getId()));
+            StackElement stack_element = Main.VariableStacks.peek().push(parameter.name, 1, parameter.type.getId(), FunctionBuilder);
+
+            new Variable(parameter.name, stack_element);
         }
 
         FunctionBuilder.append_push("IX").addComment("push stack_start");
-        FunctionBuilder.append_push("HL").addComment("push current_stack_location");
         FunctionBuilder.append_ld("(" + DataStack.CallStack + ")", "SP");
         FunctionBuilder.append_ld("SP", "HL");
-        FunctionBuilder.append_ld("IX", "0");
+        FunctionBuilder.append_ld("IX", String.valueOf(parameters.size() * 3));
         FunctionBuilder.append_add("IX", "SP");
 
         Main.tokenizeAndRun(code_block.content, FunctionBuilder);
 
+        FunctionBuilder.append_ld("DE", "0");
+
         FunctionBuilder.append_tag(end_tag);
 
         FunctionBuilder.append_ld("SP", "(" + DataStack.CallStack + ")");
-        FunctionBuilder.append_pop("HL");
         FunctionBuilder.append_pop("IX");
         FunctionBuilder.append_ret();
 
+        Main.Function_stack.pop();
         Main.VariableStacks.pop();
         FunctionBuilder.remove_func();
-        Function_stack.pop();
+        Function_depth_stack.pop();
     }
 
     void call(AssemblyBuilder builder, boolean return_value) {
         builder.append_ld("HL", "0");
         builder.append_add("HL", "SP");
         builder.append_ld("SP", "(" + DataStack.CallStack + ")");
-
         builder.append_call(assembly_name);
 
-        FunctionBuilder.append_ld("(" + DataStack.CallStack + ")", "SP");
-        FunctionBuilder.append_ld("SP", "HL");
-        if(!return_value) {
-            FunctionBuilder.append_pop("HL").addComment("void return_value");
+        builder.append_pop("HL");
+        builder.append_ld("(" + DataStack.CallStack + ")", "SP");
+        builder.append_ld("SP", "HL");
+        if (return_value) {
+            builder.append_push("DE");
         }
+    }
+
+    public String toString() {
+        StringBuilder string_params = new StringBuilder();
+        for (int i = 0; i < parameters.size(); i++) {
+            string_params.append(DataType.NAMES[parameters.get(i).type.getId()]);
+            if (i!= parameters.size() - 1)
+                string_params.append(", ");
+        }
+
+        return name + "(" + string_params + ")";
     }
 }

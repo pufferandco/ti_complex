@@ -1,0 +1,59 @@
+const BLOCK_WIDTH: int = 10i;
+const BLOCK_HEIGHT: int = 10i;
+const X_START: int = 110i;
+const Y_START: int = 40i;
+
+
+fun displayBlock(X: int, Y: int, Block: int, Color: byte){
+    var x_location: int = X_START + (X*BLOCK_WIDTH);
+    var y_location: int = Y_START + (Y*BLOCK_WIDTH);
+
+    if(Block[0b]){
+        drawBlock(x_location, y_location, BLOCK_WIDTH, BLOCK_HEIGHT, Color);
+    };
+    if(Block[1b]){
+        drawBlock(x_location + 10i, Y_START + y_location, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    if(Block[2b]){
+        drawBlock(x_location + 20i, Y_START + y_location, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    if(Block[3b]){
+        drawBlock(x_location + 30i, Y_START + y_location, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    if(Block[4b]){
+        drawBlock(x_location, y_location + 10i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    if(Block[5b]){
+        drawBlock(x_location + 10i, y_location + 10i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    if(Block[6b]){
+        drawBlock(x_location + 20i, y_location + 10i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    if(Block[7b]){
+        drawBlock(x_location +30i, y_location + 10i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    if(Block[8b]){
+        drawBlock(x_location, y_location + 20i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    if(Block[9b]){
+        drawBlock(x_location + 10i, y_location + 20i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    if(Block[10b]){
+        drawBlock(x_location + 20i, y_location + 20i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    if(Block[11b]){
+        drawBlock(x_location + 30i, y_location + 20i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    if(Block[12b]){
+        drawBlock(x_location, y_location + 30i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    if(Block[13b]){
+        drawBlock(x_location + 10i, y_location + 30i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    if(Block[14b]){
+        drawBlock(x_location + 20i, y_location + 30i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    if(Block[15b]){
+        drawBlock(x_location + 30i, y_location + 30i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+};

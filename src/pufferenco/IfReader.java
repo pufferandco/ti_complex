@@ -1,139 +1,86 @@
 package pufferenco;
 
-import pufferenco.variables.DataStack;
 import pufferenco.variables.StackElement;
 
 import static pufferenco.Main.tokenizeAndRun;
 
 class IfReader {
     static void read(TokenStream stream, AssemblyBuilder builder) {
+        builder.append_call("sub_block_enter");
+
         header(stream, builder);
-        String end_id = "if_end_" + Main.getId();
 
         Token if_block = stream.read();
         if (if_block.type != Token.TokenTypes.CURLY_BRACKETS) {
             builder.error("no code block following if statement");
         }
 
-        if (stream.isEmpty()) {
-            builder.append_ld("HL", "0");
-            builder.append_add("HL", "SP");
-            builder.append_ld("SP", "(" + DataStack.CallStack + ")");
-            builder.append_push("HL");
-            builder.append_ld("(" + DataStack.CallStack + ")", "SP");
-            builder.append_ld("SP", "HL");
+        String end_id = "if_end_" + Main.getId();
+        String next_end = "if_next_" + Main.getId();
 
-            builder.append_pop("AF");
-            builder.append_cp("A", "%11111111");
-            builder.append_jp("NZ", end_id);
-
-            tokenizeAndRun(if_block.content, builder);
-
-            builder.append_tag(end_id);
-
-            builder.append_ld("SP", "(" + DataStack.CallStack + ")");
-            builder.append_pop("HL");
-            builder.append_ld("(" + DataStack.CallStack + ")", "SP");
-            builder.append_ld("SP", "HL");
-            return;
+        if(!WhileReader.While_depth.isEmpty()) {
+            int i = WhileReader.While_depth.pop();
+            WhileReader.While_depth.push(i + 1);
+        }
+        if(!Function.Function_depth_stack.isEmpty()) {
+            int i = Function.Function_depth_stack.pop();
+            Function.Function_depth_stack.push(i + 1);
         }
 
-        Token following_statement = stream.read();
-        if (following_statement.type == Token.TokenTypes.ELSE) {
-            Token else_block = stream.read();
-            if (else_block.type != Token.TokenTypes.CURLY_BRACKETS) {
-                builder.error("no code block following else statement");
-            }
-            String else_start = "true_end_" + Main.getId();
-
-            builder.append_ld("HL", "0");
-            builder.append_add("HL", "SP");
-            builder.append_ld("SP", "(" + DataStack.CallStack + ")");
-            builder.append_push("HL");
-            builder.append_ld("(" + DataStack.CallStack + ")", "SP");
-            builder.append_ld("SP", "HL");
-
-            builder.append_pop("AF");
-            builder.append_cp("A", "%11111111");
-            builder.append_jp("NZ", else_start);
-
-            tokenizeAndRun(if_block.content, builder);
-
-            builder.append_jp(end_id);
-            builder.append_tag(else_start);
-
-            tokenizeAndRun(else_block.content, builder);
-
-            builder.append_tag(end_id);
-
-            builder.append_ld("SP", "(" + DataStack.CallStack + ")");
-            builder.append_pop("HL");
-            builder.append_ld("(" + DataStack.CallStack + ")", "SP");
-            builder.append_ld("SP", "HL");
+        builder.append_pop("AF");
+        builder.append_cp("A", "%11111111");
+        builder.append_jp("NZ", next_end);
 
 
-            return;
-        }
-        if (following_statement.type == Token.TokenTypes.ELIF) {
-            String next_end = "elif_next_" + Main.getId();
+        tokenizeAndRun(if_block.content, builder);
 
-            builder.append_ld("HL", "0");
-            builder.append_add("HL", "SP");
-            builder.append_ld("SP", "(" + DataStack.CallStack + ")");
-            builder.append_push("HL");
-            builder.append_ld("(" + DataStack.CallStack + ")", "SP");
-            builder.append_ld("SP", "HL");
+        builder.append_jp(end_id);
+        builder.append_tag(next_end);
 
-            builder.append_pop("AF");
-            builder.append_cp("A", "%11111111");
-            builder.append_jp("NZ", next_end);
+        while (stream.isNotEmpty()) {
+            Token next_statement = stream.read();
 
-            tokenizeAndRun(if_block.content, builder);
-
-            builder.append_jp(end_id);
-            builder.append_tag(next_end);
-
-            stream.backSpace();
-            while (stream.isNotEmpty()) {
-                Token next_statement = stream.read();
-
-                if (next_statement.type == Token.TokenTypes.ELSE) {
-                    Token else_block = stream.read();
-                    if (else_block.type != Token.TokenTypes.CURLY_BRACKETS) {
-                        builder.error("no code block following else statement");
-                    }
-
-                    tokenizeAndRun(else_block.content, builder);
-                    builder.append_tag(end_id);
-                    return;
+            if (next_statement.type == Token.TokenTypes.ELSE) {
+                Token else_block = stream.read();
+                if (else_block.type != Token.TokenTypes.CURLY_BRACKETS) {
+                    builder.error("no code block following else statement");
                 }
-                if (next_statement.type == Token.TokenTypes.ELIF) {
 
-                    header(stream, builder);
-                    if_block = stream.read();
-                    if (if_block.type != Token.TokenTypes.CURLY_BRACKETS) {
-                        builder.error("no code block following else statement");
-                    }
 
-                    next_end = "elif_next_" + Main.getId();
-                    builder.append_pop("AF");
-                    builder.append_cp("A", "%11111111");
-                    builder.append_jp("NZ", next_end);
-                    tokenizeAndRun(if_block.content, builder);
-                    builder.append_jp(end_id);
-                    builder.append_tag(next_end);
-                    continue;
-                }
-                builder.error("if statement is not closed");
+                tokenizeAndRun(else_block.content, builder);
+                break;
             }
-            builder.append_tag(end_id);
+            if (next_statement.type == Token.TokenTypes.ELIF) {
+                header(stream, builder);
+                if_block = stream.read();
+                if (if_block.type != Token.TokenTypes.CURLY_BRACKETS) {
+                    builder.error("no code block following else statement");
+                }
 
-            builder.append_ld("SP", "(" + DataStack.CallStack + ")");
-            builder.append_pop("HL");
-            builder.append_ld("(" + DataStack.CallStack + ")", "SP");
-            builder.append_ld("SP", "HL");
+                next_end = "elif_next_" + Main.getId();
+                builder.append_pop("AF");
+                builder.append_cp("A", "%11111111");
+                builder.append_jp("NZ", next_end);
+
+                tokenizeAndRun(if_block.content, builder);
+
+                builder.append_jp(end_id);
+                builder.append_tag(next_end);
+                continue;
+            }
+            break;
         }
-    }
+        builder.append_tag(end_id);
+        builder.append_call("sub_block_leave");
+        if(!WhileReader.While_depth.isEmpty()) {
+            int i = WhileReader.While_depth.pop();
+            WhileReader.While_depth.push(i - 1);
+        }
+        if(!Function.Function_depth_stack.isEmpty()) {
+            int i = Function.Function_depth_stack.pop();
+            Function.Function_depth_stack.push(i - 1);
+        }
+}
 
     private static void header(TokenStream stream, AssemblyBuilder builder) {
         Token logic_expression = stream.read();

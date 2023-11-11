@@ -1,7 +1,60 @@
-printLn("hello");
-var gerard: byte = 52;
-fun hello(id: int){
-    print("hello number");
-    printLn(id);
+use{std.Graphics};
+use{TGraphics}
+asm{blocks};
+clearScreen(255b);
+
+const BLOCK_COUNT: byte = 1b;
+const WHITE: byte = 255b;
+const BLACK: byte = 0b;
+const KEY_SHIFT: byte = 54b;
+const KEY_ALPHA: byte = 48b;
+const KEY_LEFT: byte = 02b;
+const KEY_RIGHT: byte = 03b;
+const TICK_SPEED: int = 100i;
+var block_rotation: global byte = 0b;
+var speed: int = 1000i;
+var current_tick: int = 0i;
+var current_block: pointer = &block_i;
+var current_rotation: byte = 0b;
+var block_x: int = 4i;
+var block_y: int = 0i;
+var i: byte = 0b;
+var x: int = 0i;
+
+
+while(block_y < 16i){
+
+    block_y = block_y + 1i;
+
+    while(current_tick < speed){
+        displayBlock(block_x, block_y, current_block+(current_rotation*2b)->int, 0b);
+        current_tick = current_tick + TICK_SPEED;
+        sleep(TICK_SPEED);
+
+        var current_key: byte = scanKey();
+        if(current_key != 0b){
+            if(current_key == KEY_SHIFT){
+                if(current_rotation == 0b){
+                    current_rotation = 3b;
+                }else{
+                    current_rotation = current_rotation - 1b;
+                };
+            }elif(current_key == KEY_ALPHA){
+                if(current_rotation == 3b){
+                    current_rotation = 0b;
+                }else{
+                    current_rotation = current_rotation + 1b;
+                };
+            }elif(current_key == KEY_LEFT){
+                block_x = block_x - 1i;
+            }elif(current_key == KEY_RIGHT){
+                block_x = block_x + 1i;
+            };
+        };
+
+        writeBuffer();
+        clearBuffer(255b);
+    }
+    current_tick = 0i;
 };
-printLn(gerard);
+

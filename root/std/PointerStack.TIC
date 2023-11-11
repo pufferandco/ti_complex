@@ -1,0 +1,25 @@
+var PS_Current_location: global pointer = 0p;
+var PS_Save_location: global pointer = 0p;
+
+fun malloc(Size: byte) -> pointer{
+    var return_location: pointer = PS_Current_location;
+    PS_Current_location = PS_Current_location + Size;
+    return return_location;
+};
+
+fun enterHeapBlock(){
+    move PS_Save_location to PS_Current_location;
+    PS_Save_location = PS_Current_location;
+    PS_Current_location = PS_Current_location + 3b;
+};
+
+fun exitHeapBlock(){
+     PS_Current_location = PS_Save_location;
+     PS_Save_location = PS_Current_location -> pointer;
+};
+
+fun PS_init(Location: pointer){
+    PS_Current_location = Location + 3b;
+    PS_Save_location = Location;
+    enterHeapBlock();
+};

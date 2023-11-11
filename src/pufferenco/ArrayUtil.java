@@ -2,11 +2,12 @@ package pufferenco;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Objects;
 
 public class ArrayUtil {
     public static <type> int inArray(type element, type[] array) {
         for (int i = 0; i < array.length; i++) {
-            if (array[i].equals(element))
+            if (Objects.equals(array[i],element))
                 return i;
         }
         return -1;

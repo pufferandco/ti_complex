@@ -1,0 +1,25 @@
+asm{std.Graphics}
+
+const SCREEN_WIDTH: int = 320i;
+const SCREEN_HEIGHT: int = 240i;
+
+nat setPixel set_pixel null int int byte;
+nat bufferPixel buffer_pixel null int int byte;
+nat clearScreen clear_screen null byte;
+nat clearBuffer clear_buffer null byte;
+nat writeBuffer write_buffer null;
+nat drawMode set_mode null bool;
+
+fun drawBlock(X: int, Y: int, Width: int, Height: int, Color: byte){
+    var y_offset: int = 0i;
+    while(y_offset < Height){
+        var x_offset: int = 0i;
+        while(x_offset < Width){
+            bufferPixel(X + x_offset, Y + y_offset, Color);
+            x_offset = x_offset + 1i;
+        }
+        y_offset = y_offset + 1i;
+    };
+};
+
+

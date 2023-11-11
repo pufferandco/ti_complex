@@ -1,0 +1,69 @@
+const KEY_ALPHA: byte = 48b;
+const KEY_ENTER: byte = 9b;
+const KEY_DELETE: byte = 56b;
+const CHAR_CURSOR: byte = 224b;
+const CHAR_ALPHA_CURSOR: byte = 226b;
+const NULL: byte = 0b;
+
+fun cycleByteToByteMap(Location: pointer, Key: byte, Max_cycles: int) -> byte{
+    while(Max_cycles > 0i){
+        if((Location -> byte) == Key){
+            return (Location + 1b) -> byte;
+        };
+        Location = Location + 2b;
+        Max_cycles = Max_cycles - 1i;
+    };
+
+};
+
+fun readLine(Max_size: byte, Location: pointer) -> string{
+    var isAlpha: bool = false;
+    var current_location: pointer = Location - 1b;
+    var i: byte = 0b;
+    var cursor: byte = CHAR_CURSOR;
+    putChar(cursor);
+    while(i < Max_size) {
+        var key: byte = scanKey();
+
+        if(key == KEY_ALPHA){
+            isAlpha = not(isAlpha);
+            if(isAlpha) {
+                cursor = CHAR_ALPHA_CURSOR;
+            }else{
+                cursor = CHAR_CURSOR;
+            };
+            putChar(cursor);
+            continue;
+        }elif(key == NULL){
+            continue;
+        }elif(key == KEY_ENTER){
+            break;
+        }elif(key == KEY_DELETE){
+            if(i == 0b){
+               continue;
+            };
+            setCursor(getCursorRow(), getCursorCol()-1b);
+            putChar(cursor);
+            current_location = current_location - 1b;
+            i = i - 1b;
+        };
+        var character: byte = NULL;
+
+        if(isAlpha){
+            character = cycleByteToByteMap(getAlphaKeyMapping(), key, 27i);
+        }else{
+            character = cycleByteToByteMap(getKeyMapping(), key, 14i);
+        };
+
+        if(character != NULL){
+            printChar(character);
+            putChar(cursor);
+            move character to current_location++;
+            i = i + 1b;
+        };
+    };
+    newLine();
+    move NULL to current_location++;
+
+    return string(Location);
+};

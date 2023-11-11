@@ -13,7 +13,7 @@ public class DataStack {
     public static final String CallStack = "callStack";
 
     public StackElement push(String name, int size, int type, AssemblyBuilder builder) {
-        return push(new StackElement(name, size, type, this.size), builder);
+        return push(new StackElement(name, size, type), builder);
     }
 
     public StackElement push(String name, int type, AssemblyBuilder builder) {
@@ -23,7 +23,8 @@ public class DataStack {
     public StackElement push(StackElement element, AssemblyBuilder builder) {
         if (element.is_constant)
             element = DataType.getInstance(element.type).convertFrom(element, builder, false);
-        element.location = size;
+        if(element.location == null)
+            element.location = stack_start + "-" + (size + 3);
         stack.add(element);
         size += element.size * 3;
         max_size = Math.max(max_size, size);
@@ -51,9 +52,6 @@ public class DataStack {
         throw new RuntimeException("no variable exists with the name: " + name);
     }
 
-    public void trim(int size) {
-        stack.removeIf(stackElement -> stackElement.location > size);
-    }
 
     public DataStack(String stack_start) {
         this.stack_start = stack_start;

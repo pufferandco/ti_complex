@@ -137,10 +137,24 @@ public class AssemblyBuilder {
     public AssemblyLine append_jp(String pointer) {
         return append(new AssemblyLine("jp", pointer));
     }
+    public AssemblyLine append_jr(String pointer) {
+        return append(new AssemblyLine("jr", pointer));
+    }
+
+    public AssemblyLine append_jr(String statement, String pointer) {
+        return append(new AssemblyLine("jr", statement, pointer));
+    }
+
 
     public AssemblyLine append_cp(String left, String right) {
         return append(new AssemblyLine("cp", left, right));
     }
 
+    public AssemblyLine append_inc(String operand) {
+        return append(new AssemblyLine("inc", operand));
+    }
+    public AssemblyLine append_dec(String operand) {
+        return append(new AssemblyLine("dec", operand));
+    }
 
 }

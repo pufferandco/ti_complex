@@ -3,6 +3,7 @@
 .org	userMem-2
 	.db          tExtTok,tAsm84CeCmp
 	             
+	set          AppAutoScroll,(IY + AppFlags)
 	ld           (StackSave),SP
 	ld           HL,callStackStart
 	ld           (callStack),HL
@@ -11,22 +12,89 @@
 	call         _homeup
 	call         _ClrScrnFull
 	             
-	             
-	ld           HL,string_1
-	call         _PutS
-	call         _NewLine
-	             
-	ld           H,52
+	ld           A,255                     ; 255b
+	push         AF
+	call         clear_screen
+	ld           A,0                       ; 0b
+	push         AF
+	pop          AF
+	ld           (globalVars+0),A
+	ld           HL,1000
 	push         HL
-	             
-	             
-	ld           HL,(stackStart-3)
-	push         HL
-	pop          DE
 	ld           HL,0
-	ld           L,D
-	call         _DispHL
-	call         _NewLine
+	push         HL
+	ld           HL,block_i
+	push         HL
+	ld           A,0                       ; 0b
+	push         AF
+	ld           HL,4
+	push         HL
+	ld           HL,0
+	push         HL
+	ld           A,0                       ; 0b
+	push         AF
+	ld           HL,0
+	push         HL
+while_start274:
+	ld           HL,(stackStart-21)
+	push         HL
+	ld           A,255
+	push         AF
+	pop          HL
+	pop          AF
+	call         byte_smaller
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,while_end275
+	call         sub_block_enter
+	ld           HL,(stackStart-21)
+	push         HL
+	call         printLn_byte
+	ld           A,0                       ; 0b
+	push         AF
+	ld           A,0                       ; 0b
+	push         AF
+	call         set_character_cursor
+	call         sub_block_enter
+	ld           HL,120
+	push         HL
+	ld           HL,120
+	push         HL
+	ld           HL,120
+	push         HL
+	ld           HL,120
+	push         HL
+	ld           HL,(stackStart-21)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	ld           A,%11111111
+	push         AF
+	call         set_mode
+	ld           A,255                     ; 255b
+	push         AF
+	call         clear_screen
+	call         write_buffer
+	ld           A,%00000000
+	push         AF
+	call         set_mode
+	ld           HL,(stackStart-21)
+	push         HL
+	pop          AF
+	inc          A
+	push         AF
+	pop          HL
+	ld           (stackStart-21),HL
+	call         _GetKey
+	call         sub_block_leave
+	jp           while_start274
+while_end275:
 	             
 ProgramExit:
 	call         _GetKey
@@ -34,40 +102,778 @@ ProgramExit:
 	res          donePrgm,(iy+doneFlags)
 	ld           SP,(StackSave)
 	ret          
-#include "asm/api.asm"
+#include "asm/defaults.asm"
 StackSave:
 	.db          0,0,0
 CallStack:
 	.db          0,0,0
-stackStart .equ saveSScreen+512
-callStackStart .equ saveSScreen+768
+stackStart .equ saveSScreen+7315
+callStackStart .equ saveSScreen+14630
+globalVars .equ pixelShadow
 
-hello_5:
+drawBlock_5:
 	push         IX                        ; push stack_start
-	push         HL                        ; push current_stack_location
 	ld           (callStack),SP
 	ld           SP,HL
-	ld           IX,0
+	ld           IX,15
 	add          IX,SP
-	             
-	ld           HL,string_6
-	call         _PutS
-	             
+	ld           HL,0
+	push         HL
+while_start10:
+	ld           HL,(IX-18)
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	pop          HL
+	pop          DE
+	ex           DE,HL
+	call         int_smaller
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,while_end11
+	call         sub_block_enter
+	ld           HL,0
+	push         HL
+while_start18:
+	ld           HL,(IX-21)
+	push         HL
+	ld           HL,(IX-9)
+	push         HL
+	pop          HL
+	pop          DE
+	ex           DE,HL
+	call         int_smaller
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,while_end19
+	call         sub_block_enter
 	ld           HL,(IX-3)
 	push         HL
-	pop          DE
-	ld           HL,0
-	ld           H,D
-	ld           L,E
-	call         _DispHL
-	call         _NewLine
-null:
-	ld           SP,(callStack)
+	ld           HL,(IX-21)
+	push         HL
 	pop          HL
+	pop          DE
+	add          HL,DE
+	push         HL
+	ld           HL,(IX-6)
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	pop          DE
+	add          HL,DE
+	push         HL
+	ld           HL,(IX-15)
+	push         HL
+	call         buffer_pixel
+	ld           HL,(IX-21)
+	push         HL
+	pop          HL
+	inc          HL
+	push         HL
+	pop          HL
+	ld           (IX-21),HL
+	call         sub_block_leave
+	jp           while_start18
+while_end19:
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	inc          HL
+	push         HL
+	pop          HL
+	ld           (IX-18),HL
+	call         sub_block_leave
+	jp           while_start10
+while_end11:
+	ld           DE,0
+drawBlock_end_6:
+	ld           SP,(callStack)
+	pop          IX
+	ret          
+displayBlock_42:
+	push         IX                        ; push stack_start
+	ld           (callStack),SP
+	ld           SP,HL
+	ld           IX,12
+	add          IX,SP
+	ld           HL,110
+	push         HL
+	ld           HL,(IX-3)
+	push         HL
+	ld           HL,10
+	push         HL
+	pop          DE
+	pop          BC
+	call         multiply_int
+	push         HL
+	pop          HL
+	pop          DE
+	add          HL,DE
+	push         HL
+	ld           HL,40
+	push         HL
+	ld           HL,(IX-6)
+	push         HL
+	ld           HL,10
+	push         HL
+	pop          DE
+	pop          BC
+	call         multiply_int
+	push         HL
+	pop          HL
+	pop          DE
+	add          HL,DE
+	push         HL
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          0,C
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_57
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_56
+if_next_57:
+if_end_56:
+	call         sub_block_leave
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          1,C
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_66
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	pop          HL
+	ld           DE,10
+	add          HL,DE
+	push         HL
+	ld           HL,40
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	pop          DE
+	add          HL,DE
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_65
+if_next_66:
+if_end_65:
+	call         sub_block_leave
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          2,C
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_78
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	pop          HL
+	ld           DE,20
+	add          HL,DE
+	push         HL
+	ld           HL,40
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	pop          DE
+	add          HL,DE
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_77
+if_next_78:
+if_end_77:
+	call         sub_block_leave
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          3,C
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_90
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	pop          HL
+	ld           DE,30
+	add          HL,DE
+	push         HL
+	ld           HL,40
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	pop          DE
+	add          HL,DE
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_89
+if_next_90:
+if_end_89:
+	call         sub_block_leave
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          4,C
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_102
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	ld           DE,10
+	add          HL,DE
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_101
+if_next_102:
+if_end_101:
+	call         sub_block_leave
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          5,C
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_113
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	pop          HL
+	ld           DE,10
+	add          HL,DE
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	ld           DE,10
+	add          HL,DE
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_112
+if_next_113:
+if_end_112:
+	call         sub_block_leave
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          6,C
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_126
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	pop          HL
+	ld           DE,20
+	add          HL,DE
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	ld           DE,10
+	add          HL,DE
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_125
+if_next_126:
+if_end_125:
+	call         sub_block_leave
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          7,C
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_139
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	pop          HL
+	ld           DE,30
+	add          HL,DE
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	ld           DE,10
+	add          HL,DE
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_138
+if_next_139:
+if_end_138:
+	call         sub_block_leave
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          0,B
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_152
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	ld           DE,20
+	add          HL,DE
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_151
+if_next_152:
+if_end_151:
+	call         sub_block_leave
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          1,B
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_163
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	pop          HL
+	ld           DE,10
+	add          HL,DE
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	ld           DE,20
+	add          HL,DE
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_162
+if_next_163:
+if_end_162:
+	call         sub_block_leave
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          2,B
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_176
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	pop          HL
+	ld           DE,20
+	add          HL,DE
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	ld           DE,20
+	add          HL,DE
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_175
+if_next_176:
+if_end_175:
+	call         sub_block_leave
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          3,B
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_189
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	pop          HL
+	ld           DE,30
+	add          HL,DE
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	ld           DE,20
+	add          HL,DE
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_188
+if_next_189:
+if_end_188:
+	call         sub_block_leave
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          4,B
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_202
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	ld           DE,30
+	add          HL,DE
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_201
+if_next_202:
+if_end_201:
+	call         sub_block_leave
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          5,B
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_213
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	pop          HL
+	ld           DE,10
+	add          HL,DE
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	ld           DE,30
+	add          HL,DE
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_212
+if_next_213:
+if_end_212:
+	call         sub_block_leave
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          6,B
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_226
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	pop          HL
+	ld           DE,20
+	add          HL,DE
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	ld           DE,30
+	add          HL,DE
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_225
+if_next_226:
+if_end_225:
+	call         sub_block_leave
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	pop          BC
+	ld           A,regTRUE
+	bit          7,B
+	call         Z,A_false_ret
+	push         AF
+	pop          AF
+	cp           A,%11111111
+	jp           NZ,if_next_239
+	call         sub_block_enter
+	ld           HL,(IX-15)
+	push         HL
+	pop          HL
+	ld           DE,30
+	add          HL,DE
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	pop          HL
+	ld           DE,30
+	add          HL,DE
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,10
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         drawBlock_5
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	jp           if_end_238
+if_next_239:
+if_end_238:
+	call         sub_block_leave
+	ld           DE,0
+displayBlock_end_43:
+	ld           SP,(callStack)
 	pop          IX
 	ret          
 
-string_1:
-	.db          "hello", 0
-string_6:
-	.db          "hello number", 0
+#include "root//std/Graphics.asm"
+#include "root//blocks.asm"

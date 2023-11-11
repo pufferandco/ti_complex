@@ -32,18 +32,32 @@ public class Token {
         int IF = 19;
         int ELSE = 20;
         int ELIF = 21;
+        int RETURN = 22;
+        int USE = 23;
+        int CONST = 24;
+        int CONTINUE = 25;
+        int BREAK = 26;
+        int MOVE = 27;
+        int TO = 28;
+        int GLOBAL = 29;
+        int NEW = 30;
+        int AT = 31;
+        int ASM = 32;
+        int NAT = 33;
     }
 
     private static final Pattern IDENTIFIER_TOKENS = Pattern.compile("[a-zA-Z0-9_]");
-    private static final Character[] ARITHMETIC_TOKENS = {'+', '*', '-', '/', '=', '^', '<', '>', '%'};
-    private static final Character[] CONTROL_TOKENS = {'!', ':', ';', '&', ',', '.'};
+    private static final Character[] ARITHMETIC_TOKENS = {'&', '+', '*', '-', '/', '=', '^', '<', '>', '%', '~', '!'};
+    private static final Character[] CONTROL_TOKENS = {':', ';',  ',', '.'};
     private static final Character[] SUB_ENTER_TOKENS = {'(', '{', '[', '"', '\''};
     private static final Character[] SUB_LEAVE_TOKENS = {')', '}', ']', '"', '\''};
+    private static final char COMMENT = '#';
 
-    private static final String[] KEYWORDS = {"fun", "while", "var", "val", "and", "or", "xor", "true", "false", "if", "else", "elif"};
+    private static final String[] KEYWORDS =
+            {"fun", "while", "var", "val", "and", "or", "xor", "true", "false", "if", "else", "elif", "return", "use", "const", "continue", "break", "move", "to", "global", "new", "at", "asm", "nat"};
 
 
-    static ArrayList<Token> tokenize(String content) {
+    public static ArrayList<Token> tokenize(String content) {
         char[] chars = content.toCharArray();
         int state = -1;
 
@@ -54,6 +68,11 @@ public class Token {
 
 
         for (Character current_char : chars) {
+            if(state == 9){
+                if(current_char == '\n')
+                    state = -1;
+                continue;
+            }
             if (state >= 0 && state <= 4) {
                 if ((state != 3 && state != 4) && (current_char == '\'' || current_char == '"')) {
                     switch (in_string) {
@@ -66,27 +85,36 @@ public class Token {
                         }
                     }
                 }
-                if (current_char == SUB_LEAVE_TOKENS[state] && in_string == ' ') {
+
+                if (isInArray(current_char, SUB_ENTER_TOKENS) && in_string == ' ' && !(current_char == '\'' || current_char == '"')) {
+                    nests++;
+                }
+                if (isInArray(current_char, SUB_LEAVE_TOKENS) && in_string == ' ' && !(current_char == '\'' || current_char == '"')) {
                     nests--;
+                }
+
+                if (current_char == SUB_LEAVE_TOKENS[state] && in_string == ' ') {
                     if (nests <= 0) {
                         tokens.add(new Token(token_builder.toString(), state));
                         token_builder = new StringBuilder();
                         state = -1;
-                    }
+                    } else
+                        token_builder.append(current_char);
                 } else
                     token_builder.append(current_char);
                 continue;
-            } else {
-                if (isInArray(current_char, SUB_ENTER_TOKENS) && in_string == ' ') {
-                    if (!token_builder.isEmpty()) {
-                        tokens.add(new Token(token_builder.toString(), state));
-                        token_builder = new StringBuilder();
-                    }
+            } else if (isInArray(current_char, SUB_ENTER_TOKENS)) {
+                if (current_char != '\'' && current_char != '"')
                     nests++;
-                    state = inArray(current_char, SUB_ENTER_TOKENS);
-                    continue;
+
+                if (!token_builder.isEmpty()) {
+                    tokens.add(new Token(token_builder.toString(), state));
+                    token_builder = new StringBuilder();
                 }
+                state = inArray(current_char, SUB_ENTER_TOKENS);
+                continue;
             }
+
 
             int char_type = -1;
             if (isInArray(current_char, ARITHMETIC_TOKENS)) {
@@ -97,6 +125,13 @@ public class Token {
                 char_type = 7;
             } else if (current_char == '\n') {
                 char_type = 8;
+            } else if (current_char == COMMENT){
+                if (!token_builder.isEmpty()) {
+                    tokens.add(new Token(token_builder.toString(), state));
+                    token_builder = new StringBuilder();
+                }
+                state = 9;
+                continue;
             }
             if (char_type != -1) {
                 if (state == char_type) {
@@ -128,9 +163,9 @@ public class Token {
 
     static List<List<Token>> tokenizeLines(String content) {
         List<Token> tokens = tokenize(content);
+
         List<List<Token>> lines = new LinkedList<>();
         List<Token> current_line = new LinkedList<>();
-
         for (Token token : tokens) {
             if (token.type == TokenTypes.CONTROL && Objects.equals(token.content, ";")) {
                 lines.add(current_line);
@@ -141,8 +176,9 @@ public class Token {
                 current_line.add(token);
         }
 
-        if (!current_line.isEmpty())
-            throw new RuntimeException("file is not closed with semicolon");
+        if (!current_line.isEmpty()) {
+            throw new RuntimeException("code block is not closed with semicolon");
+        }
 
         return lines;
     }

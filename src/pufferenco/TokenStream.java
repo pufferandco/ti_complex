@@ -9,8 +9,13 @@ public class TokenStream {
     AssemblyBuilder builder;
     int index = 0;
 
-    TokenStream(List<Token> tokens, AssemblyBuilder builder) {
+    public TokenStream(List<Token> tokens, AssemblyBuilder builder) {
         this.tokens = tokens;
+        this.builder = builder;
+    }
+
+    public TokenStream(String to_tokenize, AssemblyBuilder builder) {
+        this.tokens = Token.tokenize(to_tokenize);
         this.builder = builder;
     }
 

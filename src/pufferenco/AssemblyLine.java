@@ -8,7 +8,6 @@ public class AssemblyLine {
     }
 
 
-
     public String Opcode;
     public String Param1;
     public String Param2;
@@ -16,8 +15,8 @@ public class AssemblyLine {
     private String comment;
 
 
-
-    public AssemblyLine() {}
+    public AssemblyLine() {
+    }
 
     public AssemblyLine(String opcode) {
         this.Opcode = opcode;
@@ -44,9 +43,9 @@ public class AssemblyLine {
         if (Custom != null)
             return Custom;
         String to_return = "\t" + Opcode + ' ' + " ".repeat(12 - Opcode.length()) + ((Param1 != null) ? Param1 : "") + ((Param2 != null) ? "," + Param2 : "");
-        if(comment != null) {
+        if (comment != null) {
             int spacing = 40 - to_return.length();
-            if(spacing < 0)
+            if (spacing < 0)
                 spacing = 0;
             return to_return + " ".repeat(spacing) + "; " + comment;
         }

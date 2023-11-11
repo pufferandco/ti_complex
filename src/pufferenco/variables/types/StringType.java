@@ -6,29 +6,30 @@ import pufferenco.Main;
 import pufferenco.variables.DataStack;
 import pufferenco.variables.StackElement;
 
+import java.util.HashMap;
+
 
 public class StringType implements DataType {
     private final static int Data_type_id = 2;
+    public static HashMap<String, String> strings = new HashMap<String, String>();
 
     @Override
-    public StackElement initStackVariable(StackElement pointer, DataStack stack, AssemblyBuilder builder) {
-        builder.append_pop("HL");
-        builder.append_call("string_to_heap");
-        builder.append_push("DE");
-
-        stack.push(pointer, builder);
-        return new StackElement(pointer.name, DataType.STRING);
+    public StackElement initVariable(StackElement pointer, DataStack stack, AssemblyBuilder builder) {
+        pointer.name = "var_string_" + Main.getId();
+        return stack.push(convertFrom(pointer, builder, false), builder);
     }
 
     @Override
     public StackElement getStackVariable(StackElement element, AssemblyBuilder builder) {
-        builder.append_ld("HL", "(" + Main.VariableStacks.peek().stack_start + "-" + (element.location + 3) + ")");
+        builder.append_ld("HL", "(" + element.location + ")");
         builder.append_push("HL");
-        return element;
+        return new StackElement("var_read_string_" + Main.getId(), Data_type_id);
     }
 
     @Override
     public StackElement convertFrom(StackElement old, AssemblyBuilder builder, boolean keep_constant) {
+        if(old.type == DataType.POINTER)
+            return new StackElement("converted_pointer", getId());
         if (old.type != Data_type_id) {
             builder.error("cannot convert value to string");
             throw new RuntimeException();
@@ -47,15 +48,11 @@ public class StringType implements DataType {
     }
 
     @Override
-    public void setValue(StackElement variable, StackElement newValue, AssemblyBuilder builder) {
+    public void setStackVariable(StackElement variable, StackElement newValue, AssemblyBuilder builder) {
         newValue = convertFrom(newValue, builder, false);
 
-        builder.append_ld("HL", "(" + Main.VariableStacks.peek().stack_start + "-" + (variable.location + 3) + ")");
-        builder.append_call("free");
-
         builder.append_pop("HL");
-        builder.append_call("string_to_heap");
-        builder.append_ld("(" + Main.VariableStacks.peek().stack_start + "-" + (variable.location + 3) + ")", "DE");
+        builder.append_ld("(" + variable.location + ")", "HL");
 
         newValue.location = variable.location;
     }
@@ -64,4 +61,51 @@ public class StringType implements DataType {
     public int getId() {
         return 2;
     }
+
+    @Override
+    public StackElement getSub(StackElement element, StackElement key, AssemblyBuilder builder) {
+        builder.error("cannot read sub of string type");
+        throw new RuntimeException();
+    }
+
+    @Override
+    public void setSub(StackElement element, StackElement key, StackElement new_value, AssemblyBuilder builder) {
+        builder.error("cannot set sub of string type");
+    }
+
+    @Override
+    public int elementSize(AssemblyBuilder builder) {
+        return 3;
+    }
+
+    @Override
+    public StackElement getAt(StackElement pointer, AssemblyBuilder builder) {
+        builder.append_pop("HL");
+        builder.append_ld("HL", "(HL)");
+        builder.append_push("HL");
+        return new StackElement("var_read_str_" + Main.getId(), getId());
+    }
+
+    @Override
+    public void setAt(StackElement pointer, StackElement value, AssemblyBuilder builder) {
+        builder.append_pop("HL");
+        builder.append_pop("DE");
+        builder.append_ld("(HL)", "DE");
+    }
+
+    @Override
+    public StackElement initGlobal(StackElement element, AssemblyBuilder builder) {
+        return null;
+    }
+
+    @Override
+    public StackElement get(AssemblyBuilder builder, String location) {
+        return null;
+    }
+
+    @Override
+    public void set(String name, StackElement value, AssemblyBuilder builder) {
+
+    }
+
 }
