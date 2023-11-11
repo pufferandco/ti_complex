@@ -1,8 +1,12 @@
+(* new lines such as \n are completely ignored *)
 non_zero = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+
+S = " ", {" "};
+s = {" "};
 
 digit = "0" | non_zero;
 
-number = non_zero, {digit}
+number = non_zero, {digit};
 
 letter = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | 	"l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z";
 
@@ -29,21 +33,50 @@ logic_and = logic_node, " and ",logic_node
 logic_or = logic_node, " or ", logic_node
 logic_not = "!",logic_node
 
-compare_equel = expresion, "==", expresion
-compare_not_equel = expresion, "!=", expresion
-compare_higher_then = expresion, ">", expresion
-compare_higher_or_equel_to = expresion, "=>", expresion
-compare_lower_then = expresion, "<", expresion
-compare_lower_or_equel_to = expresion, "<=", expresion
+compare_equel = expresion, "==", expresion;
+compare_not_equel = expresion, "!=", expresion;
+compare_higher_then = expresion, ">", expresion;
+compare_higher_or_equel_to = expresion, "=>", expresion;
+compare_lower_then = expresion, "<", expresion;
+compare_lower_or_equel_to = expresion, "<=", expresion;
 
 
-logic_node =  {" "},(boolean | identifier | function_call | logic_expresion),{" "};
+logic_node =  s,(boolean | identifier | function_call | logic_expresion | pointer_get),s;
 logic_expresion = logic_and | logic_or | logic_not | compare_equel | compare_not_equel | compare_higher_then | compare_higher_or_equel_to | compare_lower_then | compare_lower_or_equel_to;
 
-expresion = {" "},(identifier | digit | string | function_call | boolean | logic_expresion | math_expresion),{" "};
+pointer_get = identifier, s, "->", s, identifier
+
+expresion = s,(identifier | digit | string | function_call | boolean | logic_expresion | math_expresion | pointer_get),s;
 
 function_parameters = "(",{" "}, {parameter,{" "}, ",",{" "}}, parameter,{" "}, ")" | "(",{" "},")";
 
-function_call = {" "},identifier, function_parameters,{" "}
+function_call = s,identifier, function_parameters,s;
 
-function_create = "fun", identifier, "(", {identifier, ":", identifier, ","}, identifier, ":", identifier, ")"
+function_create = "fun",  identifier, "(", {identifier, ":", identifier, ","}, identifier, ":", identifier, ")", [s, "->", s, identifier], s, "{", s, {function_code_line}, s, "}";
+
+code_line = s, (function_call | var_init | var_reasign | move_to | break_line | if_block | return_line | while_loop | continue_line), s, ";", s;
+while_code_line = code_line | (s, (break_line | continiue_line| return_line), s, ";", s);
+function_code_line = code_line | (s, return_line), s, ";", s);;
+global_code_line = code_line | (s, (function_create | use_line), s, ";", s);
+
+var_init = "var", S, identifier, s, ":", s, identifer, s, "=", expresion;
+var_reasign = identifer, s, "=" expresion;
+
+move_to = "move", S,  expresion, S, "to", "S", expresion;
+
+while_loop = "while(", logic_node, ")", s, "{", s, {while_code_line}, s, "}";
+
+if_follow_up = [else_block | elif_block];
+
+else_block = "else", s, "{", s, {code_line}, s, "}", s;
+elif_block = "elif", s, "(", logic_node, ")", s, "{", s, {code_line}, s, "}", s, if_follow_up;
+if_block = "if", s, "(", logic_node, ")", s, "{", s, {code_line}, s, "}", s, if_follow_up;
+
+return_line = "return ", expresion;
+break_line = "break";
+continiue_line - "continiue"
+
+use_line = "use", s, "{", s, file_location, s, "}"
+
+global_var_init = "global", S, var_init
+

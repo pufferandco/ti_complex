@@ -14,6 +14,7 @@ public class AssemblyBuilder {
     private final Stack<Integer> current_line = new Stack<>();
     private boolean locked = false;
     public int tIC_line = 0;
+    public int max_stack_size = 0;
 
     public AssemblyLine append(AssemblyLine line) {
         if (locked)
@@ -75,10 +76,12 @@ public class AssemblyBuilder {
     }
 
     public AssemblyLine append_push(String register) {
+        max_stack_size += 3;
         return append(new AssemblyLine("push", register));
     }
 
     public AssemblyLine append_pop(String register) {
+        max_stak_size -= 3;
         return append(new AssemblyLine("pop", register));
     }
 
@@ -86,10 +89,12 @@ public class AssemblyBuilder {
     //    append(new AssemblyLine("pop", register));
     //}
     public AssemblyLine append_call(String pointer) {
+        max_stack_size += 3;
         return append(new AssemblyLine("call", pointer));
     }
 
     public AssemblyLine append_ret() {
+        min_stack_size -= 3
         return append(new AssemblyLine("ret"));
     }
 
