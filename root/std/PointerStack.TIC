@@ -7,6 +7,12 @@ fun malloc(Size: byte) -> pointer{
     return return_location;
 };
 
+fun malloc(Size: int) -> pointer{
+    var return_location: pointer = PS_Current_location;
+    PS_Current_location = PS_Current_location + Size;
+    return return_location;
+};
+
 fun enterHeapBlock(){
     move PS_Save_location to PS_Current_location;
     PS_Save_location = PS_Current_location;

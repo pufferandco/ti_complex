@@ -30,6 +30,7 @@ public class PointerType implements DataType {
         if(old.type == DataType.ARRAY || old.type == DataType.STRING)
             return new StackElement("converted_pointer", getId());
         if (old.type != getId()) {
+
             builder.error("cannot convert value to pointer");
             throw new RuntimeException();
         }
@@ -196,14 +197,14 @@ public class PointerType implements DataType {
     }
 
     @Override
-    public StackElement get(AssemblyBuilder builder, String location) {
+    public StackElement getStatic(AssemblyBuilder builder, String location) {
         builder.append_ld("HL", "("+location+")");
         builder.append_push("HL");
         return new StackElement("fetched_pointer", getId());
     }
 
     @Override
-    public void set(String location, StackElement value, AssemblyBuilder builder) {
+    public void setStatic(String location, StackElement value, AssemblyBuilder builder) {
         convertFrom(value, builder, false);
         builder.append_pop("HL");
         builder.append_ld( "("+location+")", "HL");

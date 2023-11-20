@@ -144,9 +144,23 @@ public class NativeFunction {
         new NativeFunction("sleep", new int[]{INT}, NULL, List.of(
                 new AssemblyLine("call", "sleep_millis")
         ));
-        new NativeFunction("random", new int[]{}, BYTE, List.of(
-                new AssemblyLine("call", "random"),
-                new AssemblyLine("push", "AF")
+        new NativeFunction("randomInt", new int[]{}, INT, List.of(
+                new AssemblyLine("call", "random_number"),
+                new AssemblyLine("push", "HL")
+        ));
+        new NativeFunction("randomByte", new int[]{}, BYTE, List.of(
+                new AssemblyLine("call", "random_number"),
+                new AssemblyLine("push", "HL")
+        ));
+        new NativeFunction("getSaveData", new int[]{}, POINTER, List.of(
+                new AssemblyLine("ld", "HL", "SaveMemory"),
+                new AssemblyLine("push", "HL")
+        ));
+        new NativeFunction("writeMemory", new int[]{}, NULL, List.of(
+                new AssemblyLine("call", "write_to_memory")
+        ));
+        new NativeFunction("readMemory", new int[]{}, NULL, List.of(
+                new AssemblyLine("call", "load_from_memory")
         ));
 
     }
@@ -172,6 +186,7 @@ public class NativeFunction {
                     return null;
             }
         }
+
         builder.error("mismatching parameter type for function call " + name);
         return null;
     }
@@ -183,10 +198,14 @@ public class NativeFunction {
     StackElement return_type;
 
     NativeFunction(String name,  int[] params, int return_type, List<AssemblyLine> content) {
+        this(name, params, new StackElement("return_value", return_type), content);
+    }
+
+    NativeFunction(String name,  int[] params, StackElement return_type, List<AssemblyLine> content) {
         this.name = name;
         this.content = content;
         this.params = params;
-        this.return_type = new StackElement(DataType.NAMES[return_type], return_type);
+        this.return_type = return_type;
 
         if (Functions.containsKey(name))
             Functions.get(name).add(this);

@@ -1,0 +1,7 @@
+asm{std.Timer};
+
+nat startTimer start_timer null;
+nat stopTimer stop_timer null;
+nat readTimer read_timer int;
+nat initTimer init_timer null;
+initTimer();

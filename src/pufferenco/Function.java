@@ -30,7 +30,7 @@ public class Function {
             }
             function.call(builder, return_value);
             if (return_value)
-                return new StackElement("name_return_value_" + Main.getId(), function.return_type);
+                return function.return_type.duplicate();
             return null;
         }
         StringBuilder string_params = new StringBuilder();
@@ -72,7 +72,7 @@ public class Function {
         ArrayList<Parameter> parameters = new ArrayList<>();
 
         for (ArrayList<Token> param : param_tokens) {
-            if (param.size() != 3)
+            if (param.size() < 3)
                 builder.error("invalid function parameter: should be <name>: <type>");
 
             Token param_name = param.get(0);
@@ -83,17 +83,29 @@ public class Function {
             int type = ArrayUtil.inArray(param_type.content, DataType.NAMES);
             if (type == -1)
                 builder.error("invalid function parameter: should be <name>: <type>");
-            parameters.add(new Parameter(param_name.content, DataType.getInstance(type)));
+            if(param.size() == 4){
+
+                if(!(param.get(3).type == Token.TokenTypes.SQUARE_BRACKETS && param.get(3).content.isEmpty()))
+                    builder.error("invalid function parameter: should be <name>: <type>");
+                parameters.add(Parameter.ArrayParameter(param_name.content, DataType.getInstance(type)));
+            }else
+                parameters.add(new Parameter(param_name.content, DataType.getInstance(type)));
         }
 
         DataStack stack = new DataStack("IX");
         Main.VariableStacks.push(stack);
 
-        int return_type = DataType.NULL;
+        StackElement return_type = null;
         if (stream.read().content.equals("->")) {
-            return_type = ArrayUtil.inArray(stream.read().content, DataType.NAMES);
-            if (return_type == -1)
+            return_type = new StackElement("return_value", ArrayUtil.inArray(stream.read().content, DataType.NAMES));
+            if (return_type.type == -1)
                 builder.error("invalid return type");
+
+            if(stream.read().type == Token.TokenTypes.SQUARE_BRACKETS){
+                return_type.array_type = return_type.type;
+                return_type.type = DataType.ARRAY;
+            }else
+                stream.backSpace();
         } else
             stream.backSpace();
 
@@ -111,12 +123,12 @@ public class Function {
 
     ArrayList<Parameter> parameters;
     String name;
-    int return_type;
+    StackElement return_type;
     String assembly_name;
     String end_tag;
     DataStack stack;
 
-    Function(String name, ArrayList<Parameter> parameters, int return_type, Token code_block) {
+    Function(String name, ArrayList<Parameter> parameters, StackElement return_type, Token code_block) {
         this.name = name;
         this.parameters = parameters;
         this.return_type = return_type;
@@ -130,7 +142,13 @@ public class Function {
         Main.Function_stack.push(this);
 
         for (Parameter parameter : parameters) {
-            StackElement stack_element = Main.VariableStacks.peek().push(parameter.name, 1, parameter.type.getId(), FunctionBuilder);
+            StackElement stack_element;
+            if(parameter.subtype != null){
+                stack_element = Main.VariableStacks.peek().push(parameter.name, 1, DataType.ARRAY, FunctionBuilder);
+                stack_element.array_type = parameter.subtype.getId();
+            }else {
+                stack_element = Main.VariableStacks.peek().push(parameter.name, 1, parameter.type.getId(), FunctionBuilder);
+            }
 
             new Variable(parameter.name, stack_element);
         }

@@ -141,9 +141,57 @@ text_mode:
     jp          (HL)
 
 
+
+draw_vertical_line: ;color: byte, width: int, X: int, Y: int
+    pop     HL
+    ld      (Var_Safe1), HL
+
+    pop     DE
+    ld      BC, SCREEN_WIDTH
+    call    multiply_int
+
+    pop     DE
+    add     HL, DE
+    ld      DE, BUFFER_B1
+    add     HL, DE
+    ld      DE, SCREEN_WIDTH
+
+    pop     BC
+    ld      B, C
+
+    pop     AF
+
+draw_vertical_line__loop:
+        ld      (HL), A
+        add     HL, DE
+    DJNZ draw_vertical_line__loop
+
+    ld      HL, (Var_Safe1)
+    jp      (HL)
+
+
+
 write_buffer:
     ld           BC, 76800
     ld           HL, BUFFER_B1
     ld           DE, VRAM_B1
     LDIR
     ret
+
+
+
+display_bit_map: ;Color: byte, Width: byte, Height: byte, BmpLocation: pointer, X: int, Y: int
+    pop     HL
+    ld      (Var_Safe1), HL
+
+    pop     DE
+    ld      BC, SCREEN_WIDTH
+    call    multiply_int
+    pop     DE
+    add     HL, DE
+    ld      DE, BUFFER_B1
+    add     HL, DE
+    ld      DE, SCREEN_WIDTH
+
+
+    

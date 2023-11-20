@@ -70,6 +70,9 @@ public class AssemblyBuilder {
     public AssemblyLine append_db(String content) {
         return append(new AssemblyLine(".db", content));
     }
+    public AssemblyLine append_dw(String content) {
+        return append(new AssemblyLine(".dw", content));
+    }
 
     public AssemblyLine append_tag(String name) {
         return append(customAssemblyLine(name + ":"));
@@ -81,7 +84,6 @@ public class AssemblyBuilder {
     }
 
     public AssemblyLine append_pop(String register) {
-        max_stak_size -= 3;
         return append(new AssemblyLine("pop", register));
     }
 
@@ -94,7 +96,6 @@ public class AssemblyBuilder {
     }
 
     public AssemblyLine append_ret() {
-        min_stack_size -= 3
         return append(new AssemblyLine("ret"));
     }
 

@@ -1,0 +1,8 @@
+fun fillByteArray(arrays: byte[], value: byte) {
+    var i: int = 0i;
+    var size: int = len(arrays);
+    while(i < size){
+        arrays[i] = value;
+        i = i + 1i;
+    };
+};

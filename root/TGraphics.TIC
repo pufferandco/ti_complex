@@ -4,56 +4,96 @@ const X_START: int = 110i;
 const Y_START: int = 40i;
 
 
-fun displayBlock(X: int, Y: int, Block: int, Color: byte){
-    var x_location: int = X_START + (X*BLOCK_WIDTH);
-    var y_location: int = Y_START + (Y*BLOCK_WIDTH);
+fun displayBlock(X: int, Y: int, Block: pointer, Color: byte){
+    var x_location: int = X_START + ((X-100i)*BLOCK_WIDTH);
+    var y_location: int = Y_START + ((Y-100i)*BLOCK_WIDTH);
 
-    if(Block[0b]){
+    if(Block -> bool){
         drawBlock(x_location, y_location, BLOCK_WIDTH, BLOCK_HEIGHT, Color);
     };
-    if(Block[1b]){
-        drawBlock(x_location + 10i, Y_START + y_location, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 10i, y_location, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
     };
-    if(Block[2b]){
-        drawBlock(x_location + 20i, Y_START + y_location, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 20i, y_location, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
     };
-    if(Block[3b]){
-        drawBlock(x_location + 30i, Y_START + y_location, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 30i, y_location, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
     };
-    if(Block[4b]){
+    Block = Block+1b;
+    if(Block -> bool){
         drawBlock(x_location, y_location + 10i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
     };
-    if(Block[5b]){
+    Block = Block+1b;
+    if(Block -> bool){
         drawBlock(x_location + 10i, y_location + 10i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
     };
-    if(Block[6b]){
+    Block = Block+1b;
+    if(Block -> bool){
         drawBlock(x_location + 20i, y_location + 10i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
     };
-    if(Block[7b]){
-        drawBlock(x_location +30i, y_location + 10i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 30i, y_location + 10i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
     };
-    if(Block[8b]){
+    Block = Block+1b;
+    if(Block -> bool){
         drawBlock(x_location, y_location + 20i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
     };
-    if(Block[9b]){
+    Block = Block+1b;
+    if(Block -> bool){
         drawBlock(x_location + 10i, y_location + 20i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
     };
-    if(Block[10b]){
+    Block = Block+1b;
+    if(Block -> bool){
         drawBlock(x_location + 20i, y_location + 20i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
     };
-    if(Block[11b]){
+    Block = Block+1b;
+    if(Block -> bool){
         drawBlock(x_location + 30i, y_location + 20i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
     };
-    if(Block[12b]){
+    Block = Block+1b;
+    if(Block -> bool){
         drawBlock(x_location, y_location + 30i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
     };
-    if(Block[13b]){
+    Block = Block+1b;
+    if(Block -> bool){
         drawBlock(x_location + 10i, y_location + 30i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
     };
-    if(Block[14b]){
+    Block = Block+1b;
+    if(Block -> bool){
         drawBlock(x_location + 20i, y_location + 30i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
     };
-    if(Block[15b]){
+    Block = Block+1b;
+    if(Block -> bool){
         drawBlock(x_location + 30i, y_location + 30i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
     };
+
+};
+
+fun graphics(){
+    drawVerticalLine(CONTOUR_COLOR, 240i, 109i, 0i);
+    drawVerticalLine(CONTOUR_COLOR, 240i, 210i, 0i);
+    displayBlock(_block_x, _block_y, _block_location+_rotation, _block_color);
+    displayBase10(220i, 20i, _score, 3i, TEXT_COLOR);
+
+    var Y: int = 0i;
+    while(Y < 20i){
+        var X: int = 0i;
+        while(X < 10i){
+            var block: byte = getTile(X+100i, Y+100i);
+            if(block != 0b){
+                drawBlock(X * BLOCK_WIDTH + X_START, Y * BLOCK_HEIGHT + Y_START, BLOCK_WIDTH, BLOCK_HEIGHT, block);
+            };
+            X = X + 1i;
+        };
+        Y = Y + 1i;
+    };
+
+    writeBuffer();
+    clearBuffer(BACKGROUND_COLOR);
+
 };

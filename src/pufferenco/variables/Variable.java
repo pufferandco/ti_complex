@@ -102,18 +102,20 @@ public class Variable {
     }
 
     public static StackElement get(String name, AssemblyBuilder builder) {
+
         for (int i = Variables.size() - 1; i >= 0; i--) {
             HashMap<String, Variable> current_scope = Variables.get(i);
             if (current_scope.containsKey(name)) {
                 StackElement element = current_scope.get(name).element;
                 DataType.getInstance(element.type).getStackVariable(element, builder);
+
                 return element;
             }
         }
         if(Globals.containsKey(name)) {
             StackElement element = Globals.get(name).element;
-
-            return DataType.getInstance(element.type).get(builder, element.location);
+            DataType.getInstance(element.type).getStatic(builder, element.location);
+            return element;
         }
 
         builder.error("variable [" + name + "] does not exist");
@@ -157,7 +159,7 @@ public class Variable {
             return;
         }
         if(is_global)
-            DataType.getInstance(element.type).set(
+            DataType.getInstance(element.type).setStatic(
                     element.location,
                     ExpressionReader.evalExpression(stream, builder, false),
                     builder
@@ -180,6 +182,7 @@ public class Variable {
     public Variable(String name, StackElement element) {
         this.element = element;
         this.name = name;
+
         Variables.get(Variables.size() - 1).put(name, this);
     }
     public Variable() {}

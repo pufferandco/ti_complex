@@ -12,10 +12,61 @@ Var_Safe1:
     .db 0,0,0
 
 
+
+init:										; initializes stuff
+    ;ld              HL, OP1
+    ;call            _PutS
+    ;push            IX
+    ;ld              HL, symTable
+    ;ld              IX, OP1
+    ;call            fdetect
+    ;;jp              NZ, thrown_error
+    ;pop             IX
+    ;push            BC
+    ;pop             HL
+;
+    ;;ld              HL, saveMemory-MemoryStart+4
+    ;;ex              DE, HL
+    ;;add             HL, DE
+    ;ld              (SaveLocation), HL
+
+	ld              hl,$E30200               ; initializes colors
+	ld              b,0
+
+_cp1555loop:
+	ld d,b
+	ld a,b
+	and %11000000
+	srl d
+	rra
+	ld e,a
+	ld a,%00011111
+	and b
+	or e
+	ld (hl),a
+	inc hl
+	ld (hl),d
+	inc hl
+	inc b
+	jr nz,_cp1555loop
+	ld A, ($F30000)                          ; initializes random seed
+	ld (seed_lower+1), A
+    ld A, ($F30004)
+    ld (seed_lower+2), A
+    ld A, ($F30008)
+    ld (seed_upper+1), A
+    ld A, ($F3000C)
+    ld (seed_upper+2), A
+
+	ret
+
+
+
+
 get_string_size:							; (pointer(HL) string_ptr) -> double(HL) size
 	ld 		A, 0							; byte(A) compare_byte = 0
 	ld 		BC, MAX_STRING_SIZE     		; double(BC) fail_save = MAX_STRING_SIZE
-	
+
 	push 	HL								; pointer(DE) string_start = copy string_ptr
 	pop		DE								;;
 	
@@ -80,29 +131,6 @@ set_character_cursor:
     jp      (HL)
 
 
-
-init:										; initializes stuff
-CopyHL1555Palette:
-	ld hl,$E30200
-	ld b,0
-_cp1555loop:
-	ld d,b
-	ld a,b
-	and %11000000
-	srl d
-	rra
-	ld e,a
-	ld a,%00011111
-	and b
-	or e
-	ld (hl),a
-	inc hl
-	ld (hl),d
-	inc hl
-	inc b
-	jr nz,_cp1555loop
-
-	ret
 
 
 
@@ -367,7 +395,7 @@ index_out_of_bounds__message:
 
 
 
-multiply_int:
+multiply_int:; num1: int(DE), num2(BC): int -> int(HL)
    ld	hl, 0
 
    sla	e
@@ -388,6 +416,72 @@ multiply_int__loop:
 
    dec	a
    jr	nz, multiply_int__loop
+
+   ret
+
+
+
+divide_byte:
+    pop         HL
+    pop         BC
+    pop         AF
+	ld          C,$00
+
+divide_byte__loop:
+	inc         C
+	sub         A, B
+	jr          Z, divide_byte__end
+	jr          NC,divide_byte__loop
+
+divide_byte__overflow:
+	ld          A, C
+    dec         A
+    push        AF
+    jp          (HL)
+
+divide_byte__end:
+    ld          A, C
+    push        AF
+    jp          (HL)
+
+
+
+modulo_byte:
+    pop         HL
+    pop         BC
+    pop         AF
+
+    cp          A, B
+    jp          C, modulo_byte__end
+modulo_byte__loop:
+    sub         A, B
+    cp          A, B
+    jp          NC, modulo_byte__loop
+
+modulo_byte__end:
+    push        AF
+    jp          (HL)
+
+
+
+
+divide_long_byte: ;DE HL / A -> DEHL
+   xor	a
+   ld	b, 32
+
+divide_long_byte__loop:
+   add	hl, hl
+   rl	e
+   rl	d
+   rla
+   jr	c, $+5
+   cp	c
+   jr	c, $+4
+
+   sub	c
+   inc	l
+
+   djnz	divide_long_byte__loop
 
    ret
 
@@ -429,25 +523,205 @@ sleep_millis__loop:
     jp          (HL)
 
 
-randData:
-    .dw 0
-random:
-        push    hl
-        push    de
-        ld      hl,(randData)
-        ld      a,r
-        ld      d,a
-        ld      e,(hl)
-        add     hl,de
-        add     a,l
-        xor     h
-        ld      (randData),hl
-        pop     de
-        pop     hl
-        ret
+seed_upper:
+    .db 00,208,80
+seed_lower:
+    .db 00,31,221
+
+random_number:
+    ld hl,(seed_upper)
+    ld b,h
+    ld c,l
+    add hl,hl
+    add hl,hl
+    inc l
+    add hl,bc
+    ld (seed_upper),hl
+    ld hl,(seed_lower)
+    add hl,hl
+    sbc a,a
+    and %00101101
+    xor l
+    ld l,a
+    ld (seed_lower),hl
+    add hl,bc
+    ret
 
 
 
+;load_from_memory:
+;    pop         HL
+;    ld          (Var_Safe1), HL
+;
+;    ld          HL, SaveMemory
+;    ld          BC, 0
+;    ld          C, (HL)
+;    inc         HL
+;    ld          B, (HL)
+;    inc         HL
+;
+;    ex          DE, HL
+;
+;    ld          HL, (SaveLocation)
+;    inc         HL
+;    inc         HL
+;
+;    LDIR
+;
+;    ld          HL, (Var_Safe1)
+;    jp          (HL)
+
+
+
+write_to_memory:
+    ld          DE, (SaveLocation)
+    ld          HL, SaveMemory
+    ld          BC, saveSize
+    ld          A, (SaveMemory)
+
+    LDIR
+
+    ret
+
+
+
+;-------------------------------------
+; fdetect
+; detects appvars, prot progs, and
+; progs given a 0-terminated string
+; pointed to by ix.
+;-------------------------------------
+; INPUTS:
+; hl->place to start searching
+; ix->string to find
+;
+; OUTPUTS:
+; hl->place stopped searching
+; de->program data
+; bc=program size
+; OP1 contains the name and type byte
+; z flag set if found
+;-------------------------------------
+fdetect:
+ ld de,(ptemp)
+ call _cphlde
+ ld a,(hl)
+ ld (typeByte_SMC),a
+ jr nz,fcontinue
+ inc a
+ ret
+fcontinue:
+ push hl
+ cp appvarobj
+ jr z,fgoodtype
+ cp protprogobj
+ jr z,fgoodtype
+ cp progobj
+ jr nz,fskip
+fgoodtype:
+ dec hl
+ dec hl
+ dec hl
+ ld e, (hl)
+ dec hl
+ ld d,(hl)
+ dec hl
+ ld a,(hl)
+ call _SetDEUToA
+ push de
+ pop hl
+ cp $D0
+ jr nc,finRAM
+ push ix
+ push de
+  push hl
+  pop ix
+  ld a,10
+  add a,(ix+9)
+  ld de,0
+  ld e,a
+  add hl,de
+  ex (sp),hl
+  add hl,de
+ pop de
+ ex de,hl
+ pop ix
+finRAM:
+ inc de
+ inc de
+ ld bc,0
+ ld c,(hl)
+ inc hl
+ ld b,(hl)
+ inc hl ; hl -> data
+ push bc ; bc = size
+ push ix
+ pop bc
+fchkstr:
+ ld a,(bc)
+ or a,a
+ jr z,ffound
+ cp (hl)
+ inc bc
+ inc de
+ inc hl
+ jr z,fchkstr
+ pop bc
+fskip:
+ pop hl
+ call fbypassname
+ jr fdetect
+ffound:
+ push bc
+ pop hl
+ push ix
+ pop bc
+ or a,a
+ sbc hl,bc
+ push hl
+ pop bc
+ pop hl ; size
+ or a,a
+ sbc hl,bc
+ push hl
+ pop bc
+ pop hl ; current search location
+ push bc
+ call fbypassname
+ pop bc
+ xor a
+ ret
+fbypassname:
+ push de
+  ld bc,-6
+  add hl,bc
+  ld de,OP1
+  push de
+   ld b,(hl)		; Name to OP1 -> For things like archiving/deleting
+   inc b
+fbypassnameloop:
+   ld a,(hl)
+   ld (de),a
+   inc de
+   dec hl
+   djnz fbypassnameloop
+   xor a
+   ld (de),a
+typeByte_SMC: =$+1
+   ld a,15h
+  pop de
+  ld (de),a
+ pop de
+ ret
+
+
+
+thrown_error:
+    pop         HL
+    call        _PutS
+    call        _getKey
+
+    jp           ProgramExit
 
 
 

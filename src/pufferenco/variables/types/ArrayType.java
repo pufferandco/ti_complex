@@ -6,6 +6,7 @@ import pufferenco.DataType;
 import pufferenco.Main;
 import pufferenco.variables.DataStack;
 import pufferenco.variables.StackElement;
+import pufferenco.variables.Variable;
 
 public class ArrayType implements DataType {
     private static final int Data_type_id = 6;
@@ -164,18 +165,26 @@ public class ArrayType implements DataType {
 
     @Override
     public StackElement initGlobal(StackElement element, AssemblyBuilder builder) {
-        builder.error("array element is not supported");
+        element = convertFrom(element, builder, false);
+        builder.append_pop("HL");
+        element.location = "globalVars+" + (Variable.GlobalOffset);
+        builder.append_ld("("+element.location+")", "HL");
+        Variable.GlobalOffset += 3;
+        return element;
+    }
+
+    @Override
+    public StackElement getStatic(AssemblyBuilder builder, String location) {
+        builder.append_ld("HL", "("+location+")");
+        builder.append_push("HL");
         return null;
     }
 
     @Override
-    public StackElement get(AssemblyBuilder builder, String location) {
-        return null;
-    }
-
-    @Override
-    public void set(String name, StackElement value, AssemblyBuilder builder) {
-
+    public void setStatic(String location, StackElement value, AssemblyBuilder builder) {
+        convertFrom(value, builder, false);
+        builder.append_pop("HL");
+        builder.append_ld( "("+location+")", "HL");
     }
 
     public static StackElement createNew(int type, StackElement size, StackElement pointer, AssemblyBuilder builder){

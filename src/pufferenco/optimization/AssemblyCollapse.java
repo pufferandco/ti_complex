@@ -8,7 +8,7 @@ import java.util.Collections;
 public class AssemblyCollapse {
     public static AssemblyBuilder optimize(AssemblyBuilder builder, int level) {
         if (level > 0) {
-            //same_double_stack(builder);
+            same_double_stack(builder);
         }
         return builder;
     }

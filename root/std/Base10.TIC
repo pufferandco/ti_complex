@@ -1,0 +1,38 @@
+use {std.Arrays};
+use {std.Graphics};
+
+fun add(Number: byte[], ToAdd: int){
+    while(ToAdd > 0i){
+        ToAdd = ToAdd - 1i;
+        var index: int = 4i;
+        while(index > 0i){
+            if(Number[index] == 9b){
+                Number[index] = 0b;
+                index = index - 1i;
+            }else{
+                Number[index] = Number[index] + 1b;
+                break;
+            };
+        };
+    };
+    return Number;
+};
+
+fun newBase10(Location: pointer) -> byte[]{
+    var number: byte[] = new byte[5i] at Location;
+    fillByteArray(number, 0b);
+    return number;
+};
+
+fun displayBase10(X: int, Y: int, Base10: byte[], Multiplier: int, Color: byte){
+    var i: int = 0i;
+    var x_offset: int = 0i;
+    while(i < 5i){
+        if(Base10[i] != 0b){
+            displayBitmap(X + x_offset, Y, 1i, 5i, &number_chars + (Base10[i] * 5b), Color, Multiplier);
+            x_offset = 5i * Multiplier + x_offset;
+        };
+        i = i + 1i;
+    };
+
+};

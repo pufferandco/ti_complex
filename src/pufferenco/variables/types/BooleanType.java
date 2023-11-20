@@ -75,21 +75,21 @@ public class BooleanType implements DataType {
     public StackElement initGlobal(StackElement element, AssemblyBuilder builder) {
         element = convertFrom(element, builder, false);
         builder.append_pop("AF");
-        element.location = "globalVars" + (Variable.GlobalOffset);
+        element.location = "globalVars+" + (Variable.GlobalOffset);
         builder.append_ld("("+element.location+")", "A");
         Variable.GlobalOffset += 1;
         return element;
     }
 
     @Override
-    public StackElement get(AssemblyBuilder builder, String location) {
+    public StackElement getStatic(AssemblyBuilder builder, String location) {
         builder.append_ld("A", "("+location+")");
         builder.append_push("AF");
         return new StackElement("fetched_bool", getId());
     }
 
     @Override
-    public void set(String location, StackElement value, AssemblyBuilder builder) {
+    public void setStatic(String location, StackElement value, AssemblyBuilder builder) {
         convertFrom(value, builder, false);
         builder.append_pop("AF");
         builder.append_ld( "("+location+")", "A");

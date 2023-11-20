@@ -61,8 +61,8 @@ public interface DataType {
     void setAt(StackElement pointer, StackElement value, AssemblyBuilder builder);
 
     StackElement initGlobal(StackElement element, AssemblyBuilder builder);
-    StackElement get(AssemblyBuilder builder, String location);
+    StackElement getStatic(AssemblyBuilder builder, String location);
 
-    void set(String name, StackElement value, AssemblyBuilder builder);
+    void setStatic(String name, StackElement value, AssemblyBuilder builder);
 
 }

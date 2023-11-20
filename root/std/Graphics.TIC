@@ -1,9 +1,10 @@
-asm{std.Graphics}
+asm{std.Graphics};
 
 const SCREEN_WIDTH: int = 320i;
 const SCREEN_HEIGHT: int = 240i;
 
 nat setPixel set_pixel null int int byte;
+nat drawVerticalLine draw_vertical_line null byte int int int;
 nat bufferPixel buffer_pixel null int int byte;
 nat clearScreen clear_screen null byte;
 nat clearBuffer clear_buffer null byte;
@@ -17,9 +18,50 @@ fun drawBlock(X: int, Y: int, Width: int, Height: int, Color: byte){
         while(x_offset < Width){
             bufferPixel(X + x_offset, Y + y_offset, Color);
             x_offset = x_offset + 1i;
-        }
+        };
         y_offset = y_offset + 1i;
     };
+};
+
+fun displayBitmap(X: int, Y: int, Width: int, Height: int, Picture: pointer, Color: byte, Multiplier: int){
+    var y: int = 0i;
+    var i: int = 0i;
+
+
+    while(y < Height){
+        var x: int = 0i;
+        while(x < Width){
+            var pixelBlock: byte = Picture + i -> byte;
+            if(pixelBlock[7b]){
+                drawBlock(X + ((x + 0i) * Multiplier) , Y + (y * Multiplier), Multiplier, Multiplier, Color);
+            };
+            if(pixelBlock[6b]){
+                drawBlock(X + ((x + 1i) * Multiplier), Y + (y * Multiplier), Multiplier, Multiplier, Color);
+            };
+            if(pixelBlock[5b]){
+                drawBlock(X + ((x + 2i) * Multiplier), Y + (y * Multiplier), Multiplier, Multiplier, Color);
+            };
+            if(pixelBlock[4b]){
+                drawBlock(X + ((x + 3i) * Multiplier), Y + (y * Multiplier), Multiplier, Multiplier, Color);
+            };
+            if(pixelBlock[3b]){
+                drawBlock(X + ((x + 4i) * Multiplier), Y + (y * Multiplier), Multiplier, Multiplier, Color);
+            };
+            if(pixelBlock[2b]){
+                drawBlock(X + ((x + 5i) * Multiplier), Y + (y * Multiplier), Multiplier, Multiplier, Color);
+            };
+            if(pixelBlock[1b]){
+                drawBlock(X + ((x + 6i) * Multiplier), Y + (y * Multiplier), Multiplier, Multiplier, Color);
+            };
+            if(pixelBlock[0b]){
+                drawBlock(X + ((x + 7i) * Multiplier), Y + (y * Multiplier), Multiplier, Multiplier, Color);
+            };
+            x = x + 8i;
+            i = i + 1i;
+        };
+        y = y + 1i;
+    };
+
 };
 
 

@@ -1,0 +1,23 @@
+asm{Chars};
+
+
+
+#fun toString(Number: int, StringLocation: pointer){
+#    enterHeapBlock();
+#    var base10: byte[] = new byte[5b] at malloc(7b);
+#    while(Number > 0i){
+#        Number = Number - 1i;
+#        var index: int = 4i;
+#        while(index > 0i){
+#            if(base10[index] == 9b){
+#                base10[index] = 0b;
+#                index = index - 1b;
+#            }else{
+#                base10[index] = base10[index] + 1b;
+#                break;
+#            };
+#        };
+#    };
+#    exitHeapBlock();
+#};
+

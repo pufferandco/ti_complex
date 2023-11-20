@@ -4,6 +4,7 @@ import pufferenco.optimization.AssemblyCollapse;
 import pufferenco.variables.DataStack;
 import pufferenco.variables.Variable;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
@@ -24,7 +25,9 @@ public class Main {
 
 
     public static void main(String[] args) {
+
         root_folder = args[0] + "/";
+        int safe_size = Integer.parseInt(args[2]);
         safety_mode = isInArray("*unsafe", args);
 
         DataStack global_stack = new DataStack("stackStart");
@@ -35,6 +38,7 @@ public class Main {
         builder.append(customAssemblyLine("#include \"asm/include.inc\""));
         builder.append(customAssemblyLine(".assume\tADL=1"));
         builder.append(customAssemblyLine(".org\tuserMem-2"));
+        builder.append_tag("MemoryStart");
         builder.append_db("tExtTok,tAsm84CeCmp");
         builder.append((new AssemblyLine("")));
         builder.append(new AssemblyLine("set", "AppAutoScroll", "(IY + AppFlags)"));
@@ -51,7 +55,6 @@ public class Main {
 
         builder.append((new AssemblyLine("")));
         builder.append_tag("ProgramExit");
-        builder.append_call("_GetKey");
         builder.append_call("_ClrScrnFull");
         builder.append_res("donePrgm", "(iy+doneFlags)");
         builder.append_ld("SP", "(StackSave)");
@@ -61,9 +64,15 @@ public class Main {
         builder.append_db("0,0,0");
         builder.append_tag("CallStack");
         builder.append_db("0,0,0");
+        builder.append_tag("SaveLocation");
+        builder.append_db("0,0,0");
         builder.append(customAssemblyLine("stackStart" + " .equ saveSScreen+7315"));
         builder.append(customAssemblyLine("callStackStart" + " .equ saveSScreen+14630"));
         builder.append(customAssemblyLine("globalVars" + " .equ pixelShadow"));
+        builder.append(AssemblyLine.customAssemblyLine("saveSize .equ " + safe_size));
+        builder.append_tag("saveMemory");
+        String size = "0,".repeat(safe_size);
+        builder.append_db(size.substring(0, size.length()-1));
 
 
         IOUtil.writeTxt("asm/main.asm",
@@ -77,15 +86,9 @@ public class Main {
 
         early_exit = false;
         for (List<Token> tokens : tokenLines) {
-            builder.tIC_line++;
-
             globalReader.read(tokens, builder);
-            if (early_exit) {
-                early_exit = false;
-                break;
-            }
+
         }
-        builder.tIC_line++;
     }
 
     private static void init() {

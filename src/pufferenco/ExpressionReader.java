@@ -43,22 +43,33 @@ public class ExpressionReader {
             type_list.add(evalExpression(new TokenStream(parameter, builder), builder, false));
         return type_list;
     }
-
     public static StackElement evalExpression(TokenStream stream, AssemblyBuilder builder, boolean allow_constant) {
+        return evalExpression(stream, builder, allow_constant, -1);
+    }
+
+    public static StackElement evalExpression(TokenStream stream, AssemblyBuilder builder, boolean allow_constant, int stop_type) {
         if (stream.isEmpty())
             builder.error("empty stream");
         StackElement prev = null;
 
         while (stream.isNotEmpty()) {
             Token token = stream.read();
-
+            if(token.type == stop_type){
+                if (prev == null) {
+                    builder.error("empty expression");
+                    throw new RuntimeException();
+                }
+                stream.backSpace();
+                return prev;
+            }
             prev = switch (token.type) {
                 case Token.TokenTypes.QUOTE, Token.TokenTypes.DOUBLE_QUOTE ->
                         evalString(token, stream, builder, prev);
                 case Token.TokenTypes.IDENTIFIER, Token.TokenTypes.ARITHMETIC, Token.TokenTypes.AND, Token.TokenTypes.OR, Token.TokenTypes.XOR ->
                         evalIdentifier(token, stream, builder, prev, allow_constant);
-                case Token.TokenTypes.ROUND_BRACKETS ->
-                        evalExpression(new TokenStream(Token.tokenize(token.content), builder), builder, allow_constant);
+                case Token.TokenTypes.ROUND_BRACKETS -> {
+                    yield evalExpression(new TokenStream(token.content, builder), builder, allow_constant);
+                }
                 case Token.TokenTypes.TRUE, Token.TokenTypes.FALSE ->
                         evalBool(token, builder, allow_constant);
                 case Token.TokenTypes.SQUARE_BRACKETS ->
@@ -71,10 +82,11 @@ public class ExpressionReader {
                     yield null;
                 }
             };
+
         }
 
         if (prev == null) {
-            builder.error("empty parameter");
+            builder.error("empty expression");
             throw new RuntimeException();
         }
         return prev;
@@ -98,7 +110,6 @@ public class ExpressionReader {
 
         while (tokenStream.isNotEmpty()) {
             Token current = tokenStream.read();
-
             if (current.type == Token.TokenTypes.ARITHMETIC || current.type == Token.TokenTypes.AND || current.type == Token.TokenTypes.OR || current.type == Token.TokenTypes.XOR) {
                 prev = DataType.getInstance(prev.type)
                         .callOperator(
@@ -305,9 +316,9 @@ public class ExpressionReader {
     private static StackElement evalSquareBrackets(Token brackets, AssemblyBuilder builder, StackElement prev) {
         if(prev == null)
             return null;
-
         if(prev.type == DataType.NULL)
             builder.error("tried to access sub-element of a null element");
+
 
         StackElement key = evalExpression(new TokenStream(brackets.content, builder), builder, true);
         return DataType.getInstance(prev.type).getSub(prev, key, builder);

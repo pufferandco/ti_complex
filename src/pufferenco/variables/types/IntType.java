@@ -85,7 +85,7 @@ public class IntType implements DataType {
     @Override
     public StackElement initGlobal(StackElement element, AssemblyBuilder builder) {
         element = convertFrom(element, builder, false);
-        element.location = "globalVars" + (Variable.GlobalOffset);
+        element.location = "globalVars+" + (Variable.GlobalOffset);
 
         builder.append_pop("DE");
         builder.append_ld("HL", element.location);
@@ -98,7 +98,7 @@ public class IntType implements DataType {
     }
 
     @Override
-    public StackElement get(AssemblyBuilder builder, String location) {
+    public StackElement getStatic(AssemblyBuilder builder, String location) {
         builder.append_ld("DE", "0");
         builder.append_ld("HL", location);
         builder.append_ld("D", "(HL)");
@@ -109,7 +109,7 @@ public class IntType implements DataType {
     }
 
     @Override
-    public void set(String location, StackElement value, AssemblyBuilder builder) {
+    public void setStatic(String location, StackElement value, AssemblyBuilder builder) {
         convertFrom(value, builder, false);
         builder.append_pop("DE");
         builder.append_ld("HL", location);

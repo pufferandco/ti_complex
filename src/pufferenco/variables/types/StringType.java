@@ -99,12 +99,12 @@ public class StringType implements DataType {
     }
 
     @Override
-    public StackElement get(AssemblyBuilder builder, String location) {
+    public StackElement getStatic(AssemblyBuilder builder, String location) {
         return null;
     }
 
     @Override
-    public void set(String name, StackElement value, AssemblyBuilder builder) {
+    public void setStatic(String name, StackElement value, AssemblyBuilder builder) {
 
     }
 

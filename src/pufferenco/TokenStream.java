@@ -8,15 +8,20 @@ public class TokenStream {
     private final List<Token> tokens;
     AssemblyBuilder builder;
     int index = 0;
+    String line;
 
     public TokenStream(List<Token> tokens, AssemblyBuilder builder) {
         this.tokens = tokens;
         this.builder = builder;
+        StringBuilder string_builder = new StringBuilder();
+        for (Token token : tokens) {
+            string_builder.append(token);
+        }
+        line = string_builder.toString();
     }
 
     public TokenStream(String to_tokenize, AssemblyBuilder builder) {
-        this.tokens = Token.tokenize(to_tokenize);
-        this.builder = builder;
+        this(Token.tokenize(to_tokenize), builder);
     }
 
     public Token read() {

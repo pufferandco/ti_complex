@@ -128,14 +128,14 @@ public class ByteType implements DataType {
     }
 
     @Override
-    public StackElement get(AssemblyBuilder builder, String location) {
+    public StackElement getStatic(AssemblyBuilder builder, String location) {
         builder.append_ld("A", "("+location+")");
         builder.append_push("AF");
         return new StackElement("fetched_byte", getId());
     }
 
     @Override
-    public void set(String location, StackElement value, AssemblyBuilder builder) {
+    public void setStatic(String location, StackElement value, AssemblyBuilder builder) {
         convertFrom(value, builder, false);
         builder.append_pop("AF");
         builder.append_ld( "("+location+")", "A");
@@ -205,6 +205,18 @@ public class ByteType implements DataType {
             builder.append_push("HL");
 
             return new StackElement("byte_mlt_" + right.name, Data_type_id);
+        });
+
+        Operators.put("/", (AssemblyBuilder builder, StackElement right) -> {
+            right = convertFrom(right, builder, false);
+            builder.append_call("divide_byte");
+            return new StackElement("byte_div_" + right.name, Data_type_id);
+        });
+
+        Operators.put("%", (AssemblyBuilder builder, StackElement right) -> {
+            right = convertFrom(right, builder, false);
+            builder.append_call("modulo_byte");
+            return new StackElement("byte_mod_" + right.name, Data_type_id);
         });
 
         Operators.put(">", (AssemblyBuilder builder, StackElement right) -> {

@@ -44,7 +44,9 @@ public class Token {
         int AT = 31;
         int ASM = 32;
         int NAT = 33;
+        int THROW = 34;
     }
+
 
     private static final Pattern IDENTIFIER_TOKENS = Pattern.compile("[a-zA-Z0-9_]");
     private static final Character[] ARITHMETIC_TOKENS = {'&', '+', '*', '-', '/', '=', '^', '<', '>', '%', '~', '!'};
@@ -54,7 +56,7 @@ public class Token {
     private static final char COMMENT = '#';
 
     private static final String[] KEYWORDS =
-            {"fun", "while", "var", "val", "and", "or", "xor", "true", "false", "if", "else", "elif", "return", "use", "const", "continue", "break", "move", "to", "global", "new", "at", "asm", "nat"};
+            {"fun", "while", "var", "val", "and", "or", "xor", "true", "false", "if", "else", "elif", "return", "use", "const", "continue", "break", "move", "to", "global", "new", "at", "asm", "nat", "throw"};
 
 
     public static ArrayList<Token> tokenize(String content) {
@@ -199,6 +201,12 @@ public class Token {
 
     @Override
     public String toString() {
-        return type + ":" + content.replaceAll("\\r|\\n", "");
+        return (switch (type){
+            case TokenTypes.ROUND_BRACKETS -> "(" + content + ")";
+            case TokenTypes.CURLY_BRACKETS -> "{" + content + "}";
+            case TokenTypes.SQUARE_BRACKETS -> "[" + content + "]";
+            case TokenTypes.DOUBLE_QUOTE -> "\"" + content + "\"";
+            default -> content;
+        }).replace('\n', ' ');
     }
 }
