@@ -1,5 +1,6 @@
-package pufferenco;
+package pufferenco.readers;
 
+import pufferenco.*;
 import pufferenco.variables.StackElement;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class NativeFunction {
         return Functions.containsKey(name);
     }
 
-    static void init() {
+    public static void init() {
         new NativeFunction("print", new int[]{STRING}, NULL, List.of(
                 new AssemblyLine("pop", "HL"),
                 new AssemblyLine("call", "_PutS")
@@ -64,11 +65,11 @@ public class NativeFunction {
         new NativeFunction("newLine", new int[]{}, NULL, List.of(
                 new AssemblyLine("call", "_NewLine")
         ));
-        new NativeFunction("len", new int[]{STRING}, INT, List.of(
+        new NativeFunction("len", new int[]{STRING}, BYTE, List.of(
                 new AssemblyLine("pop", "HL"),
                 new AssemblyLine("call", "get_string_size"),
-                new AssemblyLine("dec", "HL"),
-                new AssemblyLine("push", "HL")
+                new AssemblyLine("dec", "A"),
+                new AssemblyLine("push", "AF")
         ));
         new NativeFunction("len", new int[]{ARRAY}, INT, List.of(
                 new AssemblyLine("call", "get_array_size")
@@ -115,6 +116,10 @@ public class NativeFunction {
         ));
         new NativeFunction("getVRam", new int[]{}, POINTER, List.of(
                 new AssemblyLine("ld", "HL", "vRam"),
+                new AssemblyLine("push", "HL")
+        ));
+        new NativeFunction("getBuffer", new int[]{}, POINTER, List.of(
+                new AssemblyLine("ld", "HL", "BUFFER_B1"),
                 new AssemblyLine("push", "HL")
         ));
         new NativeFunction("waitKey", new int[]{}, BYTE, List.of(
@@ -181,7 +186,7 @@ public class NativeFunction {
             if (overload.content != null) {
                 builder.appendList(overload.content);
                 if (returns)
-                    return overload.return_type.duplicate();
+                    return overload.return_type.retrieve();
                 else
                     return null;
             }

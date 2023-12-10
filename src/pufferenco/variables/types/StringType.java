@@ -64,13 +64,29 @@ public class StringType implements DataType {
 
     @Override
     public StackElement getSub(StackElement element, StackElement key, AssemblyBuilder builder) {
-        builder.error("cannot read sub of string type");
-        throw new RuntimeException();
+        key = TYPES[BYTE].convertFrom(key, builder, false);
+
+        builder.append_pop("HL");
+        builder.append_pop("AF");
+        builder.append_ld("DE", "0");
+        builder.append_ld("E", "A");
+        builder.append_add("HL", "DE");
+
+        return DataType.getInstance(BYTE).getAt(new StackElement("index_pointer", DataType.POINTER), builder);
     }
 
     @Override
     public void setSub(StackElement element, StackElement key, StackElement new_value, AssemblyBuilder builder) {
-        builder.error("cannot set sub of string type");
+        key = TYPES[BYTE].convertFrom(key, builder, false);
+        new_value = TYPES[BYTE].convertFrom(new_value, builder, false);
+
+        builder.append_pop("HL");
+        builder.append_pop("AF");
+        builder.append_ld("DE", "0");
+        builder.append_ld("E", "A");
+        builder.append_add("HL", "DE");
+
+        DataType.getInstance(BYTE).setAt(new StackElement("index_pointer", DataType.POINTER), new_value, builder);
     }
 
     @Override

@@ -1,10 +1,11 @@
-use {std.Arrays};
-use {std.Graphics};
+import {std.Arrays};
+import {std.Graphics};
+asm {std.Chars};
 
-fun add(Number: byte[], ToAdd: int){
+fun add(Number: byte[], ToAdd: int, Digits: int){
     while(ToAdd > 0i){
         ToAdd = ToAdd - 1i;
-        var index: int = 4i;
+        var index: int = Digits-1i;
         while(index > 0i){
             if(Number[index] == 9b){
                 Number[index] = 0b;
@@ -18,20 +19,18 @@ fun add(Number: byte[], ToAdd: int){
     return Number;
 };
 
-fun newBase10(Location: pointer) -> byte[]{
-    var number: byte[] = new byte[5i] at Location;
-    fillByteArray(number, 0b);
+fun newBase10(Location: pointer, Digits: int) -> byte[]{
+    var number: byte[] = new byte[Digits] at Location;
+    fillArray(number, 0b);
     return number;
 };
 
-fun displayBase10(X: int, Y: int, Base10: byte[], Multiplier: int, Color: byte){
+fun displayBase10(X: int, Y: int, Base10: byte[], Multiplier: int, Color: byte, Digits: int){
     var i: int = 0i;
     var x_offset: int = 0i;
-    while(i < 5i){
-        if(Base10[i] != 0b){
-            displayBitmap(X + x_offset, Y, 1i, 5i, &number_chars + (Base10[i] * 5b), Color, Multiplier);
-            x_offset = 5i * Multiplier + x_offset;
-        };
+    while(i < Digits){
+        displayBitmap(X + x_offset, Y, 1i, 5i, @number_chars + (Base10[i] * 5b), Color, Multiplier);
+        x_offset = 4i * Multiplier + x_offset + 1i;
         i = i + 1i;
     };
 

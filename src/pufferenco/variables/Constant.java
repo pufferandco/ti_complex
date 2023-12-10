@@ -1,10 +1,9 @@
 package pufferenco.variables;
 
 import pufferenco.*;
+import pufferenco.readers.ExpressionReader;
 
 import java.util.HashMap;
-
-import static pufferenco.variables.Variable.Variables;
 
 public class Constant {
     public static HashMap<String, StackElement> constants = new HashMap<>();
@@ -33,7 +32,6 @@ public class Constant {
         DataType dataType = DataType.TYPES[dataId];
 
         StackElement constant = ExpressionReader.evalExpression(stream, builder, true);
-        assert constant != null;
         if (!constant.is_constant)
             builder.error("constant [" + constant.name + "] is not a constant");
 
@@ -48,7 +46,9 @@ public class Constant {
 
     public static StackElement get(String name, AssemblyBuilder builder, boolean allow_constant) {
         StackElement element = constants.get(name);
-        element = DataType.getInstance(element.type).convertFrom(element.duplicate(), builder, allow_constant);
+        System.out.println(element.Constant_value);
+        System.out.println(builder.lines.get(builder.lines.size()-1));
+        element = DataType.getInstance(element.type).convertFrom(element.retrieve(), builder, allow_constant);
 
         return element;
     }

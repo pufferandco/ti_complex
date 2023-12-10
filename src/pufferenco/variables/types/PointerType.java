@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.function.BiFunction;
 
 public class PointerType implements DataType {
-    HashMap<String, BiFunction<StackElement, AssemblyBuilder, StackElement>> operators = new HashMap<>();
+    HashMap<String, BiFunction<StackElement, AssemblyBuilder, StackElement>> Operators = new HashMap<>();
     @Override
     public StackElement initVariable(StackElement value, DataStack stack, AssemblyBuilder builder) {
         value.name = "var_pointer_" + Main.getId();
@@ -27,10 +27,10 @@ public class PointerType implements DataType {
 
     @Override
     public StackElement convertFrom(StackElement old, AssemblyBuilder builder, boolean keep_constant) {
-        if(old.type == DataType.ARRAY || old.type == DataType.STRING)
+        if(old.type == DataType.ARRAY || old.type == DataType.STRING) {
             return new StackElement("converted_pointer", getId());
+        }
         if (old.type != getId()) {
-
             builder.error("cannot convert value to pointer");
             throw new RuntimeException();
         }
@@ -43,8 +43,8 @@ public class PointerType implements DataType {
 
     @Override
     public StackElement callOperator(String operator, AssemblyBuilder builder, StackElement right) {
-        if(operators.containsKey(operator))
-            return operators.get(operator).apply(right, builder);
+        if(Operators.containsKey(operator))
+            return Operators.get(operator).apply(right, builder);
 
         builder.error("operator " + operator + " is not supported by pointer");
         return null;
@@ -52,15 +52,11 @@ public class PointerType implements DataType {
 
     @Override
     public void init() {
-        operators.put("+", (right, builder) -> {
-
+        Operators.put("+", (right, builder) -> {
             if(right.type == DataType.INT) {
                 DataType.getInstance(INT).convertFrom(right, builder, false);
                 builder.append_pop("DE");
                 builder.append_pop("HL");
-                builder.append_ld("BC", "0");
-                builder.append_ld("B", "D");
-                builder.append_ld("C", "E");
                 builder.append_add("HL", "DE");
                 builder.append_push("HL");
                 return new StackElement("var_pointer_add" + Main.getId(), getId());
@@ -78,16 +74,13 @@ public class PointerType implements DataType {
             builder.error("cannot add to pointer type");
             throw new RuntimeException();
         });
-        operators.put("-", (right, builder) -> {
+        Operators.put("-", (right, builder) -> {
             if(right.type == DataType.INT) {
                 DataType.getInstance(INT).convertFrom(right, builder, false);
                 builder.append_pop("DE");
                 builder.append_pop("HL");
-                builder.append_ld("BC", "0");
-                builder.append_ld("B", "D");
-                builder.append_ld("C", "E");
                 builder.append_or("A", "A");
-                builder.append_sbc("HL", "BC");
+                builder.append_sbc("HL", "DE");
                 builder.append_push("HL");
                 return new StackElement("var_pointer_add" + Main.getId(), getId());
             }
@@ -106,7 +99,7 @@ public class PointerType implements DataType {
             throw new RuntimeException();
         });
 
-        operators.put("->", (right, builder) -> {
+        Operators.put("->", (right, builder) -> {
             if(right.type != DataType.TYPE)
                 builder.error("& operator requires a type identifier");
 
@@ -138,6 +131,75 @@ public class PointerType implements DataType {
         throw new RuntimeException();
         });
 
+        Operators.put("==", (right, builder) ->{
+            if(right.type == DataType.TYPE && right.Constant_value.equals(DataType.NULL)){
+                builder.append_pop("HL");
+                builder.append_ld("DE", "0");
+                builder.append_call("int_equals");
+                builder.append_push("AF");
+                return new StackElement("pointer_compare_" + Main.getId(), DataType.BOOL);
+            }else if(right.type == DataType.POINTER){
+                right = convertFrom(right, builder, false);
+                builder.append_pop("DE");
+                builder.append_pop("HL");
+                builder.append_call("int_equals");
+                builder.append_push("AF");
+                return new StackElement("pointer_compare_" + Main.getId(), DataType.BOOL);
+            }
+            builder.error("pointer equals requires other pointer or null");
+            return null;
+        });
+
+        Operators.put(">", ((right, builder) -> {
+            convertFrom(right, builder, false);
+            builder.append_pop("HL");
+            builder.append_pop("DE");
+            builder.append_ex("DE", "HL");
+            builder.append_call("int_higher");
+            builder.append_push("AF");
+            return new StackElement("pointer_cmp_" + Main.getId(), DataType.BOOL);
+        }));
+
+        Operators.put("<", ((right, builder) -> {
+            convertFrom(right, builder, false);
+            builder.append_pop("HL");
+            builder.append_pop("DE");
+            builder.append_ex("DE", "HL");
+            builder.append_call("int_smaller");
+            builder.append_push("AF");
+            return new StackElement("pointer_cmp_" + Main.getId(), DataType.BOOL);
+        }));
+
+        Operators.put("=>", ((right, builder) -> {
+            convertFrom(right, builder, false);
+            builder.append_pop("HL");
+            builder.append_pop("DE");
+            builder.append_ex("DE", "HL");
+            builder.append_call("int_higher_or_equals");
+            builder.append_push("AF");
+            return new StackElement("pointer_cmp_" + Main.getId(), DataType.BOOL);
+        }));
+
+        Operators.put("<=", ((right, builder) -> {
+            convertFrom(right, builder, false);
+            builder.append_pop("HL");
+            builder.append_pop("DE");
+            builder.append_ex("DE", "HL");
+            builder.append_call("int_smaller_or_equals");
+            builder.append_push("AF");
+            return new StackElement("pointer_cmp_" + Main.getId(), DataType.BOOL);
+        }));
+
+        Operators.put("!=", ((right, builder) -> {
+            convertFrom(right, builder, false);
+            builder.append_pop("HL");
+            builder.append_pop("DE");
+            builder.append_ex("DE", "HL");
+            builder.append_call("int_not_equals");
+            builder.append_push("AF");
+            return new StackElement("pointer_cmp_" + Main.getId(), DataType.BOOL);
+        }));
+        
     }
 
     @Override

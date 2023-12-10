@@ -2,6 +2,7 @@ package pufferenco;
 
 import pufferenco.variables.RegisterManager;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -11,9 +12,8 @@ import static pufferenco.AssemblyLine.customAssemblyLine;
 public class AssemblyBuilder {
     public LinkedList<AssemblyLine> lines = new LinkedList<>();
     private final Stack<String> current_function = new Stack<>();
-    private final Stack<Integer> current_line = new Stack<>();
+    private static final Stack<String> current_line = new Stack<>();
     private boolean locked = false;
-    public int tIC_line = 0;
     public int max_stack_size = 0;
 
     public AssemblyLine append(AssemblyLine line) {
@@ -42,18 +42,29 @@ public class AssemblyBuilder {
     }
 
     public void error(String error_code) {
-        throw new RuntimeException("error at " + current_function.peek() + ": " + tIC_line + ": " + error_code);
+        throw new RuntimeException("error at " + current_function.peek() + ": " + error_code + "\n" + "\t\tat: " + current_line.peek().trim());
+    }
+
+    public void newLine(List<Token> line){
+        StringBuilder builder = new StringBuilder();
+        for (Token token : line) {
+            builder.append(token).append(" ");
+        }
+        current_line.push(builder.toString());
+    }
+
+    public void closeLine(){
+        current_line.pop();
     }
 
     public void add_func(String hint) {
         current_function.push(hint);
-        current_line.push(tIC_line);
-        tIC_line = 0;
+
     }
 
     public void remove_func() {
         current_function.pop();
-        tIC_line = current_line.pop();
+
     }
 
     //public AssemblyLine append_ld(String left, String right, String name){

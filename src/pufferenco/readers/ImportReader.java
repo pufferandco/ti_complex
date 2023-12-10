@@ -1,4 +1,6 @@
-package pufferenco;
+package pufferenco.readers;
+
+import pufferenco.*;
 
 import java.io.File;
 import java.util.HashSet;
@@ -6,7 +8,7 @@ import java.util.HashSet;
 import static pufferenco.Main.Constants;
 import static pufferenco.Main.root_folder;
 
-public class UseReader {
+public class ImportReader {
     static HashSet<String> files = new HashSet<>();
 
     static void read(TokenStream stream, AssemblyBuilder builder, boolean is_assembly) {

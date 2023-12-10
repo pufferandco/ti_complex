@@ -1,0 +1,16 @@
+const LEAVE: byte = 64b;
+
+fun fib(Index: int) -> int{
+    #printLn(Index);
+    if((Index == 1b) or (Index == 0b)){
+        return 1i;
+    }else{
+        return fib(Index - 1i) + fib(Index - 2i);
+    };
+};
+
+var i: int = 0i;
+while(waitKey() != LEAVE){
+    printLn(fib(i));
+    i = i + 1i;
+};

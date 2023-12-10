@@ -1,3 +1,0 @@
-asm{std.save};
-
-nat createFile create_app_var null int byte string;

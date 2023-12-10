@@ -1,3 +1,5 @@
+#not working
+
 asm{Chars};
 
 
@@ -21,3 +23,12 @@ asm{Chars};
 #    exitHeapBlock();
 #};
 
+fun toInt(String: string){
+    var amplification: int = 1i;
+    var i = len(String);
+    var number: int = 0i;
+    while(i > 0b){
+        number = number + 
+        amplification = amplification * 10i;
+    }
+};

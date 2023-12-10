@@ -1,15 +1,18 @@
-package pufferenco;
+package pufferenco.readers;
 
+import pufferenco.AssemblyBuilder;
+import pufferenco.Main;
+import pufferenco.Token;
+import pufferenco.TokenStream;
 import pufferenco.variables.Constant;
 import pufferenco.variables.Variable;
-import pufferenco.variables.throwReader;
 
 import java.util.List;
 
 import static pufferenco.Token.TokenTypes;
 
-class globalReader {
-    static void read(List<Token> tokens, AssemblyBuilder builder) {
+public class globalReader {
+    public static void read(List<Token> tokens, AssemblyBuilder builder) {
         TokenStream stream = new TokenStream(tokens, builder);
         Token token = stream.read();
 
@@ -42,8 +45,10 @@ class globalReader {
                 Variable.decrease_scope();
             }
             case TokenTypes.RETURN -> {
-                ExpressionReader.evalExpression(stream, builder, false);
-                builder.append_pop("DE");
+                if(stream.isNotEmpty()) {
+                    ExpressionReader.evalExpression(stream, builder, false);
+                    builder.append_pop("DE");
+                }
                 if(!Function.Function_depth_stack.isEmpty()) {
                     if(Function.Function_depth_stack.peek() != 0) {
                         builder.append_ld("B", String.valueOf(Function.Function_depth_stack.peek()));
@@ -67,12 +72,13 @@ class globalReader {
                 builder.append_jp(WhileReader.While_break_stack.peek());
             }
             case TokenTypes.MOVE -> MoveReader.read(stream, builder);
-            case TokenTypes.USE, TokenTypes.ASM -> UseReader.read(stream, builder, token.type == TokenTypes.ASM);
-            case TokenTypes.NEW_LINE -> builder.tIC_line++;
+            case TokenTypes.IMPORT, TokenTypes.ASM -> ImportReader.read(stream, builder, token.type == TokenTypes.ASM);
             case TokenTypes.VAR -> Variable.init(stream, builder);
             case TokenTypes.CONST -> Constant.init(stream, builder);
             case TokenTypes.NAT -> NativeFunction.read(stream, builder);
-            case TokenTypes.THROW -> throwReader.read(stream, builder);
+            case TokenTypes.THROW -> ThrowReader.read(stream, builder);
+            case TokenTypes.COPY -> CopyReader.read(stream, builder);
+
             default -> builder.error("unknown token: " + token.content);
         }
         if(stream.isNotEmpty()){

@@ -53,7 +53,7 @@ public class IntType implements DataType {
 
     @Override
     public void setSub(StackElement element, StackElement key, StackElement new_value, AssemblyBuilder builder) {
-        builder.error("setSub not allowed for integer tpye");
+        builder.error("setSub not allowed for integer type");
     }
 
     @Override
@@ -63,12 +63,11 @@ public class IntType implements DataType {
 
     @Override
     public StackElement getAt(StackElement pointer, AssemblyBuilder builder) {
-
         builder.append_pop("HL");
         builder.append_ld("DE", "0");
-        builder.append_ld("D", "(HL)");
-        builder.append_inc("HL");
         builder.append_ld("E", "(HL)");
+        builder.append_inc("HL");
+        builder.append_ld("D", "(HL)");
         builder.append_push("DE");
         return new StackElement("var_read_int_" + Main.getId(), getId());
     }
@@ -77,9 +76,9 @@ public class IntType implements DataType {
     public void setAt(StackElement pointer, StackElement value, AssemblyBuilder builder) {
         builder.append_pop("HL");
         builder.append_pop("DE");
-        builder.append_ld("(HL)", "D");
-        builder.append_inc("HL");
         builder.append_ld("(HL)", "E");
+        builder.append_inc("HL");
+        builder.append_ld("(HL)", "D");
     }
 
     @Override
@@ -89,9 +88,9 @@ public class IntType implements DataType {
 
         builder.append_pop("DE");
         builder.append_ld("HL", element.location);
-        builder.append_ld("(HL)", "D");
-        builder.append_inc("HL");
         builder.append_ld("(HL)", "E");
+        builder.append_inc("HL");
+        builder.append_ld("(HL)", "D");
 
         Variable.GlobalOffset += 2;
         return element;
@@ -101,9 +100,9 @@ public class IntType implements DataType {
     public StackElement getStatic(AssemblyBuilder builder, String location) {
         builder.append_ld("DE", "0");
         builder.append_ld("HL", location);
-        builder.append_ld("D", "(HL)");
+        builder.append_ld("E", "(HL)");
         builder.append_inc("HL");
-        builder.append_ld("E","(HL)");
+        builder.append_ld("D","(HL)");
         builder.append_push("DE");
         return new StackElement("fetched_int", getId());
     }
@@ -113,9 +112,9 @@ public class IntType implements DataType {
         convertFrom(value, builder, false);
         builder.append_pop("DE");
         builder.append_ld("HL", location);
-        builder.append_ld("(HL)", "D");
-        builder.append_inc("HL");
         builder.append_ld("(HL)", "E");
+        builder.append_inc("HL");
+        builder.append_ld("(HL)", "D");
     }
 
     @Override
@@ -132,6 +131,25 @@ public class IntType implements DataType {
                 }
             }
             return old;
+        } else if (old.type == DataType.BYTE) {
+            if (old.is_constant) {
+                if (!keep_constant){
+                    old.is_constant = false;
+                    try {
+                        builder.append_ld("HL", String.valueOf(old.Constant_value));
+                        builder.append_push("HL");
+                    } catch (NumberFormatException e) {
+                        builder.error("constant value is not an integer");
+                    }
+                }else
+                    old.type = DataType.INT;
+                return old;
+            }
+            builder.append_pop("AF");
+            builder.append_ld("HL", "0");
+            builder.append_ld("L", "A");
+            builder.append_push("HL");
+            return new StackElement("int_from_byte", Data_type_id);
         }
 
         builder.error("cannot convert " + DataType.getName(old.type) + " to integer");

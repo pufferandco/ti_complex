@@ -1,0 +1,519 @@
+fun setTile(X: int, Y: int, Value: byte){
+    var location: int = (Y-100i)*FIELD_WIDTH+(X-100i);
+    _field[location] = Value;
+    _updated_pixels[location] = true;
+};
+
+fun getTile(X: int, Y: int) -> byte{
+
+    return _field[(Y-100i)*FIELD_WIDTH+(X-100i)];
+};
+
+fun hasUpdated(X: int, Y: int) -> bool{
+    var location: int = (Y-100i)*FIELD_WIDTH+(X-100i);
+    var has_updated: bool = _updated_pixels[location];
+    _updated_pixels[location] = false;
+    return has_updated;
+};
+
+fun clearLine(Y: int){
+    var y: int = Y;
+    while(y > 100i){
+        var x: int = 100i;
+        while(x < 110i){
+            if(y == 101i){
+                setTile(x, y-1i, 0b);
+            }else{
+                if(getTile(x, y) != getTile(x, y-1i)){
+                    setTile(x, y, getTile(x, y-1i));
+                };
+            };
+            x = x + 1i;
+        };
+        y = y - 1i;
+    };
+};
+
+fun checkClearLines(){
+    var lines_cleared: byte = 0b;
+    var y: int = 100i;
+    while(y < 120i){
+        var x: int = 100i;
+        var is_full: bool = true;
+        while(x < 110i){
+            is_full = (getTile(x, y) != 0b) and is_full;
+            x = x + 1i;
+        };
+        if(is_full){
+            clearLine(y);
+            lines_cleared = lines_cleared + 1b;
+        };
+        y = y + 1i;
+    };
+    if(lines_cleared != 0b){
+        _lines_cleared = _lines_cleared + 1i;
+        if(_lines_cleared => (_level + 10i)){
+            _level = _level + 1i;
+            add(_levelB10, 1i, 2i);
+            _lines_cleared = 0b;
+            drawBlock(220i, 40i, 25i, 20i, BACKGROUND_COLOR);
+            displayBase10(220i, 40i, _levelB10, 3i, TEXT_COLOR, 2i);
+            if(int(_level) < len(SPEED)){
+                _speed = SPEED[_level];
+            }else{
+                _speed = 1b;
+            };
+        };
+        if(lines_cleared == 1b){
+            add(_score, (_level+1i) * 40i, 5i);
+        }elif(lines_cleared == 2b){
+            add(_score, (_level+1i) * 100i, 5i);
+        }elif(lines_cleared == 3b){
+            add(_score, (_level+1i) * 300i, 5i);
+        }elif(lines_cleared == 4b){
+            add(_score, (_level+1i) * 1200i, 5i);
+        };
+        _score_updated = true;
+    };
+};
+
+fun loadSave(){
+    var current_location: pointer = _save;
+    copyFrom(current_location, _field);
+    current_location = current_location + 202b;
+
+    copyFrom(current_location, _score);
+    current_location = current_location + 7b;
+
+    _level = current_location -> int;
+    current_location = current_location + 2b;
+    add(_levelB10, _level, 2i);
+    _lines_cleared = current_location -> int;
+    current_location = current_location + 2b;
+
+
+    _block_x = current_location -> int;
+    current_location = current_location + 2b;
+
+    _block_y = current_location -> int;
+    current_location = current_location + 2b;
+
+    _block_id = current_location -> byte;
+    current_location = current_location + 1b;
+
+    _rotation = current_location -> byte;
+    current_location = current_location + 1b;
+
+    _block_color = current_location -> byte;
+    current_location = current_location + 1b;
+
+    _block_location = current_location -> pointer;
+    current_location = current_location + 3b;
+
+
+    _hold_block_x = current_location -> int;
+    current_location = current_location + 2b;
+
+    _hold_block_y = current_location -> int;
+    current_location = current_location + 2b;
+
+    _hold_block_id = current_location -> byte;
+    current_location = current_location + 1b;
+
+    _hold_rotation = current_location -> byte;
+    current_location = current_location + 1b;
+
+    _hold_block_color = current_location -> byte;
+    current_location = current_location + 1b;
+
+    _hold_block_location = current_location -> pointer;
+    current_location = current_location + 3b;
+
+
+    fillArray(_updated_pixels, true);
+};
+
+fun writeSave(){
+    var current_location: pointer = _save;
+
+    copyTo(current_location, _field);
+    current_location = current_location + 202b;
+
+    copyTo(current_location, _score);
+    current_location = current_location + 7b;
+
+    move _level to current_location;
+    current_location = current_location + 2b;
+    add(_levelB10, _level, 2i);
+    move _lines_cleared to current_location;
+    current_location = current_location + 2b;
+
+
+    move _block_x to current_location;
+    current_location = current_location + 2b;
+
+    move _block_y to current_location;
+    current_location = current_location + 2b;
+
+    move _block_id to current_location;
+    current_location = current_location + 1b;
+
+    move _rotation to current_location;
+    current_location = current_location + 1b;
+
+    move _block_color to current_location;
+    current_location = current_location + 1b;
+
+    move _block_location to current_location;
+    current_location = current_location + 3b;
+
+
+    move _hold_block_x to current_location;
+    current_location = current_location + 2b;
+
+    move _hold_block_y to current_location;
+    current_location = current_location + 2b;
+
+    move _hold_block_id to current_location;
+    current_location = current_location + 1b;
+
+    move _hold_rotation to current_location;
+    current_location = current_location + 1b;
+
+    move _hold_block_color to current_location;
+    current_location = current_location + 1b;
+
+    move _hold_block_location to current_location;
+    current_location = current_location + 3b;
+};
+
+fun checkBlock(X: int, Y: int) -> bool{
+    if((X > 109i) or (X < 100i) or (Y > 119i)){
+        return true;
+    };
+    return getTile(X, Y) != 0b;
+};
+
+fun checkHitBox(X: int, Y: int, Block_location: pointer) -> bool{
+    var y_offset: int = 0i;
+    var i: int = 0i;
+    while(y_offset < 4i){
+        var x_offset: int = 0i;
+        while(x_offset < 4i){
+            if(Block_location + i -> bool){
+                if(checkBlock(X + x_offset, Y + y_offset)){
+                    return false;
+                };
+            };
+            x_offset = x_offset + 1i;
+            i = i + 1i;
+        };
+        y_offset = y_offset + 1i;
+    };
+    return true;
+};
+
+fun placeBlock(X: int, Y: int, Block_location: pointer, Block_color: byte) -> bool{
+    var y_offset: int = 0i;
+    var i: int = 0i;
+    while(y_offset < 4i){
+        var x_offset: int = 0i;
+        while(x_offset < 4i){
+            if(Block_location + i -> bool){
+                if(Y+y_offset == 101i){
+                    _is_running = false;
+                    fillArray(_field, 0b);
+                };
+                setTile(X+x_offset, Y+y_offset, Block_color);
+            };
+            x_offset = x_offset + 1i;
+            i = i + 1i;
+        };
+        y_offset = y_offset + 1i;
+    };
+    checkClearLines();
+};
+
+fun selectBlock(){
+    if(_remaining_block_count == 0b){
+        _remaining_block_count = BLOCK_COUNT;
+        copy BLOCKS to pointer(_remaining_blocks);
+    };
+    var block_id: byte = randomByte() % _remaining_block_count;
+    var block: byte = _remaining_blocks[block_id];
+    _block_location = @blocks + (int(block) * 64i);
+
+    redact(_remaining_blocks, int(block_id));
+    _remaining_block_count = _remaining_block_count - 1b;
+
+    if(block == _hold_block_id){
+        selectBlock();
+        return;
+    };
+
+    _rotation = 0b;
+    _block_x = 104i;
+    _block_y = 100i;
+    _block_id = block;
+
+    _hold_block_x = 104i;
+    _hold_block_y = 100i;
+    _hold_rotation = 0b;
+
+
+    _block_color = BLOCK_COLORS[block];
+};
+
+fun refreshBlock(X: int, Y: int){
+    var y_offset: int = 0i;
+    while(y_offset < 4i){
+        var x_offset: int = 0i;
+        while(x_offset < 4i){
+            if(not((X+x_offset > 109i) or (X+x_offset < 100i) or (Y+y_offset > 119i))){
+                if(getTile(X+x_offset, Y+y_offset) != 0b){
+                    drawBlock(
+                        (X-100i+x_offset) * BLOCK_WIDTH + X_START,
+                        (Y-100i+y_offset) * BLOCK_HEIGHT + Y_START,
+                        BLOCK_WIDTH,
+                        BLOCK_HEIGHT,
+                        getTile(X+x_offset, Y+y_offset)
+                    );
+                }else{
+                    drawBlock(
+                        (X-100i+x_offset) * BLOCK_WIDTH + X_START,
+                        (Y-100i+y_offset) * BLOCK_HEIGHT + Y_START,
+                        BLOCK_WIDTH,
+                        BLOCK_HEIGHT,
+                        BACKGROUND_COLOR
+                    );
+                };
+            };
+            x_offset = x_offset + 1i;
+        };
+        y_offset = y_offset + 1i;
+    };
+};
+
+fun displayBlock(X: int, Y: int, Block: pointer, Color: byte){
+    var x_location: int = X_START + ((X-100i)*BLOCK_WIDTH);
+    var y_location: int = Y_START + ((Y-100i)*BLOCK_WIDTH);
+
+    if(Block -> bool){
+        drawBlock(x_location, y_location, BLOCK_WIDTH, BLOCK_HEIGHT, Color);
+    };
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 10i, y_location, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 20i, y_location, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 30i, y_location, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location, y_location + 10i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 10i, y_location + 10i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 20i, y_location + 10i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 30i, y_location + 10i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location, y_location + 20i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 10i, y_location + 20i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 20i, y_location + 20i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 30i, y_location + 20i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location, y_location + 30i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 10i, y_location + 30i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 20i, y_location + 30i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+    Block = Block+1b;
+    if(Block -> bool){
+        drawBlock(x_location + 30i, y_location + 30i, BLOCK_WIDTH, BLOCK_HEIGHT,Color);
+    };
+};
+
+fun checkKeys(){
+    var key: byte = scanKey();
+    if(key != 0b){
+        if(key == KEY_SHIFT){
+            if(_rotation == 0b){
+                if(checkHitBox(_block_x, _block_y, _block_location+48b)){
+                    _rotation = 48b;
+                };
+            }else{
+                if(checkHitBox(_block_x, _block_y, _block_location + _rotation - 16b)){
+                    _rotation = _rotation - 16b;
+                };
+            };
+        }elif(key == KEY_ALPHA){
+            if(_rotation == 48b){
+                if(checkHitBox(_block_x, _block_y, _block_location)){
+                    _rotation = 0b;
+                };
+            }else{
+                if(checkHitBox(_block_x, _block_y, _block_location + _rotation + 16b)){
+                    _rotation = _rotation + 16b;
+                };
+            };
+        }elif(key == KEY_LEFT){
+            if(checkHitBox(_block_x - 1i, _block_y, _block_location+_rotation)){
+                _block_x = _block_x - 1i;
+            };
+        }elif(key == KEY_RIGHT){
+            if(checkHitBox(_block_x + 1i, _block_y, _block_location+_rotation)){
+                _block_x = _block_x + 1i;
+            };
+        }elif(key == KEY_DOWN){
+            if(checkHitBox(_block_x, _block_y + 1i, _block_location+_rotation)){
+                _block_y = _block_y + 1i;
+                add(_score, 1i, 5i);
+                _score_updated = true;
+            }else{
+                placeBlock(_block_x, _block_y, _block_location+_rotation, _block_color);
+                selectBlock();
+            };
+        }elif(key == KEY_CLEAR){
+            writeSave();
+            _is_running = false;
+        }elif(key == KEY_MODE){
+            while(checkHitBox(_block_x, _block_y + 1i, _block_location+_rotation)){
+                _block_y = _block_y + 1i;
+                add(_score, 1i, 5i);
+                _score_updated = true;
+            };
+            placeBlock(_block_x, _block_y, _block_location+_rotation, _block_color);
+            selectBlock();
+        }elif(key == KEY_DEL){
+            displayBitmap(20i, 20i, 1i, 3i, @paused_bitmap, 224b, 8i);
+            while(scanKey() == 0b){
+                writeBuffer();
+            };
+            drawBlock(20i, 20i, 64i, 24i, BACKGROUND_COLOR);
+        }elif(key == KEY_X){
+            if(_hold_block_color == 0b){
+                _hold_block_x        = _block_x;
+                _hold_block_y        = _block_y;
+                _hold_block_id       = _block_id;
+                _hold_rotation       = _rotation;
+                _hold_block_color    = _block_color;
+                _hold_block_location = _block_location;
+                selectBlock();
+            }else{
+                var temp_block_x: int            = _block_x;
+                var temp_block_y: int            = _block_y;
+                var temp_block_id: byte          = _block_id;
+                var temp_rotation: byte          = _rotation;
+                var temp_block_color: byte       = _block_color;
+                var temp_block_location: pointer = _block_location;
+
+                _block_x        = _hold_block_x;
+                _block_y        = _hold_block_y;
+                _block_id       = _hold_block_id;
+                _rotation       = _hold_rotation;
+                _block_color    = _hold_block_color;
+                _block_location = _hold_block_location;
+
+                _hold_block_x        = temp_block_x;
+                _hold_block_y        = temp_block_y;
+                _hold_block_id       = temp_block_id;
+                _hold_rotation       = temp_rotation;
+                _hold_block_color    = temp_block_color;
+                _hold_block_location = temp_block_location;
+            };
+
+            drawBlock(221i, 140i, 40i, 40i, BACKGROUND_COLOR);
+            displayBlock(111i, 110i, _hold_block_location, _hold_block_color);
+        };
+    };
+};
+
+fun drawShadow(X: int, Y: int, Block: pointer, Color: byte){
+    var drop: int = 0i;
+    while(checkHitBox(X, Y+drop+1i, Block)){
+        drop = drop + 1i;
+    };
+
+    refreshBlock(_old_shadow_x, _old_shadow_y);
+    _old_shadow_x = X;
+    _old_shadow_y = Y+drop;
+
+    if(drop => 4i){
+        displayBlock(X, Y + drop, Block, Color);
+    };
+
+};
+
+fun graphics(){
+    checkKeys();
+
+    if(_score_updated){
+        drawBlock(220i, 20i, 70i, 20i, BACKGROUND_COLOR);
+        displayBase10(220i, 20i, _score, 3i, TEXT_COLOR, 5i);
+        _score_updated = false;
+    };
+
+    var Y: int = 0i;
+    while(Y < 20i){
+        var X: int = 0i;
+        while(X < 10i){
+            var block: byte = getTile(X+100i, Y+100i);
+            if(hasUpdated(X+100i, Y+100i)){
+                if(block == 0b){
+                    drawBlock(X * BLOCK_WIDTH + X_START, Y * BLOCK_HEIGHT + Y_START, BLOCK_WIDTH, BLOCK_HEIGHT, BACKGROUND_COLOR);
+                }else{
+                    drawBlock(X * BLOCK_WIDTH + X_START, Y * BLOCK_HEIGHT + Y_START, BLOCK_WIDTH, BLOCK_HEIGHT, block);
+                };
+                checkKeys();
+            };
+            X = X + 1i;
+        };
+        Y = Y + 1i;
+    };
+
+    checkKeys();
+
+    drawShadow(_block_x, _block_y, _block_location+_rotation, 180b);
+    refreshBlock(_old_block_x, _old_block_y);
+    _old_block_x = _block_x;
+    _old_block_y = _block_y;
+    displayBlock(_block_x, _block_y, _block_location+_rotation, _block_color);
+
+    checkKeys();
+
+    drawVerticalLine(CONTOUR_COLOR, 240i, 109i, 0i);
+    drawVerticalLine(CONTOUR_COLOR, 240i, 210i, 0i);
+
+    writeBuffer();
+};
+

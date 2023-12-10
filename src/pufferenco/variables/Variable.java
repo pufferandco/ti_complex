@@ -1,6 +1,7 @@
 package pufferenco.variables;
 
 import pufferenco.*;
+import pufferenco.readers.ExpressionReader;
 import pufferenco.variables.types.ArrayType;
 
 import java.util.ArrayList;
@@ -109,13 +110,13 @@ public class Variable {
                 StackElement element = current_scope.get(name).element;
                 DataType.getInstance(element.type).getStackVariable(element, builder);
 
-                return element;
+                return element.retrieve();
             }
         }
         if(Globals.containsKey(name)) {
             StackElement element = Globals.get(name).element;
             DataType.getInstance(element.type).getStatic(builder, element.location);
-            return element;
+            return element.retrieve();
         }
 
         builder.error("variable [" + name + "] does not exist");
@@ -148,10 +149,11 @@ public class Variable {
                 builder.error("no required token [=] after global mention of variable sub_setter");
 
             StackElement value = ExpressionReader.evalExpression(stream, builder, false);
+            StackElement array = get(name, builder);
             StackElement key = ExpressionReader.evalExpression(new TokenStream(Token.tokenize(next_token.content), builder), builder, true);
 
             DataType.getInstance(element.type).setSub(
-                    element,
+                    array,
                     key,
                     value,
                     builder

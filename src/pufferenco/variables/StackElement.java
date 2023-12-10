@@ -70,9 +70,20 @@ public class StackElement {
                 '}';
     }
 
+    @Deprecated
     public StackElement duplicate(){
         StackElement element = new StackElement(name, size, type);
         element.location = location;
+        element.is_constant = is_constant;
+        element.Constant_value = Constant_value;
+        element.stack = stack;
+        element.array_type = array_type;
+        return element;
+    }
+
+    public StackElement retrieve(){
+        StackElement element = new StackElement(name, size, type);
+        element.location = null;
         element.is_constant = is_constant;
         element.Constant_value = Constant_value;
         element.stack = stack;

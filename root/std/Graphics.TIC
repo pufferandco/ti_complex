@@ -12,21 +12,31 @@ nat writeBuffer write_buffer null;
 nat drawMode set_mode null bool;
 
 fun drawBlock(X: int, Y: int, Width: int, Height: int, Color: byte){
-    var y_offset: int = 0i;
-    while(y_offset < Height){
-        var x_offset: int = 0i;
-        while(x_offset < Width){
-            bufferPixel(X + x_offset, Y + y_offset, Color);
-            x_offset = x_offset + 1i;
-        };
-        y_offset = y_offset + 1i;
+    var location: pointer = getBuffer();
+    if(Y > 120i){
+        location = location + 38400i;
+        Y = Y - 120i;
     };
+    location =  location + (Y * SCREEN_WIDTH + X);
+
+    var except_width: int = SCREEN_WIDTH - Width;
+    var y: int = 0i;
+        while(y < Height){
+        var x: int = 0i;
+        while(x < Width){
+            move Color to location;
+            location = location + 1i;
+            x = x + 1i;
+        };
+        location = location + except_width;
+        y = y + 1i;
+    };
+
 };
 
 fun displayBitmap(X: int, Y: int, Width: int, Height: int, Picture: pointer, Color: byte, Multiplier: int){
     var y: int = 0i;
     var i: int = 0i;
-
 
     while(y < Height){
         var x: int = 0i;

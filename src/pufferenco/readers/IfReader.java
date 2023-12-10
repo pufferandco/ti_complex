@@ -1,10 +1,11 @@
-package pufferenco;
+package pufferenco.readers;
 
+import pufferenco.*;
 import pufferenco.variables.StackElement;
 
 import static pufferenco.Main.tokenizeAndRun;
 
-class IfReader {
+public class IfReader {
     static void read(TokenStream stream, AssemblyBuilder builder) {
         builder.append_call("sub_block_enter");
 

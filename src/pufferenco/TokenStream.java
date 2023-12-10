@@ -29,7 +29,7 @@ public class TokenStream {
             builder.error("token stream reached end");
         Token token = tokens.get(index++);
         if (token.type == Token.TokenTypes.NEW_LINE)
-            builder.tIC_line++;
+            return read();
         return token;
     }
 
@@ -68,5 +68,13 @@ public class TokenStream {
             list.add(tokens.get(i));
         }
         return list;
+    }
+
+    public String debugSnapshot() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = index; i < tokens.size(); i++) {
+            stringBuilder.append(tokens.get(i)).append(" ");
+        }
+        return stringBuilder.toString();
     }
 }

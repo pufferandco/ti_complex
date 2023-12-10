@@ -65,38 +65,21 @@ public class ArrayType implements DataType {
 
         int element_size = DataType.getInstance(element.array_type).elementSize(builder);
 
-        builder.append_pop("HL");           // move array_pointer(STACK -> HL)
-        builder.append_pop("BC");           // move index(STACK -> BC)
-
-        if(Main.safety_mode) {
-            builder.append_ld("DE", "0");     // move size(MEMORY -> DE)
-            builder.append_ld("D", "(HL)");   // elements_start(HL) = array_pointer + 2; void array_pointer
-            builder.append_inc("HL");
-            builder.append_ld("E", "(HL)");
-            builder.append_inc("HL");
-
-            builder.append_ex("DE", "HL");
-            builder.append_or("A", "A");
-            builder.append_sbc("HL", "BC");
-            builder.append_add("HL", "BC");
-            builder.append_jp("C", "index_out_of_bounds");
-            builder.append_ex("DE", "HL");
-        }else{
-            builder.append_inc("HL");
-            builder.append_inc("HL");
-        }
-
         if(element_size != 1) {
-            builder.append_push("HL");
-            builder.append_push("BC");      // move index(BC -> HL)
-            builder.append_pop("HL");
+            builder.append_pop("DE");
 
-            builder.append_ld("BC", String.valueOf(DataType.getInstance(element.type).elementSize(builder)));
+            builder.append_ld("BC", String.valueOf(element_size));
             builder.append_call("multiply_int");
             builder.append_ex("DE", "HL");
             builder.append_pop("HL");
+            builder.append_inc("HL");
+            builder.append_inc("HL");
             builder.append_add("HL", "DE");
         }else{
+            builder.append_pop("BC");
+            builder.append_pop("HL");           // move array_pointer(STACK -> HL)
+            builder.append_inc("HL");
+            builder.append_inc("HL");
             builder.append_add("HL", "BC");
         }
         builder.append_push("HL");
@@ -108,38 +91,23 @@ public class ArrayType implements DataType {
     public void setSub(StackElement element, StackElement key, StackElement new_value, AssemblyBuilder builder) {
         int element_size = DataType.getInstance(element.array_type).elementSize(builder);
         DataType.getInstance(DataType.INT).convertFrom(key, builder, false);
-        builder.append_ld("HL", "(" + element.location + ")");
-        builder.append_pop("BC");           // move index(STACK -> BC)
-
-        if(Main.safety_mode) {
-            builder.append_ld("DE", "0");     // move size(MEMORY -> DE)
-            builder.append_ld("D", "(HL)");   // elements_start(HL) = array_pointer + 2; void array_pointer
-            builder.append_inc("HL");
-            builder.append_ld("E", "(HL)");
-            builder.append_inc("HL");
-
-            builder.append_ex("DE", "HL");
-            builder.append_or("A", "A");
-            builder.append_sbc("HL", "BC");
-            builder.append_add("HL", "BC");
-            builder.append_jp("C", "index_out_of_bounds");
-            builder.append_ex("DE", "HL");
-        }else{
-            builder.append_inc("HL");
-            builder.append_inc("HL");
-        }
+                   // move index(STACK -> BC)
 
         if(element_size != 1) {
-            builder.append_push("HL");
-            builder.append_push("BC");      // move index(BC -> HL)
-            builder.append_pop("HL");
+            builder.append_pop("DE");
 
-            builder.append_ld("BC", String.valueOf(DataType.getInstance(element.type).elementSize(builder)));
+            builder.append_ld("BC", String.valueOf(element_size));
             builder.append_call("multiply_int");
             builder.append_ex("DE", "HL");
             builder.append_pop("HL");
+            builder.append_inc("HL");
+            builder.append_inc("HL");
             builder.append_add("HL", "DE");
         }else{
+            builder.append_pop("HL");
+            builder.append_inc("HL");
+            builder.append_inc("HL");
+            builder.append_pop("BC");
             builder.append_add("HL", "BC");
         }
         builder.append_push("HL");
@@ -188,16 +156,13 @@ public class ArrayType implements DataType {
     }
 
     public static StackElement createNew(int type, StackElement size, StackElement pointer, AssemblyBuilder builder){
-
         builder.append_pop("HL");
         builder.append_pop("DE");
-
-        builder.append_ld("(HL)", "D");
-        builder.append_inc("HL");
-        builder.append_ld("(HL)", "E");
-
-        builder.append_dec("HL");
         builder.append_push("HL");
+
+        builder.append_ld("(HL)", "E");
+        builder.append_inc("HL");
+        builder.append_ld("(HL)", "D");
 
         return StackElement.array("new array", type);
     }

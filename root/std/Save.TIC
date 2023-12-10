@@ -1,0 +1,4 @@
+asm{std.Save};
+
+nat createFile create_app_var pointer int string;
+nat getFile get_app_var pointer string;

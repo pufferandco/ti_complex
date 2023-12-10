@@ -1,7 +1,6 @@
 #include "asm/include.inc"
 .assume	ADL=1
 .org	userMem-2
-MemoryStart:
 	.db          tExtTok,tAsm84CeCmp
 	             
 	set          AppAutoScroll,(IY + AppFlags)
@@ -13,270 +12,138 @@ MemoryStart:
 	call         _homeup
 	call         _ClrScrnFull
 	             
-	ld           HL,0
-	ld           (globalVars+0),HL
-	ld           HL,0
-	ld           (globalVars+3),HL
 	call         sub_block_enter
-	ld           HL,HEAP_START
-	push         HL
 	ld           HL,0
 	add          HL,SP
 	ld           SP,(callStack)
-	call         PS_init_268
+	call         heapInit_78
 	pop          HL
 	ld           (callStack),SP
 	ld           SP,HL
-	ld           HL,200
+	ld           HL,24
 	push         HL
-	ld           A,0                       ; 0b
-	ld           (globalVars+6),A
-	ld           A,30                      ; 30b
-	ld           (globalVars+7),A
-	ld           HL,104
-	push         HL
-	pop          DE
-	ld           HL,globalVars+8
-	ld           (HL),D
-	inc          HL
-	ld           (HL),E
-	ld           HL,100
-	push         HL
-	pop          DE
-	ld           HL,globalVars+10
-	ld           (HL),D
-	inc          HL
-	ld           (HL),E
-	ld           HL,block_i
-	ld           (globalVars+12),HL
-	ld           HL,0
-	push         HL
-	pop          DE
-	ld           HL,globalVars+15
-	ld           (HL),D
-	inc          HL
-	ld           (HL),E
 	call         sub_block_enter
-	call         sub_block_enter
-	ld           A,7                       ; 7b
-	push         AF
+	ld           HL,26
+	push         HL
 	ld           HL,0
 	add          HL,SP
 	ld           SP,(callStack)
-	call         malloc_244
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	push         DE
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         newBase10_334
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	push         DE
-	pop          HL
-	ld           (globalVars+17),HL
-	ld           HL,200
-	push         HL
-	call         sub_block_enter
-	ld           A,202                     ; 202b
-	push         AF
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         malloc_244
+	call         malloc_6
 	pop          HL
 	ld           (callStack),SP
 	ld           SP,HL
 	push         DE
 	pop          HL
 	pop          DE
-	ld           (HL),D
-	inc          HL
+	push         HL
 	ld           (HL),E
-	dec          HL
-	ld           (globalVars+20),HL
-	ld           A,%11111111
-	ld           (globalVars+23),A
-	ld           A,%00000000
-	push         AF
-	call         set_mode
-	ld           A,74
-	push         AF
-	call         clear_screen
-	call         sub_block_enter
-	ld           HL,(globalVars+20)
-	push         HL
-	ld           A,0                       ; 0b
-	push         AF
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         fillByteArray_276
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-while_start1072:
-	ld           A,(globalVars+23)
-	cp           A,%11111111
-	jp           NZ,while_end1073
-	call         sub_block_enter
-	call         sub_block_enter
-	call         sub_block_enter
-	ld           DE,0
-	ld           HL,globalVars+8
-	ld           D,(HL)
 	inc          HL
-	ld           E,(HL)
-	push         DE
-	ld           DE,0
-	ld           HL,globalVars+10
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	pop          HL
-	inc          HL
+	ld           (HL),D
+	ld           HL,30
 	push         HL
-	ld           HL,(globalVars+12)
-	push         HL
-	ld           A,(globalVars+6)
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
+	call         sub_block_enter
+	ld           HL,32
 	push         HL
 	ld           HL,0
 	add          HL,SP
 	ld           SP,(callStack)
-	call         checkHitBox_565
+	call         malloc_6
 	pop          HL
 	ld           (callStack),SP
 	ld           SP,HL
 	push         DE
-	pop          AF
-	cp           A,%11111111
-	jp           NZ,if_next_1079
-	ld           DE,0
-	ld           HL,globalVars+10
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
 	pop          HL
-	inc          HL
-	push         HL
 	pop          DE
-	ld           HL,globalVars+10
-	ld           (HL),D
-	inc          HL
+	push         HL
 	ld           (HL),E
-	jp           if_end_1078
-if_next_1079:
-	call         sub_block_enter
-	call         sub_block_enter
-	ld           DE,0
-	ld           HL,globalVars+8
-	ld           D,(HL)
 	inc          HL
-	ld           E,(HL)
-	push         DE
-	ld           DE,0
-	ld           HL,globalVars+10
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	ld           HL,(globalVars+12)
+	ld           (HL),D
+	call         sub_block_enter
+	ld           HL,(stackStart-3)
 	push         HL
-	ld           A,(globalVars+6)
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	push         HL
-	ld           A,(globalVars+7)
+	ld           A,69
 	push         AF
 	ld           HL,0
 	add          HL,SP
 	ld           SP,(callStack)
-	call         placeBlock_614
+	call         fillArray_83
 	pop          HL
 	ld           (callStack),SP
 	ld           SP,HL
-	push         DE
-	pop          AF
-	cp           A,%11111111
-	jp           NZ,if_next_1085
-	ld           B,3
-	call         multi_block_leave
-	jp           while_end1073
-	jp           if_end_1084
-if_next_1085:
-if_end_1084:
-	call         sub_block_leave
 	call         sub_block_enter
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         selectBlock_669
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-if_end_1078:
-	call         sub_block_leave
-	call         sub_block_enter
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         checkKeys_687
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           HL,0
-	push         HL
-while_start1089:
 	ld           HL,(stackStart-6)
 	push         HL
-	ld           HL,(stackStart-3)
+	ld           A,13
+	push         AF
+	ld           HL,0
+	add          HL,SP
+	ld           SP,(callStack)
+	call         fillArray_83
+	pop          HL
+	ld           (callStack),SP
+	ld           SP,HL
+	ld           HL,0
+	push         HL
+while_start221:
+	ld           HL,(stackStart-9)
+	push         HL
+	ld           HL,5
 	pop          DE
 	ex           DE,HL
 	call         int_smaller
 	cp           A,%11111111
-	jp           NZ,while_end1090
+	jp           NZ,while_end222
 	call         sub_block_enter
-	call         sub_block_enter
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         graphics_1016
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           HL,(stackStart-6)
-	ld           DE,100
-	add          HL,DE
-	ld           (stackStart-6),HL
-	ld           HL,100
+	ld           HL,(stackStart-3)
 	push         HL
-	call         sleep_millis
-	call         sub_block_enter
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         checkKeys_687
+	ld           HL,(stackStart-9)
+	push         HL
+	pop          BC
 	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	call         sub_block_leave
-	jp           while_start1089
-while_end1090:
-	call         sub_block_leave
-	jp           while_start1072
-while_end1073:
+	inc          HL
+	inc          HL
+	add          HL,BC
+	ld           A,(HL)
+	push         AF
+	call         printLn_byte
 	call         _GetKey
+	ld           HL,(stackStart-9)
+	inc          HL
+	ld           (stackStart-9),HL
+	call         sub_block_leave
+	jp           while_start221
+while_end222:
+	ld           HL,0
+	ld           (stackStart-9),HL
+while_start234:
+	ld           HL,(stackStart-9)
+	push         HL
+	ld           HL,5
+	pop          DE
+	ex           DE,HL
+	call         int_smaller
+	cp           A,%11111111
+	jp           NZ,while_end235
+	call         sub_block_enter
+	ld           HL,(stackStart-6)
+	push         HL
+	ld           HL,(stackStart-9)
+	push         HL
+	pop          BC
+	pop          HL
+	inc          HL
+	inc          HL
+	add          HL,BC
+	ld           A,(HL)
+	push         AF
+	call         printLn_byte
+	call         _GetKey
+	ld           HL,(stackStart-9)
+	inc          HL
+	ld           (stackStart-9),HL
+	call         sub_block_leave
+	jp           while_start234
+while_end235:
 	             
 ProgramExit:
 	call         _ClrScrnFull
@@ -293,690 +160,242 @@ SaveLocation:
 stackStart .equ saveSScreen+7315
 callStackStart .equ saveSScreen+14630
 globalVars .equ pixelShadow
-saveSize .equ 100
-saveMemory:
-	.db          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 
-drawBlock_5:
-	push         IX                        ; push stack_start
+malloc_6:
+	push         IX
 	ld           (callStack),SP
 	ld           SP,HL
-	ld           IX,15
+	ld           IX,3
 	add          IX,SP
-	ld           HL,0
+	ld           HL,13706053
+	push         HL
+	ld           HL,13706053
+	push         HL
+	ld           HL,13706053
 	push         HL
 while_start10:
-	ld           HL,(IX-18)
+	ld           HL,(IX-6)
 	push         HL
-	ld           HL,(IX-12)
+	ld           HL,13706053
+	push         HL
+	ld           HL,13713368
 	pop          DE
 	ex           DE,HL
 	call         int_smaller
 	cp           A,%11111111
 	jp           NZ,while_end11
 	call         sub_block_enter
-	ld           HL,0
+	ld           HL,(IX-6)
 	push         HL
-while_start18:
-	ld           HL,(IX-21)
+	ld           HL,13706053
+	ld           A,(HL)
+	push         AF
+	ld           HL,(IX-6)
 	push         HL
+	ld           HL,13706053
+	push         HL
+	ld           HL,1
+	push         HL
+	pop          DE
+	pop          HL
+	add          HL,DE
+	ld           DE,0
+	ld           E,(HL)
+	inc          HL
+	ld           D,(HL)
+	push         DE
 	ld           HL,(IX-9)
+	push         HL
+	pop          AF
+	call         print_bool
+	call         sub_block_enter
+	ld           HL,(IX-9)
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,(IX-3)
 	pop          DE
 	ex           DE,HL
 	call         int_smaller
+	push         AF
+	pop          HL
+	pop          AF
+	or           A,H
 	cp           A,%11111111
-	jp           NZ,while_end19
-	call         sub_block_enter
-	ld           HL,(IX-3)
+	jp           NZ,if_next_31
+	ld           HL,(IX-6)
 	push         HL
-	ld           HL,(IX-21)
+	ld           HL,13706053
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
 	pop          DE
+	pop          HL
 	add          HL,DE
+	push         HL
+	ld           HL,3
+	push         HL
+	pop          DE
+	pop          HL
+	add          HL,DE
+	ld           (IX-6),HL
+	ld           B,2
+	call         multi_block_leave
+	jp           while_start10
+	jp           if_end_30
+if_next_31:
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,(IX-3)
+	pop          DE
+	ex           DE,HL
+	call         int_higher
+	cp           A,%11111111
+	jp           NZ,elif_next_40
+	ld           HL,(IX-3)
 	push         HL
 	ld           HL,(IX-6)
 	push         HL
-	ld           HL,(IX-18)
+	ld           HL,13706053
+	push         HL
+	ld           HL,1
+	push         HL
 	pop          DE
+	pop          HL
+	add          HL,DE
+	pop          DE
+	ld           (HL),E
+	inc          HL
+	ld           (HL),D
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,(IX-3)
+	or           A,A
+	pop          DE
+	ex           DE,HL
+	sbc          HL,DE
+	push         HL
+	ld           HL,(IX-6)
+	push         HL
+	ld           HL,13706053
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	pop          DE
+	pop          HL
 	add          HL,DE
 	push         HL
-	ld           HL,(IX-15)
+	ld           HL,3
 	push         HL
-	call         buffer_pixel
-	ld           HL,(IX-21)
-	inc          HL
-	ld           (IX-21),HL
-	call         sub_block_leave
-	jp           while_start18
-while_end19:
+	pop          DE
+	pop          HL
+	add          HL,DE
+	push         HL
+	ld           A,%00000000
+	push         AF
 	ld           HL,(IX-18)
+	pop          AF
+	ld           (HL),A
+	ld           HL,(IX-15)
+	or           A,A
+	ld           DE,3
+	sbc          HL,DE
+	push         HL
+	ld           HL,(IX-18)
+	push         HL
+	ld           HL,1
+	push         HL
+	pop          DE
+	pop          HL
+	add          HL,DE
+	pop          DE
+	ld           (HL),E
 	inc          HL
-	ld           (IX-18),HL
+	ld           (HL),D
+	jp           if_end_30
+elif_next_40:
+if_end_30:
+	call         sub_block_leave
+	ld           A,%11111111
+	push         AF
+	ld           HL,(IX-6)
+	pop          AF
+	ld           (HL),A
+	ld           HL,(IX-6)
+	push         HL
+	ld           HL,13706053
+	push         HL
+	ld           HL,3
+	push         HL
+	pop          DE
+	pop          HL
+	add          HL,DE
+	push         HL
+	pop          DE
+	ld           B,1
+	call         multi_block_leave
+	jp           malloc_end_7
 	call         sub_block_leave
 	jp           while_start10
 while_end11:
+	ld           HL,string_68
+	push         HL
+	jp           thrown_error
 	ld           DE,0
-drawBlock_end_6:
+malloc_end_7:
 	ld           SP,(callStack)
 	pop          IX
 	ret          
-displayBitmap_37:
-	push         IX                        ; push stack_start
+free_70:
+	push         IX
 	ld           (callStack),SP
 	ld           SP,HL
-	ld           IX,21
+	ld           IX,3
 	add          IX,SP
-	ld           HL,0
+	ld           HL,(IX-3)
 	push         HL
-	ld           HL,0
-	push         HL
-while_start44:
-	ld           HL,(IX-24)
-	push         HL
-	ld           HL,(IX-12)
-	pop          DE
-	ex           DE,HL
-	call         int_smaller
-	cp           A,%11111111
-	jp           NZ,while_end45
-	call         sub_block_enter
-	ld           HL,0
-	push         HL
-while_start52:
-	ld           HL,(IX-30)
-	push         HL
-	ld           HL,(IX-9)
-	pop          DE
-	ex           DE,HL
-	call         int_smaller
-	cp           A,%11111111
-	jp           NZ,while_end53
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	push         HL
-	ld           HL,(IX-27)
+	ld           HL,3
 	push         HL
 	pop          DE
 	pop          HL
-	ld           BC,0
-	ld           B,D
-	ld           C,E
-	add          HL,DE
-	ld           A,(HL)
+	or           A,A
+	sbc          HL,DE
+	ld           (IX-3),HL
+	ld           A,%00000000
 	push         AF
-	call         sub_block_enter
-	ld           HL,(IX-33)
-	push         HL
-	pop          BC
-	ld           A,regTRUE
-	bit          7,B
-	call         Z,A_false_ret
-	cp           A,%11111111
-	jp           NZ,if_next_68
-	call         sub_block_enter
 	ld           HL,(IX-3)
-	push         HL
-	ld           HL,(IX-30)
-	ld           DE,0
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,(IX-24)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-18)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_67
-if_next_68:
-if_end_67:
-	call         sub_block_leave
-	call         sub_block_enter
-	ld           HL,(IX-33)
-	push         HL
-	pop          BC
-	ld           A,regTRUE
-	bit          6,B
-	call         Z,A_false_ret
-	cp           A,%11111111
-	jp           NZ,if_next_89
-	call         sub_block_enter
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,(IX-30)
-	inc          HL
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,(IX-24)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-18)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_88
-if_next_89:
-if_end_88:
-	call         sub_block_leave
-	call         sub_block_enter
-	ld           HL,(IX-33)
-	push         HL
-	pop          BC
-	ld           A,regTRUE
-	bit          5,B
-	call         Z,A_false_ret
-	cp           A,%11111111
-	jp           NZ,if_next_110
-	call         sub_block_enter
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,(IX-30)
-	ld           DE,2
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,(IX-24)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-18)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_109
-if_next_110:
-if_end_109:
-	call         sub_block_leave
-	call         sub_block_enter
-	ld           HL,(IX-33)
-	push         HL
-	pop          BC
-	ld           A,regTRUE
-	bit          4,B
-	call         Z,A_false_ret
-	cp           A,%11111111
-	jp           NZ,if_next_131
-	call         sub_block_enter
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,(IX-30)
-	ld           DE,3
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,(IX-24)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-18)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_130
-if_next_131:
-if_end_130:
-	call         sub_block_leave
-	call         sub_block_enter
-	ld           HL,(IX-33)
-	push         HL
-	pop          BC
-	ld           A,regTRUE
-	bit          3,B
-	call         Z,A_false_ret
-	cp           A,%11111111
-	jp           NZ,if_next_152
-	call         sub_block_enter
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,(IX-30)
-	ld           DE,4
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,(IX-24)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-18)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_151
-if_next_152:
-if_end_151:
-	call         sub_block_leave
-	call         sub_block_enter
-	ld           HL,(IX-33)
-	push         HL
-	pop          BC
-	ld           A,regTRUE
-	bit          2,B
-	call         Z,A_false_ret
-	cp           A,%11111111
-	jp           NZ,if_next_173
-	call         sub_block_enter
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,(IX-30)
-	ld           DE,5
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,(IX-24)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-18)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_172
-if_next_173:
-if_end_172:
-	call         sub_block_leave
-	call         sub_block_enter
-	ld           HL,(IX-33)
-	push         HL
-	pop          BC
-	ld           A,regTRUE
-	bit          1,B
-	call         Z,A_false_ret
-	cp           A,%11111111
-	jp           NZ,if_next_194
-	call         sub_block_enter
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,(IX-30)
-	ld           DE,6
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,(IX-24)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-18)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_193
-if_next_194:
-if_end_193:
-	call         sub_block_leave
-	call         sub_block_enter
-	ld           HL,(IX-33)
-	push         HL
-	pop          BC
-	ld           A,regTRUE
-	bit          0,B
-	call         Z,A_false_ret
-	cp           A,%11111111
-	jp           NZ,if_next_215
-	call         sub_block_enter
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,(IX-30)
-	ld           DE,7
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,(IX-24)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,(IX-18)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_214
-if_next_215:
-if_end_214:
-	call         sub_block_leave
-	ld           HL,(IX-30)
-	ld           DE,8
-	add          HL,DE
-	ld           (IX-30),HL
-	ld           HL,(IX-27)
-	inc          HL
-	ld           (IX-27),HL
-	call         sub_block_leave
-	jp           while_start52
-while_end53:
-	ld           HL,(IX-24)
-	inc          HL
-	ld           (IX-24),HL
-	call         sub_block_leave
-	jp           while_start44
-while_end45:
-	ld           DE,0
-displayBitmap_end_38:
-	ld           SP,(callStack)
-	pop          IX
-	ret          
-malloc_244:
-	push         IX                        ; push stack_start
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           IX,3
-	add          IX,SP
-	ld           HL,(globalVars+0)
-	push         HL
-	ld           HL,(globalVars+0)
-	push         HL
-	ld           HL,(IX-3)
-	push         HL
 	pop          AF
-	pop          HL
+	ld           (HL),A
 	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (globalVars+0),HL
-	ld           HL,(globalVars+0)
-	push         HL
-	pop          DE
-	jp           malloc_end_245
-	ld           DE,0
-malloc_end_245:
+free_end_71:
 	ld           SP,(callStack)
 	pop          IX
 	ret          
-malloc_251:
-	push         IX                        ; push stack_start
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           IX,3
-	add          IX,SP
-	ld           HL,(globalVars+0)
-	push         HL
-	ld           HL,(globalVars+0)
-	push         HL
-	ld           HL,(IX-3)
-	push         HL
-	pop          DE
-	pop          HL
-	ld           BC,0
-	ld           B,D
-	ld           C,E
-	add          HL,DE
-	ld           (globalVars+0),HL
-	ld           HL,(globalVars+0)
-	push         HL
-	pop          DE
-	jp           malloc_end_252
-	ld           DE,0
-malloc_end_252:
-	ld           SP,(callStack)
-	pop          IX
-	ret          
-enterHeapBlock_258:
-	push         IX                        ; push stack_start
+heapInit_78:
+	push         IX
 	ld           (callStack),SP
 	ld           SP,HL
 	ld           IX,0
 	add          IX,SP
-	ld           HL,(globalVars+3)
+	ld           A,%00000000
+	push         AF
+	ld           HL,13706053
+	pop          AF
+	ld           (HL),A
+	ld           HL,7315
 	push         HL
-	ld           HL,(globalVars+0)
+	ld           HL,13706053
 	pop          DE
-	ld           (HL),DE
-	ld           HL,(globalVars+0)
-	ld           (globalVars+3),HL
-	ld           HL,(globalVars+0)
-	push         HL
-	ld           A,3
-	pop          HL
+	ld           (HL),E
+	inc          HL
+	ld           (HL),D
 	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (globalVars+0),HL
-	ld           DE,0
-enterHeapBlock_end_259:
+heapInit_end_79:
 	ld           SP,(callStack)
 	pop          IX
 	ret          
-exitHeapBlock_263:
-	push         IX                        ; push stack_start
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           IX,0
-	add          IX,SP
-	ld           HL,(globalVars+3)
-	ld           (globalVars+0),HL
-	ld           HL,(globalVars+0)
-	ld           DE,(HL)
-	push         DE
-	pop          HL
-	ld           (globalVars+3),HL
-	ld           DE,0
-exitHeapBlock_end_264:
-	ld           SP,(callStack)
-	pop          IX
-	ret          
-PS_init_268:
-	push         IX                        ; push stack_start
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           IX,3
-	add          IX,SP
-	ld           HL,(IX-3)
-	push         HL
-	ld           A,3
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (globalVars+0),HL
-	ld           HL,(IX-3)
-	ld           (globalVars+3),HL
-	call         sub_block_enter
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         enterHeapBlock_258
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           DE,0
-PS_init_end_269:
-	ld           SP,(callStack)
-	pop          IX
-	ret          
-fillByteArray_276:
-	push         IX                        ; push stack_start
+fillArray_83:
+	push         IX
 	ld           (callStack),SP
 	ld           SP,HL
 	ld           IX,6
@@ -986,7 +405,7 @@ fillByteArray_276:
 	ld           HL,(IX-3)
 	push         HL
 	call         get_array_size
-while_start283:
+while_start90:
 	ld           HL,(IX-9)
 	push         HL
 	ld           HL,(IX-12)
@@ -994,16 +413,16 @@ while_start283:
 	ex           DE,HL
 	call         int_smaller
 	cp           A,%11111111
-	jp           NZ,while_end284
+	jp           NZ,while_end91
 	call         sub_block_enter
 	ld           HL,(IX-6)
 	push         HL
-	ld           HL,(IX-9)
-	push         HL
 	ld           HL,(IX-3)
+	push         HL
+	ld           HL,(IX-9)
+	inc          HL
+	inc          HL
 	pop          BC
-	inc          HL
-	inc          HL
 	add          HL,BC
 	pop          AF
 	ld           (HL),A
@@ -1011,2301 +430,278 @@ while_start283:
 	inc          HL
 	ld           (IX-9),HL
 	call         sub_block_leave
-	jp           while_start283
-while_end284:
+	jp           while_start90
+while_end91:
 	ld           DE,0
-fillByteArray_end_277:
+fillArray_end_84:
 	ld           SP,(callStack)
 	pop          IX
 	ret          
-add_295:
-	push         IX                        ; push stack_start
+fillArray_102:
+	push         IX
 	ld           (callStack),SP
 	ld           SP,HL
 	ld           IX,6
 	add          IX,SP
-while_start298:
-	ld           HL,(IX-6)
-	push         HL
 	ld           HL,0
-	pop          DE
-	ex           DE,HL
-	call         int_higher
-	cp           A,%11111111
-	jp           NZ,while_end299
-	call         sub_block_enter
-	ld           HL,(IX-6)
-	dec          HL
-	ld           (IX-6),HL
-	ld           HL,4
 	push         HL
-while_start309:
+	ld           HL,(IX-3)
+	push         HL
+	call         get_array_size
+while_start109:
 	ld           HL,(IX-9)
 	push         HL
-	ld           HL,0
+	ld           HL,(IX-12)
 	pop          DE
 	ex           DE,HL
-	call         int_higher
+	call         int_smaller
 	cp           A,%11111111
-	jp           NZ,while_end310
+	jp           NZ,while_end110
 	call         sub_block_enter
-	call         sub_block_enter
+	ld           HL,(IX-6)
+	push         HL
 	ld           HL,(IX-3)
 	push         HL
 	ld           HL,(IX-9)
+	inc          HL
+	inc          HL
 	pop          BC
-	inc          HL
-	inc          HL
-	add          HL,BC
-	ld           A,(HL)
-	push         AF
-	ld           A,9
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_equals
-	cp           A,%11111111
-	jp           NZ,if_next_320
-	ld           A,0                       ; 0b
-	push         AF
-	ld           HL,(IX-9)
-	push         HL
-	ld           HL,(IX-3)
-	pop          BC
-	inc          HL
-	inc          HL
 	add          HL,BC
 	pop          AF
 	ld           (HL),A
 	ld           HL,(IX-9)
-	dec          HL
+	inc          HL
 	ld           (IX-9),HL
-	jp           if_end_319
-if_next_320:
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,(IX-9)
-	pop          BC
-	inc          HL
-	inc          HL
-	add          HL,BC
-	ld           A,(HL)
-	inc          A
-	push         AF
-	ld           HL,(IX-9)
-	push         HL
-	ld           HL,(IX-3)
-	pop          BC
-	inc          HL
-	inc          HL
-	add          HL,BC
-	pop          AF
-	ld           (HL),A
-	ld           B,2
-	call         multi_block_leave
-	jp           while_end310
-if_end_319:
 	call         sub_block_leave
-	call         sub_block_leave
-	jp           while_start309
-while_end310:
-	call         sub_block_leave
-	jp           while_start298
-while_end299:
-	ld           HL,(IX-3)
-	push         HL
-	pop          DE
-	jp           add_end_296
+	jp           while_start109
+while_end110:
 	ld           DE,0
-add_end_296:
+fillArray_end_103:
 	ld           SP,(callStack)
 	pop          IX
 	ret          
-newBase10_334:
-	push         IX                        ; push stack_start
+redact_121:
+	push         IX
+	ld           (callStack),SP
+	ld           SP,HL
+	ld           IX,6
+	add          IX,SP
+	ld           HL,(IX-6)
+	push         HL
+	ld           HL,(IX-3)
+	push         HL
+	call         get_array_size
+	pop          HL
+	dec          HL
+	push         HL
+while_start130:
+	ld           HL,(IX-9)
+	push         HL
+	ld           HL,(IX-12)
+	pop          DE
+	ex           DE,HL
+	call         int_smaller
+	cp           A,%11111111
+	jp           NZ,while_end131
+	call         sub_block_enter
+	ld           HL,(IX-3)
+	push         HL
+	ld           HL,(IX-9)
+	inc          HL
+	push         HL
+	pop          BC
+	pop          HL
+	inc          HL
+	inc          HL
+	add          HL,BC
+	ld           A,(HL)
+	push         AF
+	ld           HL,(IX-3)
+	push         HL
+	ld           HL,(IX-9)
+	inc          HL
+	inc          HL
+	pop          BC
+	add          HL,BC
+	pop          AF
+	ld           (HL),A
+	ld           HL,(IX-9)
+	inc          HL
+	ld           (IX-9),HL
+	call         sub_block_leave
+	jp           while_start130
+while_end131:
+	ld           DE,0
+redact_end_122:
+	ld           SP,(callStack)
+	pop          IX
+	ret          
+mallocByteArray_146:
+	push         IX
 	ld           (callStack),SP
 	ld           SP,HL
 	ld           IX,3
 	add          IX,SP
-	ld           HL,5
-	push         HL
-	ld           HL,(IX-3)
-	pop          DE
-	ld           (HL),D
-	inc          HL
-	ld           (HL),E
-	dec          HL
-	push         HL
-	call         sub_block_enter
-	ld           HL,(IX-6)
-	push         HL
-	ld           A,0                       ; 0b
-	push         AF
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         fillByteArray_276
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           HL,(IX-6)
-	push         HL
-	pop          DE
-	jp           newBase10_end_335
-	ld           DE,0
-newBase10_end_335:
-	ld           SP,(callStack)
-	pop          IX
-	ret          
-displayBase10_343:
-	push         IX                        ; push stack_start
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           IX,15
-	add          IX,SP
-	ld           HL,0
-	push         HL
-	ld           HL,0
-	push         HL
-while_start350:
-	ld           HL,(IX-18)
-	push         HL
-	ld           HL,5
-	pop          DE
-	ex           DE,HL
-	call         int_smaller
-	cp           A,%11111111
-	jp           NZ,while_end351
-	call         sub_block_enter
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	push         HL
-	ld           HL,(IX-18)
-	pop          BC
-	inc          HL
-	inc          HL
-	add          HL,BC
-	ld           A,(HL)
-	push         AF
-	ld           A,0
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_not_equals
-	cp           A,%11111111
-	jp           NZ,if_next_361
 	call         sub_block_enter
 	ld           HL,(IX-3)
-	push         HL
-	ld           HL,(IX-21)
-	pop          DE
+	ld           DE,2
 	add          HL,DE
-	push         HL
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,1
-	push         HL
-	ld           HL,5
-	push         HL
-	ld           HL,number_chars
-	push         HL
-	ld           HL,(IX-9)
-	push         HL
-	ld           HL,(IX-18)
-	pop          BC
-	inc          HL
-	inc          HL
-	add          HL,BC
-	ld           A,(HL)
-	push         AF
-	pop          HL
-	ld           L,5
-	mlt          HL
-	ld           H,L
-	push         HL
-	pop          AF
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-15)
-	push         HL
-	ld           HL,(IX-12)
 	push         HL
 	ld           HL,0
 	add          HL,SP
 	ld           SP,(callStack)
-	call         displayBitmap_37
+	call         malloc_6
 	pop          HL
 	ld           (callStack),SP
 	ld           SP,HL
-	ld           HL,5
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	push         HL
-	ld           HL,(IX-21)
-	pop          DE
-	add          HL,DE
-	ld           (IX-21),HL
-	jp           if_end_360
-if_next_361:
-if_end_360:
-	call         sub_block_leave
-	ld           HL,(IX-18)
-	inc          HL
-	ld           (IX-18),HL
-	call         sub_block_leave
-	jp           while_start350
-while_end351:
 	ld           DE,0
-displayBase10_end_344:
+mallocByteArray_end_147:
 	ld           SP,(callStack)
 	pop          IX
 	ret          
-setTile_409:
-	push         IX                        ; push stack_start
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           IX,9
-	add          IX,SP
-	ld           HL,(IX-9)
-	push         HL
-	ld           HL,(IX-6)
-	or           A,A
-	ld           DE,100
-	sbc          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	push         HL
-	ld           HL,(IX-3)
-	or           A,A
-	ld           DE,100
-	sbc          HL,DE
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(globalVars+20)
-	pop          BC
-	inc          HL
-	inc          HL
-	add          HL,BC
-	pop          AF
-	ld           (HL),A
-	ld           DE,0
-setTile_end_410:
-	ld           SP,(callStack)
-	pop          IX
-	ret          
-getTile_421:
-	push         IX                        ; push stack_start
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           IX,6
-	add          IX,SP
-	ld           HL,(globalVars+20)
-	push         HL
-	ld           HL,(IX-6)
-	or           A,A
-	ld           DE,100
-	sbc          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	push         HL
-	ld           HL,(IX-3)
-	or           A,A
-	ld           DE,100
-	sbc          HL,DE
-	pop          DE
-	add          HL,DE
-	pop          BC
-	inc          HL
-	inc          HL
-	add          HL,BC
-	ld           A,(HL)
-	push         AF
-	pop          DE
-	jp           getTile_end_422
-	ld           DE,0
-getTile_end_422:
-	ld           SP,(callStack)
-	pop          IX
-	ret          
-clearLine_433:
-	push         IX                        ; push stack_start
+mallocIntArray_152:
+	push         IX
 	ld           (callStack),SP
 	ld           SP,HL
 	ld           IX,3
 	add          IX,SP
-	ld           HL,(IX-3)
-	push         HL
-while_start438:
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,100
-	pop          DE
-	ex           DE,HL
-	call         int_higher
-	cp           A,%11111111
-	jp           NZ,while_end439
-	call         sub_block_enter
-	ld           HL,100
-	push         HL
-while_start446:
-	ld           HL,(IX-9)
-	push         HL
-	ld           HL,110
-	pop          DE
-	ex           DE,HL
-	call         int_smaller
-	cp           A,%11111111
-	jp           NZ,while_end447
-	call         sub_block_enter
 	call         sub_block_enter
 	ld           HL,(IX-3)
-	push         HL
-	ld           HL,101
-	pop          DE
-	ex           DE,HL
-	call         int_equals
-	cp           A,%11111111
-	jp           NZ,if_next_456
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	push         HL
-	ld           HL,(IX-3)
-	dec          HL
-	push         HL
-	ld           A,0                       ; 0b
-	push         AF
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         setTile_409
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_455
-if_next_456:
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	push         HL
-	ld           HL,(IX-3)
-	push         HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	push         HL
-	ld           HL,(IX-3)
-	dec          HL
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         getTile_421
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	push         DE
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         setTile_409
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-if_end_455:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	inc          HL
-	ld           (IX-9),HL
-	call         sub_block_leave
-	jp           while_start446
-while_end447:
-	ld           HL,(IX-3)
-	dec          HL
-	ld           (IX-3),HL
-	call         sub_block_leave
-	jp           while_start438
-while_end439:
-	ld           DE,0
-clearLine_end_434:
-	ld           SP,(callStack)
-	pop          IX
-	ret          
-checkClearLines_475:
-	push         IX                        ; push stack_start
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           IX,0
-	add          IX,SP
-	ld           A,0                       ; 0b
-	push         AF
-	ld           HL,100
-	push         HL
-while_start482:
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,120
-	pop          DE
-	ex           DE,HL
-	call         int_smaller
-	cp           A,%11111111
-	jp           NZ,while_end483
-	call         sub_block_enter
-	ld           HL,100
-	push         HL
-	ld           A,%11111111
-	push         AF
-while_start492:
-	ld           HL,(IX-9)
-	push         HL
-	ld           HL,110
-	pop          DE
-	ex           DE,HL
-	call         int_smaller
-	cp           A,%11111111
-	jp           NZ,while_end493
-	call         sub_block_enter
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	push         HL
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         getTile_421
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	push         DE
-	ld           A,0
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_not_equals
-	push         AF
-	ld           HL,(IX-12)
-	pop          AF
-	and          A,H
-	push         AF
-	pop          HL
-	ld           (IX-12),HL
-	ld           HL,(IX-9)
-	inc          HL
-	ld           (IX-9),HL
-	call         sub_block_leave
-	jp           while_start492
-while_end493:
-	call         sub_block_enter
-	ld           HL,(IX-12)
-	push         HL
-	pop          AF
-	cp           A,%11111111
-	jp           NZ,if_next_507
-	call         sub_block_enter
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         clearLine_433
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           HL,(IX-3)
-	push         HL
-	pop          AF
-	inc          A
-	push         AF
-	pop          HL
-	ld           (IX-3),HL
-	jp           if_end_506
-if_next_507:
-if_end_506:
-	call         sub_block_leave
-	ld           HL,(IX-6)
-	inc          HL
-	ld           (IX-6),HL
-	call         sub_block_leave
-	jp           while_start482
-while_end483:
-	call         sub_block_enter
-	ld           HL,(IX-3)
-	push         HL
-	ld           A,1
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_equals
-	cp           A,%11111111
-	jp           NZ,if_next_519
-	call         sub_block_enter
-	ld           HL,(globalVars+17)
-	push         HL
-	ld           DE,0
-	ld           HL,globalVars+15
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	pop          HL
-	inc          HL
-	push         HL
-	ld           HL,40
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         add_295
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_518
-if_next_519:
-	ld           HL,(IX-3)
-	push         HL
-	ld           A,2
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_equals
-	cp           A,%11111111
-	jp           NZ,elif_next_526
-	call         sub_block_enter
-	ld           HL,(globalVars+17)
-	push         HL
-	ld           DE,0
-	ld           HL,globalVars+15
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	pop          HL
-	inc          HL
-	push         HL
-	ld           HL,100
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         add_295
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_518
-elif_next_526:
-	ld           HL,(IX-3)
-	push         HL
-	ld           A,3
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_equals
-	cp           A,%11111111
-	jp           NZ,elif_next_533
-	call         sub_block_enter
-	ld           HL,(globalVars+17)
-	push         HL
-	ld           DE,0
-	ld           HL,globalVars+15
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	pop          HL
-	inc          HL
-	push         HL
-	ld           HL,300
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         add_295
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_518
-elif_next_533:
-	ld           HL,(IX-3)
-	push         HL
-	ld           A,4
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_equals
-	cp           A,%11111111
-	jp           NZ,elif_next_540
-	call         sub_block_enter
-	ld           HL,(globalVars+17)
-	push         HL
-	ld           DE,0
-	ld           HL,globalVars+15
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	pop          HL
-	inc          HL
-	push         HL
-	ld           HL,1200
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         add_295
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_518
-elif_next_540:
-if_end_518:
-	call         sub_block_leave
-	ld           DE,0
-checkClearLines_end_476:
-	ld           SP,(callStack)
-	pop          IX
-	ret          
-checkBlock_546:
-	push         IX                        ; push stack_start
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           IX,6
-	add          IX,SP
-	call         sub_block_enter
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,109
-	pop          DE
-	ex           DE,HL
-	call         int_higher
-	push         AF
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,100
-	pop          DE
-	ex           DE,HL
-	call         int_smaller
-	push         AF
-	pop          HL
-	pop          AF
-	or           A,H
-	push         AF
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,119
-	pop          DE
-	ex           DE,HL
-	call         int_higher
-	push         AF
-	pop          HL
-	pop          AF
-	or           A,H
-	cp           A,%11111111
-	jp           NZ,if_next_559
-	ld           A,%11111111
-	push         AF
-	pop          DE
-	ld           B,1
-	call         multi_block_leave
-	jp           checkBlock_end_547
-	jp           if_end_558
-if_next_559:
-if_end_558:
-	call         sub_block_leave
-	call         sub_block_enter
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         getTile_421
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	push         DE
-	ld           A,0
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_not_equals
-	push         AF
-	pop          DE
-	jp           checkBlock_end_547
-	ld           DE,0
-checkBlock_end_547:
-	ld           SP,(callStack)
-	pop          IX
-	ret          
-checkHitBox_565:
-	push         IX                        ; push stack_start
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           IX,9
-	add          IX,SP
-	ld           HL,0
-	push         HL
-	ld           HL,0
-	push         HL
-while_start572:
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,4
-	pop          DE
-	ex           DE,HL
-	call         int_smaller
-	cp           A,%11111111
-	jp           NZ,while_end573
-	call         sub_block_enter
-	ld           HL,0
-	push         HL
-while_start580:
-	ld           HL,(IX-18)
-	push         HL
-	ld           HL,4
-	pop          DE
-	ex           DE,HL
-	call         int_smaller
-	cp           A,%11111111
-	jp           NZ,while_end581
-	call         sub_block_enter
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	push         HL
-	ld           HL,(IX-15)
-	push         HL
-	pop          DE
-	pop          HL
-	ld           BC,0
-	ld           B,D
-	ld           C,E
-	add          HL,DE
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_592
-	call         sub_block_enter
-	call         sub_block_enter
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,(IX-18)
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,(IX-12)
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         checkBlock_546
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	push         DE
-	pop          AF
-	cp           A,%11111111
-	jp           NZ,if_next_601
-	ld           A,%00000000
-	push         AF
-	pop          DE
-	ld           B,4
-	call         multi_block_leave
-	jp           checkHitBox_end_566
-	jp           if_end_600
-if_next_601:
-if_end_600:
-	call         sub_block_leave
-	jp           if_end_591
-if_next_592:
-if_end_591:
-	call         sub_block_leave
-	ld           HL,(IX-18)
-	inc          HL
-	ld           (IX-18),HL
-	ld           HL,(IX-15)
-	inc          HL
-	ld           (IX-15),HL
-	call         sub_block_leave
-	jp           while_start580
-while_end581:
-	ld           HL,(IX-12)
-	inc          HL
-	ld           (IX-12),HL
-	call         sub_block_leave
-	jp           while_start572
-while_end573:
-	ld           A,%11111111
-	push         AF
-	pop          DE
-	jp           checkHitBox_end_566
-	ld           DE,0
-checkHitBox_end_566:
-	ld           SP,(callStack)
-	pop          IX
-	ret          
-placeBlock_614:
-	push         IX                        ; push stack_start
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           IX,12
-	add          IX,SP
-	ld           HL,0
-	push         HL
-	ld           HL,0
-	push         HL
-while_start621:
-	ld           HL,(IX-15)
-	push         HL
-	ld           HL,4
-	pop          DE
-	ex           DE,HL
-	call         int_smaller
-	cp           A,%11111111
-	jp           NZ,while_end622
-	call         sub_block_enter
-	ld           HL,0
-	push         HL
-while_start629:
-	ld           HL,(IX-21)
-	push         HL
-	ld           HL,4
-	pop          DE
-	ex           DE,HL
-	call         int_smaller
-	cp           A,%11111111
-	jp           NZ,while_end630
-	call         sub_block_enter
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	push         HL
-	ld           HL,(IX-18)
-	push         HL
-	pop          DE
-	pop          HL
-	ld           BC,0
-	ld           B,D
-	ld           C,E
-	add          HL,DE
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_641
-	call         sub_block_enter
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,(IX-15)
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,0
-	pop          DE
-	ex           DE,HL
-	call         int_equals
-	cp           A,%11111111
-	jp           NZ,if_next_649
-	ld           A,%00000000
-	ld           (globalVars+23),A
-	ld           A,%11111111
-	push         AF
-	pop          DE
-	ld           B,4
-	call         multi_block_leave
-	jp           placeBlock_end_615
-	jp           if_end_648
-if_next_649:
-if_end_648:
-	call         sub_block_leave
-	call         sub_block_enter
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,(IX-21)
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,(IX-15)
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         setTile_409
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_640
-if_next_641:
-if_end_640:
-	call         sub_block_leave
-	ld           HL,(IX-21)
-	inc          HL
-	ld           (IX-21),HL
-	ld           HL,(IX-18)
-	inc          HL
-	ld           (IX-18),HL
-	call         sub_block_leave
-	jp           while_start629
-while_end630:
-	ld           HL,(IX-15)
-	inc          HL
-	ld           (IX-15),HL
-	call         sub_block_leave
-	jp           while_start621
-while_end622:
-	call         sub_block_enter
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         checkClearLines_475
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           DE,0
-placeBlock_end_615:
-	ld           SP,(callStack)
-	pop          IX
-	ret          
-selectBlock_669:
-	push         IX                        ; push stack_start
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           IX,0
-	add          IX,SP
-	call         random_number
-	push         HL
-	ld           A,7
-	push         AF
-	call         modulo_byte
-	ld           A,0                       ; 0b
-	push         AF
-	call         merge_byte_to_int
-	ld           A,0                       ; 0b
-	ld           (globalVars+6),A
-	ld           HL,blocks
-	push         HL
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,64
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	push         HL
-	pop          DE
-	pop          HL
-	ld           BC,0
-	ld           B,D
-	ld           C,E
-	add          HL,DE
-	ld           (globalVars+12),HL
-	ld           HL,104
-	push         HL
-	pop          DE
-	ld           HL,globalVars+8
-	ld           (HL),D
-	inc          HL
-	ld           (HL),E
-	ld           HL,100
-	push         HL
-	pop          DE
-	ld           HL,globalVars+10
-	ld           (HL),D
-	inc          HL
-	ld           (HL),E
-	ld           HL,block_color
-	push         HL
-	ld           HL,(IX-3)
-	push         HL
-	pop          DE
-	pop          HL
-	ld           BC,0
-	ld           B,D
-	ld           C,E
-	add          HL,DE
-	ld           A,(HL)
-	ld           (globalVars+7),A
-	ld           DE,0
-selectBlock_end_670:
-	ld           SP,(callStack)
-	pop          IX
-	ret          
-checkKeys_687:
-	push         IX                        ; push stack_start
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           IX,0
-	add          IX,SP
-	call         _GetCSC
-	push         AF
-	call         sub_block_enter
-	ld           HL,(IX-3)
-	push         HL
-	ld           A,0
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_not_equals
-	cp           A,%11111111
-	jp           NZ,if_next_694
-	call         sub_block_enter
-	ld           HL,(IX-3)
-	push         HL
-	ld           A,54
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_equals
-	cp           A,%11111111
-	jp           NZ,if_next_698
-	call         sub_block_enter
-	ld           A,(globalVars+6)
-	push         AF
-	ld           A,0
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_equals
-	cp           A,%11111111
-	jp           NZ,if_next_702
-	call         sub_block_enter
-	call         sub_block_enter
-	ld           DE,0
-	ld           HL,globalVars+8
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	ld           DE,0
-	ld           HL,globalVars+10
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	ld           HL,(globalVars+12)
-	push         HL
-	ld           A,48
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         checkHitBox_565
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	push         DE
-	pop          AF
-	cp           A,%11111111
-	jp           NZ,if_next_707
-	ld           A,48                      ; 48b
-	ld           (globalVars+6),A
-	jp           if_end_706
-if_next_707:
-if_end_706:
-	call         sub_block_leave
-	jp           if_end_701
-if_next_702:
-	call         sub_block_enter
-	call         sub_block_enter
-	ld           DE,0
-	ld           HL,globalVars+8
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	ld           DE,0
-	ld           HL,globalVars+10
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	ld           HL,(globalVars+12)
-	push         HL
-	ld           A,(globalVars+6)
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	push         HL
-	ld           A,16
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	or           A,A
-	sbc          HL,DE
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         checkHitBox_565
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	push         DE
-	pop          AF
-	cp           A,%11111111
-	jp           NZ,if_next_714
-	ld           A,(globalVars+6)
-	push         AF
-	pop          HL
-	ld           A,H
-	sub          A,16
-	ld           H,A
-	push         HL
-	pop          AF
-	ld           (globalVars+6),A
-	jp           if_end_713
-if_next_714:
-if_end_713:
-	call         sub_block_leave
-if_end_701:
-	call         sub_block_leave
-	jp           if_end_697
-if_next_698:
-	ld           HL,(IX-3)
-	push         HL
-	ld           A,48
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_equals
-	cp           A,%11111111
-	jp           NZ,elif_next_717
-	call         sub_block_enter
-	ld           A,(globalVars+6)
-	push         AF
-	ld           A,48
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_equals
-	cp           A,%11111111
-	jp           NZ,if_next_721
-	call         sub_block_enter
-	call         sub_block_enter
-	ld           DE,0
-	ld           HL,globalVars+8
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	ld           DE,0
-	ld           HL,globalVars+10
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	ld           HL,(globalVars+12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         checkHitBox_565
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	push         DE
-	pop          AF
-	cp           A,%11111111
-	jp           NZ,if_next_724
-	ld           A,0                       ; 0b
-	ld           (globalVars+6),A
-	jp           if_end_723
-if_next_724:
-if_end_723:
-	call         sub_block_leave
-	jp           if_end_720
-if_next_721:
-	call         sub_block_enter
-	call         sub_block_enter
-	ld           DE,0
-	ld           HL,globalVars+8
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	ld           DE,0
-	ld           HL,globalVars+10
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	ld           HL,(globalVars+12)
-	push         HL
-	ld           A,(globalVars+6)
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	push         HL
-	ld           A,16
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         checkHitBox_565
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	push         DE
-	pop          AF
-	cp           A,%11111111
-	jp           NZ,if_next_731
-	ld           A,(globalVars+6)
-	push         AF
-	pop          HL
-	ld           A,H
-	add          A,16
-	ld           H,A
-	push         HL
-	pop          AF
-	ld           (globalVars+6),A
-	jp           if_end_730
-if_next_731:
-if_end_730:
-	call         sub_block_leave
-if_end_720:
-	call         sub_block_leave
-	jp           if_end_697
-elif_next_717:
-	ld           HL,(IX-3)
-	push         HL
-	ld           A,2
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_equals
-	cp           A,%11111111
-	jp           NZ,elif_next_734
-	call         sub_block_enter
-	call         sub_block_enter
-	ld           DE,0
-	ld           HL,globalVars+8
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	pop          HL
-	dec          HL
-	push         HL
-	ld           DE,0
-	ld           HL,globalVars+10
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	ld           HL,(globalVars+12)
-	push         HL
-	ld           A,(globalVars+6)
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         checkHitBox_565
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	push         DE
-	pop          AF
-	cp           A,%11111111
-	jp           NZ,if_next_740
-	ld           DE,0
-	ld           HL,globalVars+8
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	pop          HL
-	dec          HL
-	push         HL
-	pop          DE
-	ld           HL,globalVars+8
-	ld           (HL),D
-	inc          HL
-	ld           (HL),E
-	jp           if_end_739
-if_next_740:
-if_end_739:
-	call         sub_block_leave
-	jp           if_end_697
-elif_next_734:
-	ld           HL,(IX-3)
-	push         HL
-	ld           A,3
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_equals
-	cp           A,%11111111
-	jp           NZ,elif_next_744
-	call         sub_block_enter
-	call         sub_block_enter
-	ld           DE,0
-	ld           HL,globalVars+8
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	pop          HL
-	inc          HL
-	push         HL
-	ld           DE,0
-	ld           HL,globalVars+10
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	ld           HL,(globalVars+12)
-	push         HL
-	ld           A,(globalVars+6)
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         checkHitBox_565
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	push         DE
-	pop          AF
-	cp           A,%11111111
-	jp           NZ,if_next_750
-	ld           DE,0
-	ld           HL,globalVars+8
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	pop          HL
-	inc          HL
-	push         HL
-	pop          DE
-	ld           HL,globalVars+8
-	ld           (HL),D
-	inc          HL
-	ld           (HL),E
-	jp           if_end_749
-if_next_750:
-if_end_749:
-	call         sub_block_leave
-	jp           if_end_697
-elif_next_744:
-	ld           HL,(IX-3)
-	push         HL
-	ld           A,15
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_equals
-	cp           A,%11111111
-	jp           NZ,elif_next_754
-	ld           HL,string_755
-	push         HL
-	jp           thrown_error
-	jp           if_end_697
-elif_next_754:
-	ld           HL,(IX-3)
-	push         HL
-	ld           A,55
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_equals
-	cp           A,%11111111
-	jp           NZ,elif_next_757
-	ld           HL,string_755
-	push         HL
-	jp           thrown_error
-	jp           if_end_697
-elif_next_757:
-if_end_697:
-	call         sub_block_leave
-	jp           if_end_693
-if_next_694:
-if_end_693:
-	call         sub_block_leave
-	ld           DE,0
-checkKeys_end_688:
-	ld           SP,(callStack)
-	pop          IX
-	ret          
-displayBlock_764:
-	push         IX                        ; push stack_start
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           IX,12
-	add          IX,SP
-	ld           HL,110
-	push         HL
-	ld           HL,(IX-3)
-	or           A,A
-	ld           DE,100
-	sbc          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	ld           HL,40
-	push         HL
-	ld           HL,(IX-6)
-	or           A,A
-	ld           DE,100
-	sbc          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	pop          DE
-	add          HL,DE
-	push         HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_783
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	push         HL
-	ld           HL,(IX-18)
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_782
-if_next_783:
-if_end_782:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,1
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (IX-9),HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_795
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	ld           DE,10
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-18)
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_794
-if_next_795:
-if_end_794:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,1
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (IX-9),HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_809
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	ld           DE,20
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-18)
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_808
-if_next_809:
-if_end_808:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,1
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (IX-9),HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_823
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	ld           DE,30
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-18)
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_822
-if_next_823:
-if_end_822:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,1
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (IX-9),HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_837
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	push         HL
-	ld           HL,(IX-18)
-	ld           DE,10
-	add          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_836
-if_next_837:
-if_end_836:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,1
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (IX-9),HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_851
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	ld           DE,10
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-18)
-	ld           DE,10
-	add          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_850
-if_next_851:
-if_end_850:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,1
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (IX-9),HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_867
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	ld           DE,20
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-18)
-	ld           DE,10
-	add          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_866
-if_next_867:
-if_end_866:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,1
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (IX-9),HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_883
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	ld           DE,30
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-18)
-	ld           DE,10
-	add          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_882
-if_next_883:
-if_end_882:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,1
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (IX-9),HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_899
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	push         HL
-	ld           HL,(IX-18)
-	ld           DE,20
-	add          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_898
-if_next_899:
-if_end_898:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,1
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (IX-9),HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_913
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	ld           DE,10
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-18)
-	ld           DE,20
-	add          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_912
-if_next_913:
-if_end_912:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,1
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (IX-9),HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_929
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	ld           DE,20
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-18)
-	ld           DE,20
-	add          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_928
-if_next_929:
-if_end_928:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,1
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (IX-9),HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_945
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	ld           DE,30
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-18)
-	ld           DE,20
-	add          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_944
-if_next_945:
-if_end_944:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,1
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (IX-9),HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_961
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	push         HL
-	ld           HL,(IX-18)
-	ld           DE,30
-	add          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_960
-if_next_961:
-if_end_960:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,1
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (IX-9),HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_975
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	ld           DE,10
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-18)
-	ld           DE,30
-	add          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_974
-if_next_975:
-if_end_974:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,1
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (IX-9),HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_991
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	ld           DE,20
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-18)
-	ld           DE,30
-	add          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_990
-if_next_991:
-if_end_990:
-	call         sub_block_leave
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,1
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	ld           (IX-9),HL
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	ld           A,(HL)
-	cp           A,%11111111
-	jp           NZ,if_next_1007
-	call         sub_block_enter
-	ld           HL,(IX-15)
-	ld           DE,30
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-18)
-	ld           DE,30
-	add          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-12)
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         drawBlock_5
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	jp           if_end_1006
-if_next_1007:
-if_end_1006:
-	call         sub_block_leave
-	ld           DE,0
-displayBlock_end_765:
-	ld           SP,(callStack)
-	pop          IX
-	ret          
-graphics_1016:
-	push         IX                        ; push stack_start
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           IX,0
-	add          IX,SP
-	ld           A,148
-	push         AF
-	ld           HL,240
-	push         HL
-	ld           HL,109
-	push         HL
-	ld           HL,0
-	push         HL
-	call         draw_vertical_line
-	ld           A,148
-	push         AF
-	ld           HL,240
-	push         HL
-	ld           HL,210
-	push         HL
-	ld           HL,0
-	push         HL
-	call         draw_vertical_line
-	call         sub_block_enter
-	ld           DE,0
-	ld           HL,globalVars+8
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	ld           DE,0
-	ld           HL,globalVars+10
-	ld           D,(HL)
-	inc          HL
-	ld           E,(HL)
-	push         DE
-	ld           HL,(globalVars+12)
-	push         HL
-	ld           A,(globalVars+6)
-	pop          HL
-	ld           DE,0
-	ld           E,A
-	add          HL,DE
-	push         HL
-	ld           A,(globalVars+7)
-	push         AF
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         displayBlock_764
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	call         sub_block_enter
-	ld           HL,220
-	push         HL
-	ld           HL,20
-	push         HL
-	ld           HL,(globalVars+17)
 	push         HL
 	ld           HL,3
 	push         HL
-	ld           A,0
-	push         AF
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         displayBase10_343
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	ld           HL,0
-	push         HL
-while_start1031:
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,20
-	pop          DE
-	ex           DE,HL
-	call         int_smaller
-	cp           A,%11111111
-	jp           NZ,while_end1032
-	call         sub_block_enter
-	ld           HL,0
-	push         HL
-while_start1039:
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,10
-	pop          DE
-	ex           DE,HL
-	call         int_smaller
-	cp           A,%11111111
-	jp           NZ,while_end1040
-	call         sub_block_enter
-	call         sub_block_enter
-	ld           HL,(IX-6)
-	ld           DE,100
-	add          HL,DE
-	push         HL
-	ld           HL,(IX-3)
-	ld           DE,100
-	add          HL,DE
-	push         HL
-	ld           HL,0
-	add          HL,SP
-	ld           SP,(callStack)
-	call         getTile_421
-	pop          HL
-	ld           (callStack),SP
-	ld           SP,HL
-	push         DE
-	call         sub_block_enter
-	ld           HL,(IX-9)
-	push         HL
-	ld           A,0
-	push         AF
-	pop          HL
-	pop          AF
-	call         byte_not_equals
-	cp           A,%11111111
-	jp           NZ,if_next_1055
-	call         sub_block_enter
-	ld           HL,(IX-6)
-	push         HL
-	ld           HL,10
-	push         HL
 	pop          DE
 	pop          BC
 	call         multiply_int
-	ld           DE,110
+	ld           DE,2
 	add          HL,DE
-	push         HL
-	ld           HL,(IX-3)
-	push         HL
-	ld           HL,10
-	push         HL
-	pop          DE
-	pop          BC
-	call         multiply_int
-	ld           DE,40
-	add          HL,DE
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,10
-	push         HL
-	ld           HL,(IX-9)
 	push         HL
 	ld           HL,0
 	add          HL,SP
 	ld           SP,(callStack)
-	call         drawBlock_5
+	call         malloc_6
 	pop          HL
 	ld           (callStack),SP
 	ld           SP,HL
-	jp           if_end_1054
-if_next_1055:
-if_end_1054:
-	call         sub_block_leave
-	ld           HL,(IX-6)
-	inc          HL
-	ld           (IX-6),HL
-	call         sub_block_leave
-	jp           while_start1039
-while_end1040:
-	ld           HL,(IX-3)
-	inc          HL
-	ld           (IX-3),HL
-	call         sub_block_leave
-	jp           while_start1031
-while_end1032:
-	call         write_buffer
-	ld           A,74
-	push         AF
-	call         clear_buffer
 	ld           DE,0
-graphics_end_1017:
+mallocIntArray_end_153:
+	ld           SP,(callStack)
+	pop          IX
+	ret          
+copyFrom_160:
+	push         IX
+	ld           (callStack),SP
+	ld           SP,HL
+	ld           IX,6
+	add          IX,SP
+	ld           HL,(IX-6)
+	push         HL
+	call         get_array_size
+	ld           HL,0
+	push         HL
+while_start167:
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,(IX-9)
+	pop          DE
+	ex           DE,HL
+	call         int_smaller
+	cp           A,%11111111
+	jp           NZ,while_end168
+	call         sub_block_enter
+	ld           HL,(IX-3)
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	pop          DE
+	pop          HL
+	add          HL,DE
+	push         HL
+	ld           A,2
+	pop          HL
+	ld           DE,0
+	ld           E,A
+	add          HL,DE
+	ld           A,(HL)
+	push         AF
+	ld           HL,(IX-6)
+	push         HL
+	ld           HL,(IX-12)
+	inc          HL
+	inc          HL
+	pop          BC
+	add          HL,BC
+	pop          AF
+	ld           (HL),A
+	ld           HL,(IX-12)
+	inc          HL
+	ld           (IX-12),HL
+	call         sub_block_leave
+	jp           while_start167
+while_end168:
+	ld           DE,0
+copyFrom_end_161:
+	ld           SP,(callStack)
+	pop          IX
+	ret          
+copyTo_185:
+	push         IX
+	ld           (callStack),SP
+	ld           SP,HL
+	ld           IX,6
+	add          IX,SP
+	ld           HL,(IX-6)
+	push         HL
+	call         get_array_size
+	ld           HL,0
+	push         HL
+while_start192:
+	ld           HL,(IX-12)
+	push         HL
+	ld           HL,(IX-9)
+	pop          DE
+	ex           DE,HL
+	call         int_smaller
+	cp           A,%11111111
+	jp           NZ,while_end193
+	call         sub_block_enter
+	ld           HL,(IX-6)
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	pop          BC
+	pop          HL
+	inc          HL
+	inc          HL
+	add          HL,BC
+	ld           A,(HL)
+	push         AF
+	ld           HL,(IX-3)
+	push         HL
+	ld           HL,(IX-12)
+	push         HL
+	pop          DE
+	pop          HL
+	add          HL,DE
+	push         HL
+	ld           A,2
+	pop          HL
+	ld           DE,0
+	ld           E,A
+	add          HL,DE
+	pop          AF
+	ld           (HL),A
+	ld           HL,(IX-12)
+	inc          HL
+	ld           (IX-12),HL
+	call         sub_block_leave
+	jp           while_start192
+while_end193:
+	ld           DE,0
+copyTo_end_186:
 	ld           SP,(callStack)
 	pop          IX
 	ret          
 
-#include "root//std/Graphics.asm"
-#include "root//mapping.asm"
-#include "root//std/Chars.asm"
-string_755:
-	.db          "", 0
+string_68:
+	.db          "heap exception", 0

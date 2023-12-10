@@ -1,8 +1,54 @@
-fun fillByteArray(arrays: byte[], value: byte) {
+fun fillArray(Arrays: byte[], Value: byte) {
     var i: int = 0i;
-    var size: int = len(arrays);
+    var size: int = len(Arrays);
     while(i < size){
-        arrays[i] = value;
+        Arrays[i] = Value;
+        i = i + 1i;
+    };
+};
+
+fun fillArray(Arrays: bool[], Value: bool) {
+    var i: int = 0i;
+    var size: int = len(Arrays);
+    while(i < size){
+        Arrays[i] = Value;
+        i = i + 1i;
+    };
+};
+
+fun redact(Arrays: byte[], Index: int){
+    var i: int = Index;
+    var length: int = len(Arrays)-1i;
+
+    while(i < length){
+        Arrays[i] = Arrays[i+1i];
+        i = i + 1i;
+    };
+
+};
+
+fun mallocByteArray(Size: int) -> pointer{
+    malloc(Size + 2i);
+};
+
+fun mallocIntArray(Size: int) -> pointer{
+    malloc(Size * 3i + 2i);
+};
+
+fun copyFrom(Location: pointer, Array: byte[]){
+    var length: int = len(Array);
+    var i: int = 0i;
+    while(i < length){
+        Array[i] = (Location + i + 2b) -> byte;
+        i = i + 1i;
+    };
+};
+
+fun copyTo(Location: pointer, Array: byte[]){
+    var length: int = len(Array);
+    var i: int = 0i;
+    while(i < length){
+        move Array[i] to (Location + i + 2b);
         i = i + 1i;
     };
 };

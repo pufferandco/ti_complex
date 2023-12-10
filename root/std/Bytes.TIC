@@ -1,3 +1,5 @@
+#not working
+
 fun bit(Byte: byte, Bit: byte, Value: bool) -> byte{
 
 }

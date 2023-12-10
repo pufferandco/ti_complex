@@ -1,5 +1,5 @@
 HEAP_START .equ saveSScreen+14630
-HEAP_SIZE .equ 21945
+HEAP_END .equ 21945
 MAX_HEAP_ELEMENT_SIZE .equ 65536
 MAX_STRING_SIZE .equ 255
 
@@ -62,8 +62,7 @@ _cp1555loop:
 
 
 
-
-get_string_size:							; (pointer(HL) string_ptr) -> double(HL) size
+get_string_size:							; (pointer(HL) string_ptr) -> int(HL) size
 	ld 		A, 0							; byte(A) compare_byte = 0
 	ld 		BC, MAX_STRING_SIZE     		; double(BC) fail_save = MAX_STRING_SIZE
 
@@ -74,7 +73,7 @@ get_string_size:							; (pointer(HL) string_ptr) -> double(HL) size
 	
 	or		A   							;;  size = string_ptr - string_start
 	sbc		HL, DE							;; 
-	
+	ld      A, L
 	ret										; return size
 
 
@@ -83,9 +82,9 @@ get_array_size:
     pop     DE
     pop     HL
     ld      BC, 0
-    ld      B, (HL)
-    inc     HL
     ld      C, (HL)
+    inc     HL
+    ld      B, (HL)
     push    BC
     ex      DE, HL
     jp      (HL)
@@ -129,8 +128,6 @@ set_character_cursor:
     pop     AF
     ld      (curCol), A
     jp      (HL)
-
-
 
 
 
@@ -375,16 +372,6 @@ multi_block_loop:
 
 
 
-function_did_not_return:
-	ld		HL, function_did_not_return__message ; string(HL) error_message = "out of memory!"
-	call	_PutS
-	jp		ProgramExit
-
-function_did_not_return__message:
-	.db 	"out of memory!", 0
-
-
-
 index_out_of_bounds:
     ld      HL, index_out_of_bounds__message
     call    _PutS
@@ -523,6 +510,7 @@ sleep_millis__loop:
     jp          (HL)
 
 
+
 seed_upper:
     .db 00,208,80
 seed_lower:
@@ -549,171 +537,29 @@ random_number:
 
 
 
-;load_from_memory:
-;    pop         HL
-;    ld          (Var_Safe1), HL
-;
-;    ld          HL, SaveMemory
-;    ld          BC, 0
-;    ld          C, (HL)
-;    inc         HL
-;    ld          B, (HL)
-;    inc         HL
-;
-;    ex          DE, HL
-;
-;    ld          HL, (SaveLocation)
-;    inc         HL
-;    inc         HL
-;
-;    LDIR
-;
-;    ld          HL, (Var_Safe1)
-;    jp          (HL)
+copy_array:
+    pop          HL
+    ld           (Var_Safe1), HL
+
+    pop         DE
+    pop         HL
+    push        DE
 
 
+    ld          BC, 0
+    ld          C, (HL)
+    inc         HL
+    ld          B, (HL)
+    dec         HL
 
-write_to_memory:
-    ld          DE, (SaveLocation)
-    ld          HL, SaveMemory
-    ld          BC, saveSize
-    ld          A, (SaveMemory)
+    inc         BC
+    inc         BC
+
 
     LDIR
 
-    ret
-
-
-
-;-------------------------------------
-; fdetect
-; detects appvars, prot progs, and
-; progs given a 0-terminated string
-; pointed to by ix.
-;-------------------------------------
-; INPUTS:
-; hl->place to start searching
-; ix->string to find
-;
-; OUTPUTS:
-; hl->place stopped searching
-; de->program data
-; bc=program size
-; OP1 contains the name and type byte
-; z flag set if found
-;-------------------------------------
-fdetect:
- ld de,(ptemp)
- call _cphlde
- ld a,(hl)
- ld (typeByte_SMC),a
- jr nz,fcontinue
- inc a
- ret
-fcontinue:
- push hl
- cp appvarobj
- jr z,fgoodtype
- cp protprogobj
- jr z,fgoodtype
- cp progobj
- jr nz,fskip
-fgoodtype:
- dec hl
- dec hl
- dec hl
- ld e, (hl)
- dec hl
- ld d,(hl)
- dec hl
- ld a,(hl)
- call _SetDEUToA
- push de
- pop hl
- cp $D0
- jr nc,finRAM
- push ix
- push de
-  push hl
-  pop ix
-  ld a,10
-  add a,(ix+9)
-  ld de,0
-  ld e,a
-  add hl,de
-  ex (sp),hl
-  add hl,de
- pop de
- ex de,hl
- pop ix
-finRAM:
- inc de
- inc de
- ld bc,0
- ld c,(hl)
- inc hl
- ld b,(hl)
- inc hl ; hl -> data
- push bc ; bc = size
- push ix
- pop bc
-fchkstr:
- ld a,(bc)
- or a,a
- jr z,ffound
- cp (hl)
- inc bc
- inc de
- inc hl
- jr z,fchkstr
- pop bc
-fskip:
- pop hl
- call fbypassname
- jr fdetect
-ffound:
- push bc
- pop hl
- push ix
- pop bc
- or a,a
- sbc hl,bc
- push hl
- pop bc
- pop hl ; size
- or a,a
- sbc hl,bc
- push hl
- pop bc
- pop hl ; current search location
- push bc
- call fbypassname
- pop bc
- xor a
- ret
-fbypassname:
- push de
-  ld bc,-6
-  add hl,bc
-  ld de,OP1
-  push de
-   ld b,(hl)		; Name to OP1 -> For things like archiving/deleting
-   inc b
-fbypassnameloop:
-   ld a,(hl)
-   ld (de),a
-   inc de
-   dec hl
-   djnz fbypassnameloop
-   xor a
-   ld (de),a
-typeByte_SMC: =$+1
-   ld a,15h
-  pop de
-  ld (de),a
- pop de
- ret
-
+    ld          HL, (Var_Safe1)
+    jp          (HL)
 
 
 thrown_error:

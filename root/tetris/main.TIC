@@ -1,0 +1,114 @@
+import{std.Graphics};
+import{std.PointerStack};
+import{std.Arrays};
+import{std.Base10};
+import{std.Save};
+
+asm{mapping};
+
+PS_init(getHeap());
+
+
+const KEY_SHIFT: byte = 54b;
+const KEY_ALPHA: byte = 48b;
+const KEY_LEFT: byte = 02b;
+const KEY_RIGHT: byte = 03b;
+const KEY_DOWN: byte = 01b;
+const KEY_CLEAR: byte = 15b;
+const KEY_MODE: byte = 55b;
+const KEY_DEL: byte = 56b;
+const KEY_X: byte = 40b;
+const KEY_STAT: byte = 32b;
+
+const BLOCK_COUNT: byte = 7b;
+const BACKGROUND_COLOR: byte = 74b;
+const CONTOUR_COLOR: byte = 148b;
+const TEXT_COLOR: byte = 0b;
+const FIELD_WIDTH: int = 10i;
+const BLOCK_WIDTH: int = 10i;
+const BLOCK_HEIGHT: int = 10i;
+const X_START: int = 110i;
+const Y_START: int = 40i;
+
+var BLOCKS: global byte[] = new byte[]{0b, 1b, 2b, 3b, 4b, 5b, 6b};
+var BLOCK_COLORS: global byte[] = new byte[]{31b, 231b, 240b, 226b, 224b, 144b, 7b};
+var SPEED: global byte[] = new byte[]{8b, 8b,  7b, 7b, 7b,  6b, 6b, 6b,  5b, 5b, 5b, 5b,  4b, 4b, 4b, 4b, 4b,  3b, 3b, 3b, 3b, 3b,  2b, 2b, 2b, 2b, 2b, 2b};
+
+
+var _old_block_x: global int = 0i;
+var _old_block_y: global int = 0i;
+var _old_shadow_x: global int = 0i;
+var _old_shadow_y: global int = 0i;
+var _old_shadow_y: global int = 0i;
+
+var _hold_block_x: global pointer = 0i;
+var _hold_block_y: global int = 0i;
+var _hold_block_id: global byte = 255b;
+var _hold_rotation: global byte = 0b;
+var _hold_block_color: global byte = 0b;
+var _hold_block_location: global pointer = 0p;
+
+var _block_x: global int = 0i;
+var _block_y: global int = 0i;
+var _block_id: global byte = 0b;
+var _rotation: global byte = 0b;
+var _block_color: global byte = 0b;
+var _block_location: global pointer = @block_i;
+
+var _remaining_block_count: global byte = 7b;
+var _is_running: global bool = true;
+var _score_updated: global bool = true;
+var _level: global int = 0i;
+var _levelB10: global byte[] = newBase10(malloc(4b), 2i);
+var _lines_cleared: global int = 0i;
+var _speed: global int = SPEED[_level];
+var _score: global byte[] = newBase10(malloc(7b), 5i);
+var _field: global byte[] = new byte[200i] at malloc(202b);
+var _updated_pixels: global bool[] = new bool[200i] at malloc(202b);
+var _remaining_blocks: global byte[] = copy BLOCKS to malloc(9b);
+var _high_score: global int = 0i;
+
+
+var _save: global pointer = getFile("TetrisFl");
+
+import{functions};
+
+selectBlock();
+if(_save == null){
+    _save = createFile(300i, "TetrisFl");
+    fillArray(_field, 0b);
+}else{
+    loadSave();
+};
+
+
+drawMode(false);
+clearScreen(BACKGROUND_COLOR);
+clearBuffer(BACKGROUND_COLOR);
+drawBlock(221i, 140i, 40i, 40i, BACKGROUND_COLOR);
+displayBlock(111i, 110i, _hold_block_location, _hold_block_color);
+
+displayBase10(220i, 40i, _levelB10, 3i, TEXT_COLOR, 2i);
+
+
+while(_is_running){
+    refreshBlock(_block_x, _block_y);
+    if(checkHitBox(_block_x, _block_y + 1i, _block_location+_rotation)){
+        _block_y = _block_y + 1i;
+    }else{
+        placeBlock(_block_x, _block_y, _block_location+_rotation, _block_color);
+        selectBlock();
+    };
+
+    checkKeys();
+
+    var current_tick: byte = 0b;
+    while(current_tick < _speed){
+        graphics();
+        current_tick = current_tick + 1b;
+        checkKeys();
+    };
+};
+pause();
+
+

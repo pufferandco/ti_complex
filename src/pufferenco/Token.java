@@ -33,7 +33,7 @@ public class Token {
         int ELSE = 20;
         int ELIF = 21;
         int RETURN = 22;
-        int USE = 23;
+        int IMPORT = 23;
         int CONST = 24;
         int CONTINUE = 25;
         int BREAK = 26;
@@ -45,18 +45,19 @@ public class Token {
         int ASM = 32;
         int NAT = 33;
         int THROW = 34;
+        int COPY = 35;
     }
 
 
     private static final Pattern IDENTIFIER_TOKENS = Pattern.compile("[a-zA-Z0-9_]");
     private static final Character[] ARITHMETIC_TOKENS = {'&', '+', '*', '-', '/', '=', '^', '<', '>', '%', '~', '!'};
-    private static final Character[] CONTROL_TOKENS = {':', ';',  ',', '.'};
+    private static final Character[] CONTROL_TOKENS = {':', ';',  ',', '.', '@'};
     private static final Character[] SUB_ENTER_TOKENS = {'(', '{', '[', '"', '\''};
     private static final Character[] SUB_LEAVE_TOKENS = {')', '}', ']', '"', '\''};
     private static final char COMMENT = '#';
 
     private static final String[] KEYWORDS =
-            {"fun", "while", "var", "val", "and", "or", "xor", "true", "false", "if", "else", "elif", "return", "use", "const", "continue", "break", "move", "to", "global", "new", "at", "asm", "nat", "throw"};
+            {"fun", "while", "var", "val", "and", "or", "xor", "true", "false", "if", "else", "elif", "return", "import", "const", "continue", "break", "move", "to", "global", "new", "at", "asm", "nat", "throw", "copy"};
 
 
     public static ArrayList<Token> tokenize(String content) {
@@ -126,7 +127,7 @@ public class Token {
             } else if (IDENTIFIER_TOKENS.matcher(current_char.toString()).matches()) {
                 char_type = 7;
             } else if (current_char == '\n') {
-                char_type = 8;
+                continue;
             } else if (current_char == COMMENT){
                 if (!token_builder.isEmpty()) {
                     tokens.add(new Token(token_builder.toString(), state));
@@ -163,7 +164,7 @@ public class Token {
         return ArrayUtil.linkedToArrayList(tokens);
     }
 
-    static List<List<Token>> tokenizeLines(String content) {
+    static List<List<Token>> tokenizeLines(String content, AssemblyBuilder builder) {
         List<Token> tokens = tokenize(content);
 
         List<List<Token>> lines = new LinkedList<>();
@@ -179,7 +180,12 @@ public class Token {
         }
 
         if (!current_line.isEmpty()) {
-            throw new RuntimeException("code block is not closed with semicolon");
+            StringBuilder SBuilder = new StringBuilder();
+            for (Token token : current_line) {
+                SBuilder.append(token.content).append(" ");
+            }
+            builder.error("line: " + SBuilder + " is missing semicolon");
+
         }
 
         return lines;
@@ -202,10 +208,30 @@ public class Token {
     @Override
     public String toString() {
         return (switch (type){
-            case TokenTypes.ROUND_BRACKETS -> "(" + content + ")";
-            case TokenTypes.CURLY_BRACKETS -> "{" + content + "}";
-            case TokenTypes.SQUARE_BRACKETS -> "[" + content + "]";
-            case TokenTypes.DOUBLE_QUOTE -> "\"" + content + "\"";
+            case TokenTypes.ROUND_BRACKETS -> {
+                if(content.length() > 10){
+                    yield "(...)";
+                }
+                yield "(" + content + ")";
+            }
+            case TokenTypes.CURLY_BRACKETS -> {
+                if(content.length() > 10){
+                    yield "{...}";
+                }
+                yield "{" + content + "}";
+            }
+            case TokenTypes.SQUARE_BRACKETS -> {
+                if(content.length() > 10){
+                    yield "[...]";
+                }
+                yield "[" + content + "]";
+            }
+            case TokenTypes.DOUBLE_QUOTE -> {
+                if(content.length() > 10){
+                    yield "\"...\"";
+                }
+                yield "\"" + content + "\"";
+            }
             default -> content;
         }).replace('\n', ' ');
     }

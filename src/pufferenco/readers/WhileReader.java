@@ -1,5 +1,9 @@
-package pufferenco;
+package pufferenco.readers;
 
+import pufferenco.AssemblyBuilder;
+import pufferenco.Main;
+import pufferenco.Token;
+import pufferenco.TokenStream;
 import pufferenco.variables.StackElement;
 
 import java.util.Stack;

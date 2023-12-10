@@ -27,6 +27,5 @@ out/
 /.idea/
 
 ### ti_compile ###
-bin/out.8xp
-bin/out.lst
+bin/
 asm/main.asm

@@ -1,5 +1,6 @@
-package pufferenco;
+package pufferenco.readers;
 
+import pufferenco.*;
 import pufferenco.variables.DataStack;
 import pufferenco.variables.StackElement;
 import pufferenco.variables.Variable;
@@ -29,8 +30,12 @@ public class Function {
                     continue outer;
             }
             function.call(builder, return_value);
-            if (return_value)
-                return function.return_type.duplicate();
+            if (return_value){
+                if(function.return_type == null)
+                    builder.error("function " + name + " does not return");
+                return function.return_type.retrieve();
+            }
+
             return null;
         }
         StringBuilder string_params = new StringBuilder();
@@ -113,11 +118,7 @@ public class Function {
         if (code_block.type != Token.TokenTypes.CURLY_BRACKETS)
             builder.error("expected code block after function declaration");
 
-        Function function = new Function(name, parameters, return_type, code_block);
-        if (!Functions.containsKey(name))
-            Functions.put(name, new ArrayList<>());
-        Functions.get(name).add(function);
-
+        new Function(name, parameters, return_type, code_block);
     }
 
 
@@ -135,6 +136,9 @@ public class Function {
         this.assembly_name = name + "_" + Main.getId();
         this.end_tag = name + "_end_" + Main.getId();
 
+        if (!Functions.containsKey(name))
+            Functions.put(name, new ArrayList<>());
+        Functions.get(name).add(this);
 
         FunctionBuilder.add_func(name);
         Function_depth_stack.push(0);
@@ -153,7 +157,7 @@ public class Function {
             new Variable(parameter.name, stack_element);
         }
 
-        FunctionBuilder.append_push("IX").addComment("push stack_start");
+        FunctionBuilder.append_push("IX");
         FunctionBuilder.append_ld("(" + DataStack.CallStack + ")", "SP");
         FunctionBuilder.append_ld("SP", "HL");
         FunctionBuilder.append_ld("IX", String.valueOf(parameters.size() * 3));

@@ -1,0 +1,41 @@
+#not working
+const STACK_START: pointer = 13706053p;
+const STACK_END: pointer = 13713368p;
+const STACK_SIZE: int = 7315i;
+
+#fun clean()
+
+
+fun malloc(Size: int) -> pointer{
+    var current_block: pointer = STACK_START;
+    while(current_block < STACK_END){
+        var is_used: bool = current_block -> bool;
+        var size: int = current_block+1i -> int;
+        print(is_used);
+        if(is_used or (size < Size)){
+            current_block = current_block + size + 3i;
+            continue;
+        }elif(size > Size){
+            move Size to (current_block+1i);
+            var trim_size: int = size - Size;
+            var new_block: pointer = current_block + size + 3i;
+            move false to new_block;
+            move (trim_size-3i) to (new_block+1i);
+        };
+        move true to current_block;
+        return current_block + 3i;
+    };
+    throw "heap exception";
+};
+
+
+fun free(Location: pointer){
+    Location = Location - 3i;
+    move false to Location;
+};
+
+
+fun heapInit(){
+    move false to STACK_START;
+    move STACK_SIZE to STACK_START;
+};

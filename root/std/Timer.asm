@@ -1,16 +1,14 @@
-CONTROL_REGISTER .equ F20000
-TOGGLE_BIT .equ 0
-CLOCK_SOURCE_BIT .equ 1
-ALLOW_INTERRUPT_BIT .equ 2
-CLOCK_DIRECTION_BIT .equ 2
-COUNTER_REGISTER .equ $F20000
+CONTROL_REGISTER .equ $F20030
+TOGGLE_BIT .equ 3
+CLOCK_SOURCE_BIT .equ 4
+ALLOW_INTERRUPT_BIT .equ 5
+CLOCK_DIRECTION_BIT .equ 3
+COUNTER_REGISTER .equ $F20010
 
 
 
 start_timer:
-    ld           A, 1
-    ld           (COUNTER_REGISTER), A
-    ld           HL, 0
+    ld           HL, 1
     ld           (COUNTER_REGISTER), HL
 
     ld           HL, CONTROL_REGISTER
@@ -22,7 +20,7 @@ start_timer:
 
 stop_timer:
     ld           HL, CONTROL_REGISTER
-    set          TOGGLE_BIT, (HL)
+    res          TOGGLE_BIT, (HL)
     ret
 
 
@@ -31,29 +29,23 @@ read_timer:
     pop          HL
     ld           (Var_Safe1), HL
 
-    ld           A, (COUNTER_REGISTER)
-    ld           L, A
-    ld           A, (COUNTER_REGISTER+1)
-    ld           H, A
-    ld           A, (COUNTER_REGISTER+2)
-    ld           E, A
-    ld           A, (COUNTER_REGISTER+3)
-    ld           D, A
+    ld           HL, (COUNTER_REGISTER)
 
-    ld           A, 5
+    ;ld           A, 200
 
-    call         divide_long_byte
+    ;call         divide_long_byte
 
     push         HL
+    call         stop_timer
     ld           HL, (Var_Safe1)
     jp           (HL)
 
 
 init_timer:
     ld           HL, CONTROL_REGISTER
-    set          CLOCK_SOURCE_BIT, (HL)
-    res          ALLOW_INTERRUPT_BIT, (HL)
-    inc          HL
-    res          CLOCK_DIRECTION_BIT, (HL)
+    res          CLOCK_SOURCE_BIT, (HL)
+    ;res          ALLOW_INTERRUPT_BIT, (HL)
+    ;inc          HL
+    ;set          CLOCK_DIRECTION_BIT, (HL)
 
     ret

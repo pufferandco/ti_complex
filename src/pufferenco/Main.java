@@ -1,14 +1,15 @@
 package pufferenco;
 
 import pufferenco.optimization.AssemblyCollapse;
+import pufferenco.readers.Function;
+import pufferenco.readers.NativeFunction;
+import pufferenco.readers.globalReader;
 import pufferenco.variables.DataStack;
 import pufferenco.variables.Variable;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-import static pufferenco.ArrayUtil.inArray;
 import static pufferenco.ArrayUtil.isInArray;
 import static pufferenco.AssemblyLine.customAssemblyLine;
 
@@ -38,7 +39,6 @@ public class Main {
         builder.append(customAssemblyLine("#include \"asm/include.inc\""));
         builder.append(customAssemblyLine(".assume\tADL=1"));
         builder.append(customAssemblyLine(".org\tuserMem-2"));
-        builder.append_tag("MemoryStart");
         builder.append_db("tExtTok,tAsm84CeCmp");
         builder.append((new AssemblyLine("")));
         builder.append(new AssemblyLine("set", "AppAutoScroll", "(IY + AppFlags)"));
@@ -69,10 +69,6 @@ public class Main {
         builder.append(customAssemblyLine("stackStart" + " .equ saveSScreen+7315"));
         builder.append(customAssemblyLine("callStackStart" + " .equ saveSScreen+14630"));
         builder.append(customAssemblyLine("globalVars" + " .equ pixelShadow"));
-        builder.append(AssemblyLine.customAssemblyLine("saveSize .equ " + safe_size));
-        builder.append_tag("saveMemory");
-        String size = "0,".repeat(safe_size);
-        builder.append_db(size.substring(0, size.length()-1));
 
 
         IOUtil.writeTxt("asm/main.asm",
@@ -82,12 +78,13 @@ public class Main {
     }
 
     public static void tokenizeAndRun(String code, AssemblyBuilder builder) {
-        List<List<Token>> tokenLines = Token.tokenizeLines(code);
+        List<List<Token>> tokenLines = Token.tokenizeLines(code, builder);
 
         early_exit = false;
         for (List<Token> tokens : tokenLines) {
+            builder.newLine(tokens);
             globalReader.read(tokens, builder);
-
+            builder.closeLine();
         }
     }
 
