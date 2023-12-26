@@ -16,1386 +16,787 @@ Listing for file "asm/main.asm"
     4 D1:A87F EF 7B -  -  	.db          tExtTok,tAsm84CeCmp
     5 D1:A881 -  -  -  -  	             
     6 D1:A881 FD CB 0D D6 	set          AppAutoScroll,(IY + AppFlags)
-    7 D1:A885 ED 73 DD AC 
+    7 D1:A885 ED 73 EE AB 
               D1 -  -  -  	ld           (StackSave),SP
     8 D1:A88A 21 45 23 D1 	ld           HL,callStackStart
-    9 D1:A88E 22 E0 AC D1 	ld           (callStack),HL
+    9 D1:A88E 22 F1 AB D1 	ld           (callStack),HL
    10 D1:A892 31 B2 06 D1 	ld           SP,stackStart
-   11 D1:A896 CD F5 A9 D1 	call         init
+   11 D1:A896 CD 06 A9 D1 	call         init
    12 D1:A89A CD 28 08 02 	call         _homeup
    13 D1:A89E CD 10 08 02 	call         _ClrScrnFull
    14 D1:A8A2 -  -  -  -  	             
-   15 D1:A8A2 CD 64 AB D1 	call         sub_block_enter
-   16 D1:A8A6 21 00 00 00 	ld           HL,0
-   17 D1:A8AA 39 -  -  -  	add          HL,SP
-   18 D1:A8AB ED 7B E0 AC 
+   15 D1:A8A2 3E 00 -  -  	ld           A,0
+   16 D1:A8A4 F5 -  -  -  	push         AF
+   17 D1:A8A5 -  -  -  -  while_start21:
+   18 D1:A8A5 2A AF 06 D1 	ld           HL,(stackStart-3)
+   19 D1:A8A9 E5 -  -  -  	push         HL
+   20 D1:A8AA 3E 1E -  -  	ld           A,30
+   21 D1:A8AC F5 -  -  -  	push         AF
+   22 D1:A8AD E1 -  -  -  	pop          HL
+   23 D1:A8AE F1 -  -  -  	pop          AF
+   24 D1:A8AF CD E9 A9 D1 	call         byte_smaller
+   25 D1:A8B3 FE FF -  -  	cp           A,%11111111
+   26 D1:A8B5 C2 F5 A8 D1 	jp           NZ,while_end22
+   27 D1:A8B9 CD 75 AA D1 	call         sub_block_enter
+   28 D1:A8BD CD 75 AA D1 	call         sub_block_enter
+   29 D1:A8C1 2A AF 06 D1 	ld           HL,(stackStart-3)
+   30 D1:A8C5 E5 -  -  -  	push         HL
+   31 D1:A8C6 21 00 00 00 	ld           HL,0
+   32 D1:A8CA 39 -  -  -  	add          HL,SP
+   33 D1:A8CB ED 7B F1 AB 
               D1 -  -  -  	ld           SP,(callStack)
-   19 D1:A8B0 CD 8A AE D1 	call         heapInit_78
-   20 D1:A8B4 E1 -  -  -  	pop          HL
-   21 D1:A8B5 ED 73 E0 AC 
+   34 D1:A8D0 CD F7 AB D1 	call         fib_2
+   35 D1:A8D4 E1 -  -  -  	pop          HL
+   36 D1:A8D5 ED 73 F1 AB 
               D1 -  -  -  	ld           (callStack),SP
-   22 D1:A8BA F9 -  -  -  	ld           SP,HL
-   23 D1:A8BB 21 18 00 00 	ld           HL,24
-   24 D1:A8BF E5 -  -  -  	push         HL
-   25 D1:A8C0 CD 64 AB D1 	call         sub_block_enter
-   26 D1:A8C4 21 1A 00 00 	ld           HL,26
-   27 D1:A8C8 E5 -  -  -  	push         HL
-   28 D1:A8C9 21 00 00 00 	ld           HL,0
-   29 D1:A8CD 39 -  -  -  	add          HL,SP
-   30 D1:A8CE ED 7B E0 AC 
-              D1 -  -  -  	ld           SP,(callStack)
-   31 D1:A8D3 CD E6 AC D1 	call         malloc_6
-   32 D1:A8D7 E1 -  -  -  	pop          HL
-   33 D1:A8D8 ED 73 E0 AC 
-              D1 -  -  -  	ld           (callStack),SP
-   34 D1:A8DD F9 -  -  -  	ld           SP,HL
-   35 D1:A8DE D5 -  -  -  	push         DE
-   36 D1:A8DF E1 -  -  -  	pop          HL
-   37 D1:A8E0 D1 -  -  -  	pop          DE
-   38 D1:A8E1 E5 -  -  -  	push         HL
-   39 D1:A8E2 73 -  -  -  	ld           (HL),E
-   40 D1:A8E3 23 -  -  -  	inc          HL
-   41 D1:A8E4 72 -  -  -  	ld           (HL),D
-   42 D1:A8E5 21 1E 00 00 	ld           HL,30
-   43 D1:A8E9 E5 -  -  -  	push         HL
-   44 D1:A8EA CD 64 AB D1 	call         sub_block_enter
-   45 D1:A8EE 21 20 00 00 	ld           HL,32
-   46 D1:A8F2 E5 -  -  -  	push         HL
-   47 D1:A8F3 21 00 00 00 	ld           HL,0
-   48 D1:A8F7 39 -  -  -  	add          HL,SP
-   49 D1:A8F8 ED 7B E0 AC 
-              D1 -  -  -  	ld           SP,(callStack)
-   50 D1:A8FD CD E6 AC D1 	call         malloc_6
-   51 D1:A901 E1 -  -  -  	pop          HL
-   52 D1:A902 ED 73 E0 AC 
-              D1 -  -  -  	ld           (callStack),SP
-   53 D1:A907 F9 -  -  -  	ld           SP,HL
-   54 D1:A908 D5 -  -  -  	push         DE
-   55 D1:A909 E1 -  -  -  	pop          HL
-   56 D1:A90A D1 -  -  -  	pop          DE
-   57 D1:A90B E5 -  -  -  	push         HL
-   58 D1:A90C 73 -  -  -  	ld           (HL),E
-   59 D1:A90D 23 -  -  -  	inc          HL
-   60 D1:A90E 72 -  -  -  	ld           (HL),D
-   61 D1:A90F CD 64 AB D1 	call         sub_block_enter
-   62 D1:A913 2A AF 06 D1 	ld           HL,(stackStart-3)
-   63 D1:A917 E5 -  -  -  	push         HL
-   64 D1:A918 3E 45 -  -  	ld           A,69
-   65 D1:A91A F5 -  -  -  	push         AF
-   66 D1:A91B 21 00 00 00 	ld           HL,0
-   67 D1:A91F 39 -  -  -  	add          HL,SP
-   68 D1:A920 ED 7B E0 AC 
-              D1 -  -  -  	ld           SP,(callStack)
-   69 D1:A925 CD BB AE D1 	call         fillArray_83
-   70 D1:A929 E1 -  -  -  	pop          HL
-   71 D1:A92A ED 73 E0 AC 
-              D1 -  -  -  	ld           (callStack),SP
-   72 D1:A92F F9 -  -  -  	ld           SP,HL
-   73 D1:A930 CD 64 AB D1 	call         sub_block_enter
-   74 D1:A934 2A AC 06 D1 	ld           HL,(stackStart-6)
-   75 D1:A938 E5 -  -  -  	push         HL
-   76 D1:A939 3E 0D -  -  	ld           A,13
-   77 D1:A93B F5 -  -  -  	push         AF
-   78 D1:A93C 21 00 00 00 	ld           HL,0
-   79 D1:A940 39 -  -  -  	add          HL,SP
-   80 D1:A941 ED 7B E0 AC 
-              D1 -  -  -  	ld           SP,(callStack)
-   81 D1:A946 CD BB AE D1 	call         fillArray_83
-   82 D1:A94A E1 -  -  -  	pop          HL
-   83 D1:A94B ED 73 E0 AC 
-              D1 -  -  -  	ld           (callStack),SP
-   84 D1:A950 F9 -  -  -  	ld           SP,HL
-   85 D1:A951 21 00 00 00 	ld           HL,0
-   86 D1:A955 E5 -  -  -  	push         HL
-   87 D1:A956 -  -  -  -  while_start221:
-   88 D1:A956 2A A9 06 D1 	ld           HL,(stackStart-9)
-   89 D1:A95A E5 -  -  -  	push         HL
-   90 D1:A95B 21 05 00 00 	ld           HL,5
-   91 D1:A95F D1 -  -  -  	pop          DE
-   92 D1:A960 EB -  -  -  	ex           DE,HL
-   93 D1:A961 CD 12 AB D1 	call         int_smaller
-   94 D1:A965 FE FF -  -  	cp           A,%11111111
-   95 D1:A967 C2 99 A9 D1 	jp           NZ,while_end222
-   96 D1:A96B CD 64 AB D1 	call         sub_block_enter
-   97 D1:A96F 2A AF 06 D1 	ld           HL,(stackStart-3)
-   98 D1:A973 E5 -  -  -  	push         HL
-   99 D1:A974 2A A9 06 D1 	ld           HL,(stackStart-9)
-  100 D1:A978 E5 -  -  -  	push         HL
-  101 D1:A979 C1 -  -  -  	pop          BC
-  102 D1:A97A E1 -  -  -  	pop          HL
-  103 D1:A97B 23 -  -  -  	inc          HL
-  104 D1:A97C 23 -  -  -  	inc          HL
-  105 D1:A97D 09 -  -  -  	add          HL,BC
-  106 D1:A97E 7E -  -  -  	ld           A,(HL)
-  107 D1:A97F F5 -  -  -  	push         AF
-  108 D1:A980 CD A7 AA D1 	call         printLn_byte
-  109 D1:A984 CD 8C 0D 02 	call         _GetKey
-  110 D1:A988 2A A9 06 D1 	ld           HL,(stackStart-9)
-  111 D1:A98C 23 -  -  -  	inc          HL
-  112 D1:A98D 22 A9 06 D1 	ld           (stackStart-9),HL
-  113 D1:A991 CD 78 AB D1 	call         sub_block_leave
-  114 D1:A995 C3 56 A9 D1 	jp           while_start221
-  115 D1:A999 -  -  -  -  while_end222:
-  116 D1:A999 21 00 00 00 	ld           HL,0
-  117 D1:A99D 22 A9 06 D1 	ld           (stackStart-9),HL
-  118 D1:A9A1 -  -  -  -  while_start234:
-  119 D1:A9A1 2A A9 06 D1 	ld           HL,(stackStart-9)
-  120 D1:A9A5 E5 -  -  -  	push         HL
-  121 D1:A9A6 21 05 00 00 	ld           HL,5
-  122 D1:A9AA D1 -  -  -  	pop          DE
-  123 D1:A9AB EB -  -  -  	ex           DE,HL
-  124 D1:A9AC CD 12 AB D1 	call         int_smaller
-  125 D1:A9B0 FE FF -  -  	cp           A,%11111111
-  126 D1:A9B2 C2 E4 A9 D1 	jp           NZ,while_end235
-  127 D1:A9B6 CD 64 AB D1 	call         sub_block_enter
-  128 D1:A9BA 2A AC 06 D1 	ld           HL,(stackStart-6)
-  129 D1:A9BE E5 -  -  -  	push         HL
-  130 D1:A9BF 2A A9 06 D1 	ld           HL,(stackStart-9)
-  131 D1:A9C3 E5 -  -  -  	push         HL
-  132 D1:A9C4 C1 -  -  -  	pop          BC
-  133 D1:A9C5 E1 -  -  -  	pop          HL
-  134 D1:A9C6 23 -  -  -  	inc          HL
-  135 D1:A9C7 23 -  -  -  	inc          HL
-  136 D1:A9C8 09 -  -  -  	add          HL,BC
-  137 D1:A9C9 7E -  -  -  	ld           A,(HL)
-  138 D1:A9CA F5 -  -  -  	push         AF
-  139 D1:A9CB CD A7 AA D1 	call         printLn_byte
-  140 D1:A9CF CD 8C 0D 02 	call         _GetKey
-  141 D1:A9D3 2A A9 06 D1 	ld           HL,(stackStart-9)
-  142 D1:A9D7 23 -  -  -  	inc          HL
-  143 D1:A9D8 22 A9 06 D1 	ld           (stackStart-9),HL
-  144 D1:A9DC CD 78 AB D1 	call         sub_block_leave
-  145 D1:A9E0 C3 A1 A9 D1 	jp           while_start234
-  146 D1:A9E4 -  -  -  -  while_end235:
-  147 D1:A9E4 -  -  -  -  	             
-  148 D1:A9E4 -  -  -  -  ProgramExit:
-  149 D1:A9E4 CD 10 08 02 	call         _ClrScrnFull
-  150 D1:A9E8 FD CB 00 AE 	res          donePrgm,(iy+doneFlags)
-  151 D1:A9EC ED 7B DD AC 
+   37 D1:A8DA F9 -  -  -  	ld           SP,HL
+   38 D1:A8DB D5 -  -  -  	push         DE
+   39 D1:A8DC CD D7 A9 D1 	call         printLn_int
+   40 D1:A8E0 2A AF 06 D1 	ld           HL,(stackStart-3)
+   41 D1:A8E4 E5 -  -  -  	push         HL
+   42 D1:A8E5 F1 -  -  -  	pop          AF
+   43 D1:A8E6 3C -  -  -  	inc          A
+   44 D1:A8E7 F5 -  -  -  	push         AF
+   45 D1:A8E8 E1 -  -  -  	pop          HL
+   46 D1:A8E9 22 AF 06 D1 	ld           (stackStart-3),HL
+   47 D1:A8ED CD 89 AA D1 	call         sub_block_leave
+   48 D1:A8F1 C3 A5 A8 D1 	jp           while_start21
+   49 D1:A8F5 -  -  -  -  while_end22:
+   50 D1:A8F5 -  -  -  -  	             
+   51 D1:A8F5 -  -  -  -  ProgramExit:
+   52 D1:A8F5 CD 10 08 02 	call         _ClrScrnFull
+   53 D1:A8F9 FD CB 00 AE 	res          donePrgm,(iy+doneFlags)
+   54 D1:A8FD ED 7B EE AB 
               D1 -  -  -  	ld           SP,(StackSave)
-  152 D1:A9F1 C9 -  -  -  	ret          
-  153 D1:A9F2 -  -  -  -  #include "asm/defaults.asm"
+   55 D1:A902 C9 -  -  -  	ret          
+   56 D1:A903 -  -  -  -  #include "asm/defaults.asm"
 Listing for file "C:\Users\sande\IdeaProjects\ti_compile\asm\defaults.asm"
-    1 D1:A9F2 -  -  -  -  HEAP_START .equ saveSScreen+14630
-    2 D1:A9F2 -  -  -  -  HEAP_END .equ 21945
-    3 D1:A9F2 -  -  -  -  MAX_HEAP_ELEMENT_SIZE .equ 65536
-    4 D1:A9F2 -  -  -  -  MAX_STRING_SIZE .equ 255
-    5 D1:A9F2 -  -  -  -  
-    6 D1:A9F2 -  -  -  -  
-    7 D1:A9F2 -  -  -  -  
-    8 D1:A9F2 -  -  -  -  regTRUE .equ %11111111
-    9 D1:A9F2 -  -  -  -  regFALSE .equ %00000000
-   10 D1:A9F2 -  -  -  -  
-   11 D1:A9F2 -  -  -  -  Var_Safe1:
-   12 D1:A9F2 00 00 00 -      .db 0,0,0
-   13 D1:A9F5 -  -  -  -  
-   14 D1:A9F5 -  -  -  -  
-   15 D1:A9F5 -  -  -  -  
-   16 D1:A9F5 -  -  -  -  init:										; initializes stuff
-   17 D1:A9F5 -  -  -  -      ;ld              HL, OP1
-   18 D1:A9F5 -  -  -  -      ;call            _PutS
-   19 D1:A9F5 -  -  -  -      ;push            IX
-   20 D1:A9F5 -  -  -  -      ;ld              HL, symTable
-   21 D1:A9F5 -  -  -  -      ;ld              IX, OP1
-   22 D1:A9F5 -  -  -  -      ;call            fdetect
-   23 D1:A9F5 -  -  -  -      ;;jp              NZ, thrown_error
-   24 D1:A9F5 -  -  -  -      ;pop             IX
-   25 D1:A9F5 -  -  -  -      ;push            BC
-   26 D1:A9F5 -  -  -  -      ;pop             HL
-   27 D1:A9F5 -  -  -  -  ;
-   28 D1:A9F5 -  -  -  -      ;;ld              HL, saveMemory-MemoryStart+4
-   29 D1:A9F5 -  -  -  -      ;;ex              DE, HL
-   30 D1:A9F5 -  -  -  -      ;;add             HL, DE
-   31 D1:A9F5 -  -  -  -      ;ld              (SaveLocation), HL
-   32 D1:A9F5 -  -  -  -  
-   33 D1:A9F5 21 00 02 E3 	ld              hl,$E30200               ; initializes colors
-   34 D1:A9F9 06 00 -  -  	ld              b,0
-   35 D1:A9FB -  -  -  -  
-   36 D1:A9FB -  -  -  -  _cp1555loop:
-   37 D1:A9FB 50 -  -  -  	ld d,b
-   38 D1:A9FC 78 -  -  -  	ld a,b
-   39 D1:A9FD E6 C0 -  -  	and %11000000
-   40 D1:A9FF CB 3A -  -  	srl d
-   41 D1:AA01 1F -  -  -  	rra
-   42 D1:AA02 5F -  -  -  	ld e,a
-   43 D1:AA03 3E 1F -  -  	ld a,%00011111
-   44 D1:AA05 A0 -  -  -  	and b
-   45 D1:AA06 B3 -  -  -  	or e
-   46 D1:AA07 77 -  -  -  	ld (hl),a
-   47 D1:AA08 23 -  -  -  	inc hl
-   48 D1:AA09 72 -  -  -  	ld (hl),d
-   49 D1:AA0A 23 -  -  -  	inc hl
-   50 D1:AA0B 04 -  -  -  	inc b
-   51 D1:AA0C 20 ED -  -  	jr nz,_cp1555loop
-   52 D1:AA0E 3A 00 00 F3 	ld A, ($F30000)                          ; initializes random seed
-   53 D1:AA12 32 43 AC D1 	ld (seed_lower+1), A
-   54 D1:AA16 3A 04 00 F3     ld A, ($F30004)
-   55 D1:AA1A 32 44 AC D1     ld (seed_lower+2), A
-   56 D1:AA1E 3A 08 00 F3     ld A, ($F30008)
-   57 D1:AA22 32 40 AC D1     ld (seed_upper+1), A
-   58 D1:AA26 3A 0C 00 F3     ld A, ($F3000C)
-   59 D1:AA2A 32 41 AC D1     ld (seed_upper+2), A
-   60 D1:AA2E -  -  -  -  
-   61 D1:AA2E C9 -  -  -  	ret
-   62 D1:AA2F -  -  -  -  
-   63 D1:AA2F -  -  -  -  
-   64 D1:AA2F -  -  -  -  
-   65 D1:AA2F -  -  -  -  get_string_size:							; (pointer(HL) string_ptr) -> int(HL) size
-   66 D1:AA2F 3E 00 -  -  	ld 		A, 0							; byte(A) compare_byte = 0
-   67 D1:AA31 01 FF 00 00 	ld 		BC, MAX_STRING_SIZE     		; double(BC) fail_save = MAX_STRING_SIZE
-   68 D1:AA35 -  -  -  -  
-   69 D1:AA35 E5 -  -  -  	push 	HL								; pointer(DE) string_start = copy string_ptr
-   70 D1:AA36 D1 -  -  -  	pop		DE								;;
-   71 D1:AA37 -  -  -  -  	
-   72 D1:AA37 ED B1 -  -  	CPIR									; while(&string_ptr != compare_byte && fail_save != 0){string_ptr++; fail_save--;}
-   73 D1:AA39 -  -  -  -  	
-   74 D1:AA39 B7 -  -  -  	or		A   							;;  size = string_ptr - string_start
-   75 D1:AA3A ED 52 -  -  	sbc		HL, DE							;; 
-   76 D1:AA3C 7D -  -  -  	ld      A, L
-   77 D1:AA3D C9 -  -  -  	ret										; return size
-   78 D1:AA3E -  -  -  -  
-   79 D1:AA3E -  -  -  -  
-   80 D1:AA3E -  -  -  -  
-   81 D1:AA3E -  -  -  -  get_array_size:
-   82 D1:AA3E D1 -  -  -      pop     DE
-   83 D1:AA3F E1 -  -  -      pop     HL
-   84 D1:AA40 01 00 00 00     ld      BC, 0
-   85 D1:AA44 4E -  -  -      ld      C, (HL)
-   86 D1:AA45 23 -  -  -      inc     HL
-   87 D1:AA46 46 -  -  -      ld      B, (HL)
-   88 D1:AA47 C5 -  -  -      push    BC
-   89 D1:AA48 EB -  -  -      ex      DE, HL
-   90 D1:AA49 E9 -  -  -      jp      (HL)
-   91 D1:AA4A -  -  -  -  
-   92 D1:AA4A -  -  -  -  
-   93 D1:AA4A -  -  -  -  
-   94 D1:AA4A -  -  -  -  merge_byte_to_int:
-   95 D1:AA4A E1 -  -  -      pop     HL
-   96 D1:AA4B 01 00 00 00     ld      BC, 0
-   97 D1:AA4F F1 -  -  -      pop     AF
-   98 D1:AA50 47 -  -  -      ld      B, A
-   99 D1:AA51 F1 -  -  -      pop     AF
-  100 D1:AA52 4F -  -  -      ld      C, A
-  101 D1:AA53 C5 -  -  -      push    BC
-  102 D1:AA54 E9 -  -  -      jp      (HL)
-  103 D1:AA55 -  -  -  -  
-  104 D1:AA55 -  -  -  -  
-  105 D1:AA55 -  -  -  -  
-  106 D1:AA55 -  -  -  -  get_upper_int:
-  107 D1:AA55 E1 -  -  -      pop     HL
-  108 D1:AA56 C1 -  -  -      pop     BC
-  109 D1:AA57 78 -  -  -      ld      A, B
-  110 D1:AA58 F5 -  -  -      push    AF
-  111 D1:AA59 E9 -  -  -      jp      (HL)
-  112 D1:AA5A -  -  -  -  
-  113 D1:AA5A -  -  -  -  
-  114 D1:AA5A -  -  -  -  
-  115 D1:AA5A -  -  -  -  get_lower_int:
-  116 D1:AA5A E1 -  -  -      pop     HL
-  117 D1:AA5B C1 -  -  -      pop     BC
-  118 D1:AA5C 79 -  -  -      ld      A, C
-  119 D1:AA5D F5 -  -  -      push    AF
-  120 D1:AA5E E9 -  -  -      jp      (HL)
-  121 D1:AA5F -  -  -  -  
-  122 D1:AA5F -  -  -  -  
-  123 D1:AA5F -  -  -  -  
-  124 D1:AA5F -  -  -  -  set_character_cursor:
-  125 D1:AA5F E1 -  -  -      pop     HL
-  126 D1:AA60 F1 -  -  -      pop     AF
-  127 D1:AA61 32 95 05 D0     ld      (curRow),A
-  128 D1:AA65 F1 -  -  -      pop     AF
-  129 D1:AA66 32 96 05 D0     ld      (curCol), A
-  130 D1:AA6A E9 -  -  -      jp      (HL)
-  131 D1:AA6B -  -  -  -  
-  132 D1:AA6B -  -  -  -  
-  133 D1:AA6B -  -  -  -  
-  134 D1:AA6B -  -  -  -  print_bool:
-  135 D1:AA6B FE FF -  -  	cp		A, regTRUE
-  136 D1:AA6D CA 7A AA D1 	jp		Z, print_bool__true
-  137 D1:AA71 21 88 AA D1 	ld		HL, false_string
-  138 D1:AA75 CD C0 07 02 	call 	_PutS
-  139 D1:AA79 C9 -  -  -  	ret
-  140 D1:AA7A -  -  -  -  print_bool__true:
-  141 D1:AA7A 21 83 AA D1 	ld		HL, true_string
-  142 D1:AA7E CD C0 07 02 	call 	_PutS
-  143 D1:AA82 C9 -  -  -  	ret
-  144 D1:AA83 -  -  -  -  
-  145 D1:AA83 -  -  -  -  true_string:
-  146 D1:AA83 74 72 75 65 
+    1 D1:A903 -  -  -  -  HEAP_START .equ saveSScreen+14630
+    2 D1:A903 -  -  -  -  HEAP_END .equ 21945
+    3 D1:A903 -  -  -  -  MAX_HEAP_ELEMENT_SIZE .equ 65536
+    4 D1:A903 -  -  -  -  MAX_STRING_SIZE .equ 255
+    5 D1:A903 -  -  -  -  
+    6 D1:A903 -  -  -  -  
+    7 D1:A903 -  -  -  -  
+    8 D1:A903 -  -  -  -  regTRUE .equ %11111111
+    9 D1:A903 -  -  -  -  regFALSE .equ %00000000
+   10 D1:A903 -  -  -  -  
+   11 D1:A903 -  -  -  -  Var_Safe1:
+   12 D1:A903 00 00 00 -      .db 0,0,0
+   13 D1:A906 -  -  -  -  
+   14 D1:A906 -  -  -  -  
+   15 D1:A906 -  -  -  -  
+   16 D1:A906 -  -  -  -  init:										; initializes stuff
+   17 D1:A906 -  -  -  -      ;ld              HL, OP1
+   18 D1:A906 -  -  -  -      ;call            _PutS
+   19 D1:A906 -  -  -  -      ;push            IX
+   20 D1:A906 -  -  -  -      ;ld              HL, symTable
+   21 D1:A906 -  -  -  -      ;ld              IX, OP1
+   22 D1:A906 -  -  -  -      ;call            fdetect
+   23 D1:A906 -  -  -  -      ;;jp              NZ, thrown_error
+   24 D1:A906 -  -  -  -      ;pop             IX
+   25 D1:A906 -  -  -  -      ;push            BC
+   26 D1:A906 -  -  -  -      ;pop             HL
+   27 D1:A906 -  -  -  -  ;
+   28 D1:A906 -  -  -  -      ;;ld              HL, saveMemory-MemoryStart+4
+   29 D1:A906 -  -  -  -      ;;ex              DE, HL
+   30 D1:A906 -  -  -  -      ;;add             HL, DE
+   31 D1:A906 -  -  -  -      ;ld              (SaveLocation), HL
+   32 D1:A906 -  -  -  -  
+   33 D1:A906 21 00 02 E3 	ld              hl,$E30200               ; initializes colors
+   34 D1:A90A 06 00 -  -  	ld              b,0
+   35 D1:A90C -  -  -  -  
+   36 D1:A90C -  -  -  -  _cp1555loop:
+   37 D1:A90C 50 -  -  -  	ld d,b
+   38 D1:A90D 78 -  -  -  	ld a,b
+   39 D1:A90E E6 C0 -  -  	and %11000000
+   40 D1:A910 CB 3A -  -  	srl d
+   41 D1:A912 1F -  -  -  	rra
+   42 D1:A913 5F -  -  -  	ld e,a
+   43 D1:A914 3E 1F -  -  	ld a,%00011111
+   44 D1:A916 A0 -  -  -  	and b
+   45 D1:A917 B3 -  -  -  	or e
+   46 D1:A918 77 -  -  -  	ld (hl),a
+   47 D1:A919 23 -  -  -  	inc hl
+   48 D1:A91A 72 -  -  -  	ld (hl),d
+   49 D1:A91B 23 -  -  -  	inc hl
+   50 D1:A91C 04 -  -  -  	inc b
+   51 D1:A91D 20 ED -  -  	jr nz,_cp1555loop
+   52 D1:A91F 3A 00 00 F3 	ld A, ($F30000)                          ; initializes random seed
+   53 D1:A923 32 54 AB D1 	ld (seed_lower+1), A
+   54 D1:A927 3A 04 00 F3     ld A, ($F30004)
+   55 D1:A92B 32 55 AB D1     ld (seed_lower+2), A
+   56 D1:A92F 3A 08 00 F3     ld A, ($F30008)
+   57 D1:A933 32 51 AB D1     ld (seed_upper+1), A
+   58 D1:A937 3A 0C 00 F3     ld A, ($F3000C)
+   59 D1:A93B 32 52 AB D1     ld (seed_upper+2), A
+   60 D1:A93F -  -  -  -  
+   61 D1:A93F C9 -  -  -  	ret
+   62 D1:A940 -  -  -  -  
+   63 D1:A940 -  -  -  -  
+   64 D1:A940 -  -  -  -  
+   65 D1:A940 -  -  -  -  get_string_size:							; (pointer(HL) string_ptr) -> int(HL) size
+   66 D1:A940 3E 00 -  -  	ld 		A, 0							; byte(A) compare_byte = 0
+   67 D1:A942 01 FF 00 00 	ld 		BC, MAX_STRING_SIZE     		; double(BC) fail_save = MAX_STRING_SIZE
+   68 D1:A946 -  -  -  -  
+   69 D1:A946 E5 -  -  -  	push 	HL								; pointer(DE) string_start = copy string_ptr
+   70 D1:A947 D1 -  -  -  	pop		DE								;;
+   71 D1:A948 -  -  -  -  	
+   72 D1:A948 ED B1 -  -  	CPIR									; while(&string_ptr != compare_byte && fail_save != 0){string_ptr++; fail_save--;}
+   73 D1:A94A -  -  -  -  	
+   74 D1:A94A B7 -  -  -  	or		A   							;;  size = string_ptr - string_start
+   75 D1:A94B ED 52 -  -  	sbc		HL, DE							;; 
+   76 D1:A94D 7D -  -  -  	ld      A, L
+   77 D1:A94E C9 -  -  -  	ret										; return size
+   78 D1:A94F -  -  -  -  
+   79 D1:A94F -  -  -  -  
+   80 D1:A94F -  -  -  -  
+   81 D1:A94F -  -  -  -  get_array_size:
+   82 D1:A94F D1 -  -  -      pop     DE
+   83 D1:A950 E1 -  -  -      pop     HL
+   84 D1:A951 01 00 00 00     ld      BC, 0
+   85 D1:A955 4E -  -  -      ld      C, (HL)
+   86 D1:A956 23 -  -  -      inc     HL
+   87 D1:A957 46 -  -  -      ld      B, (HL)
+   88 D1:A958 C5 -  -  -      push    BC
+   89 D1:A959 EB -  -  -      ex      DE, HL
+   90 D1:A95A E9 -  -  -      jp      (HL)
+   91 D1:A95B -  -  -  -  
+   92 D1:A95B -  -  -  -  
+   93 D1:A95B -  -  -  -  
+   94 D1:A95B -  -  -  -  merge_byte_to_int:
+   95 D1:A95B E1 -  -  -      pop     HL
+   96 D1:A95C 01 00 00 00     ld      BC, 0
+   97 D1:A960 F1 -  -  -      pop     AF
+   98 D1:A961 47 -  -  -      ld      B, A
+   99 D1:A962 F1 -  -  -      pop     AF
+  100 D1:A963 4F -  -  -      ld      C, A
+  101 D1:A964 C5 -  -  -      push    BC
+  102 D1:A965 E9 -  -  -      jp      (HL)
+  103 D1:A966 -  -  -  -  
+  104 D1:A966 -  -  -  -  
+  105 D1:A966 -  -  -  -  
+  106 D1:A966 -  -  -  -  get_upper_int:
+  107 D1:A966 E1 -  -  -      pop     HL
+  108 D1:A967 C1 -  -  -      pop     BC
+  109 D1:A968 78 -  -  -      ld      A, B
+  110 D1:A969 F5 -  -  -      push    AF
+  111 D1:A96A E9 -  -  -      jp      (HL)
+  112 D1:A96B -  -  -  -  
+  113 D1:A96B -  -  -  -  
+  114 D1:A96B -  -  -  -  
+  115 D1:A96B -  -  -  -  get_lower_int:
+  116 D1:A96B E1 -  -  -      pop     HL
+  117 D1:A96C C1 -  -  -      pop     BC
+  118 D1:A96D 79 -  -  -      ld      A, C
+  119 D1:A96E F5 -  -  -      push    AF
+  120 D1:A96F E9 -  -  -      jp      (HL)
+  121 D1:A970 -  -  -  -  
+  122 D1:A970 -  -  -  -  
+  123 D1:A970 -  -  -  -  
+  124 D1:A970 -  -  -  -  set_character_cursor:
+  125 D1:A970 E1 -  -  -      pop     HL
+  126 D1:A971 F1 -  -  -      pop     AF
+  127 D1:A972 32 95 05 D0     ld      (curRow),A
+  128 D1:A976 F1 -  -  -      pop     AF
+  129 D1:A977 32 96 05 D0     ld      (curCol), A
+  130 D1:A97B E9 -  -  -      jp      (HL)
+  131 D1:A97C -  -  -  -  
+  132 D1:A97C -  -  -  -  
+  133 D1:A97C -  -  -  -  
+  134 D1:A97C -  -  -  -  print_bool:
+  135 D1:A97C FE FF -  -  	cp		A, regTRUE
+  136 D1:A97E CA 8B A9 D1 	jp		Z, print_bool__true
+  137 D1:A982 21 99 A9 D1 	ld		HL, false_string
+  138 D1:A986 CD C0 07 02 	call 	_PutS
+  139 D1:A98A C9 -  -  -  	ret
+  140 D1:A98B -  -  -  -  print_bool__true:
+  141 D1:A98B 21 94 A9 D1 	ld		HL, true_string
+  142 D1:A98F CD C0 07 02 	call 	_PutS
+  143 D1:A993 C9 -  -  -  	ret
+  144 D1:A994 -  -  -  -  
+  145 D1:A994 -  -  -  -  true_string:
+  146 D1:A994 74 72 75 65 
               00 -  -  -  	.db "true",0
-  147 D1:AA88 -  -  -  -  false_string:
-  148 D1:AA88 66 61 6C 73 
+  147 D1:A999 -  -  -  -  false_string:
+  148 D1:A999 66 61 6C 73 
               65 00 -  -  	.db "false",0
-  149 D1:AA8E -  -  -  -  
-  150 D1:AA8E -  -  -  -  
-  151 D1:AA8E -  -  -  -  
-  152 D1:AA8E -  -  -  -  printLn_string:
-  153 D1:AA8E D1 -  -  -      pop         DE
-  154 D1:AA8F E1 -  -  -      pop         HL
-  155 D1:AA90 CD C0 07 02     call        _PutS
-  156 D1:AA94 CD F0 07 02     call        _NewLine
-  157 D1:AA98 EB -  -  -      ex          DE, HL
-  158 D1:AA99 E9 -  -  -      jp          (HL)
-  159 D1:AA9A -  -  -  -  
-  160 D1:AA9A -  -  -  -  
-  161 D1:AA9A -  -  -  -  
-  162 D1:AA9A -  -  -  -  print_byte:
-  163 D1:AA9A D1 -  -  -      pop         DE
-  164 D1:AA9B C1 -  -  -      pop         BC
-  165 D1:AA9C D5 -  -  -      push        DE
-  166 D1:AA9D 21 00 00 00     ld          HL, 0
-  167 D1:AAA1 68 -  -  -      ld          L, B
-  168 D1:AAA2 CD E0 1E 02     call        _DispHL
-  169 D1:AAA6 C9 -  -  -      ret
-  170 D1:AAA7 -  -  -  -  
-  171 D1:AAA7 -  -  -  -  
-  172 D1:AAA7 -  -  -  -  
-  173 D1:AAA7 -  -  -  -  printLn_byte:
-  174 D1:AAA7 D1 -  -  -      pop         DE
-  175 D1:AAA8 C1 -  -  -      pop         BC
-  176 D1:AAA9 D5 -  -  -      push        DE
-  177 D1:AAAA 21 00 00 00     ld          HL, 0
-  178 D1:AAAE 68 -  -  -      ld          L, B
-  179 D1:AAAF CD E0 1E 02     call        _DispHL
-  180 D1:AAB3 CD F0 07 02     call        _NewLine
-  181 D1:AAB7 C9 -  -  -      ret
-  182 D1:AAB8 -  -  -  -  
-  183 D1:AAB8 -  -  -  -  
-  184 D1:AAB8 -  -  -  -  
-  185 D1:AAB8 -  -  -  -  print_int:
-  186 D1:AAB8 D1 -  -  -      pop         DE
-  187 D1:AAB9 C1 -  -  -      pop         BC
-  188 D1:AABA D5 -  -  -      push        DE
-  189 D1:AABB 21 00 00 00     ld          HL, 0
-  190 D1:AABF 69 -  -  -      ld          L, C
-  191 D1:AAC0 60 -  -  -      ld          H, B
-  192 D1:AAC1 CD E0 1E 02     call        _DispHL
-  193 D1:AAC5 C9 -  -  -      ret
-  194 D1:AAC6 -  -  -  -  
-  195 D1:AAC6 -  -  -  -  
-  196 D1:AAC6 -  -  -  -  
-  197 D1:AAC6 -  -  -  -  printLn_int:
-  198 D1:AAC6 D1 -  -  -      pop         DE
-  199 D1:AAC7 C1 -  -  -      pop         BC
-  200 D1:AAC8 D5 -  -  -      push        DE
-  201 D1:AAC9 21 00 00 00     ld          HL, 0
-  202 D1:AACD 69 -  -  -      ld          L, C
-  203 D1:AACE 60 -  -  -      ld          H, B
-  204 D1:AACF CD E0 1E 02     call        _DispHL
-  205 D1:AAD3 CD F0 07 02     call        _NewLine
-  206 D1:AAD7 C9 -  -  -      ret
-  207 D1:AAD8 -  -  -  -  
-  208 D1:AAD8 -  -  -  -  
-  209 D1:AAD8 -  -  -  -  
-  210 D1:AAD8 -  -  -  -  byte_smaller:
-  211 D1:AAD8 BC -  -  -      cp		    A, H
-  212 D1:AAD9 38 31 -  -      jr		    C, A_true_ret
-  213 D1:AADB 3E 00 -  -      ld	        A, regFALSE
-  214 D1:AADD C9 -  -  -      ret
-  215 D1:AADE -  -  -  -  
-  216 D1:AADE -  -  -  -  
-  217 D1:AADE -  -  -  -  
-  218 D1:AADE -  -  -  -  byte_higher:
-  219 D1:AADE BC -  -  -      cp		    A, H
-  220 D1:AADF 28 2E -  -      jr		    Z, A_false_ret
-  221 D1:AAE1 38 2C -  -      jr		    C, A_false_ret
-  222 D1:AAE3 3E FF -  -      ld	        A, regTRUE
-  223 D1:AAE5 C9 -  -  -      ret
-  224 D1:AAE6 -  -  -  -  
-  225 D1:AAE6 -  -  -  -  
-  226 D1:AAE6 -  -  -  -  
-  227 D1:AAE6 -  -  -  -  byte_higher_or_equals:
-  228 D1:AAE6 BC -  -  -      cp		    A, H
-  229 D1:AAE7 30 23 -  -      jr		    NC, A_true_ret
-  230 D1:AAE9 3E 00 -  -      ld	        A, regFALSE
-  231 D1:AAEB C9 -  -  -      ret
-  232 D1:AAEC -  -  -  -  
-  233 D1:AAEC -  -  -  -  
-  234 D1:AAEC -  -  -  -  
-  235 D1:AAEC -  -  -  -  byte_lower_or_equals:
-  236 D1:AAEC BC -  -  -      cp		    A, H
-  237 D1:AAED 28 1D -  -      jr		    Z, A_true_ret
-  238 D1:AAEF 38 1B -  -      jr          C, A_true_ret
-  239 D1:AAF1 3E 00 -  -      ld	        A, regFALSE
-  240 D1:AAF3 C9 -  -  -      ret
-  241 D1:AAF4 -  -  -  -  
-  242 D1:AAF4 -  -  -  -  
-  243 D1:AAF4 -  -  -  -  
-  244 D1:AAF4 -  -  -  -  byte_equals:
-  245 D1:AAF4 BC -  -  -      cp	        A, H
-  246 D1:AAF5 DA 0F AB D1     jp          C, A_false_ret
-  247 D1:AAF9 CA 0C AB D1     jp          Z, A_true_ret
-  248 D1:AAFD 3E 00 -  -      ld          A, regFALSE
-  249 D1:AAFF C9 -  -  -      ret
-  250 D1:AB00 -  -  -  -  
-  251 D1:AB00 -  -  -  -  
-  252 D1:AB00 -  -  -  -  
-  253 D1:AB00 -  -  -  -  byte_not_equals:
-  254 D1:AB00 BC -  -  -      cp	        A, H
-  255 D1:AB01 DA 0C AB D1     jp          C, A_true_ret
-  256 D1:AB05 CA 0F AB D1     jp          Z, A_false_ret
-  257 D1:AB09 3E FF -  -      ld          A, regTRUE
-  258 D1:AB0B C9 -  -  -      ret
-  259 D1:AB0C -  -  -  -  
-  260 D1:AB0C -  -  -  -  
-  261 D1:AB0C -  -  -  -  
-  262 D1:AB0C -  -  -  -  A_true_ret:
-  263 D1:AB0C 3E FF -  -      ld          A, regTRUE
-  264 D1:AB0E C9 -  -  -      ret
-  265 D1:AB0F -  -  -  -  
-  266 D1:AB0F -  -  -  -  
-  267 D1:AB0F -  -  -  -  
-  268 D1:AB0F -  -  -  -  A_false_ret:
-  269 D1:AB0F 3E 00 -  -      ld          A, regFALSE
-  270 D1:AB11 C9 -  -  -      ret
-  271 D1:AB12 -  -  -  -  
-  272 D1:AB12 -  -  -  -  
-  273 D1:AB12 -  -  -  -  
-  274 D1:AB12 -  -  -  -  int_smaller:
-  275 D1:AB12 B7 -  -  -      or          A
-  276 D1:AB13 ED 52 -  -      sbc         HL, DE
-  277 D1:AB15 19 -  -  -      add         HL, DE
-  278 D1:AB16 DA 0C AB D1     jp          C, A_true_ret
-  279 D1:AB1A 3E 00 -  -      ld          A, regFALSE
-  280 D1:AB1C C9 -  -  -      ret
-  281 D1:AB1D -  -  -  -  
-  282 D1:AB1D -  -  -  -  
-  283 D1:AB1D -  -  -  -  
-  284 D1:AB1D -  -  -  -  int_higher:
-  285 D1:AB1D B7 -  -  -      or          A
-  286 D1:AB1E ED 52 -  -      sbc         HL, DE
-  287 D1:AB20 19 -  -  -      add         HL, DE
-  288 D1:AB21 CA 0F AB D1     jp          Z, A_false_ret
-  289 D1:AB25 D2 0C AB D1     jp          NC, A_true_ret
-  290 D1:AB29 3E 00 -  -      ld          A, regFALSE
-  291 D1:AB2B C9 -  -  -      ret
-  292 D1:AB2C -  -  -  -  
-  293 D1:AB2C -  -  -  -  
-  294 D1:AB2C -  -  -  -  
-  295 D1:AB2C -  -  -  -  int_higher_or_equals:
-  296 D1:AB2C B7 -  -  -      or          A
-  297 D1:AB2D ED 52 -  -      sbc         HL, DE
-  298 D1:AB2F 19 -  -  -      add         HL, DE
-  299 D1:AB30 D2 0C AB D1     jp          NC, A_true_ret
-  300 D1:AB34 3E 00 -  -      ld          A, regFALSE
-  301 D1:AB36 C9 -  -  -      ret
-  302 D1:AB37 -  -  -  -  
-  303 D1:AB37 -  -  -  -  
-  304 D1:AB37 -  -  -  -  
-  305 D1:AB37 -  -  -  -  int_smaller_or_equals:
-  306 D1:AB37 B7 -  -  -      or          A
-  307 D1:AB38 ED 52 -  -      sbc         HL, DE
-  308 D1:AB3A 19 -  -  -      add         HL, DE
-  309 D1:AB3B CA 0C AB D1     jp          Z, A_true_ret
-  310 D1:AB3F DA 0C AB D1     jp          C, A_true_ret
-  311 D1:AB43 3E 00 -  -      ld          A, regFALSE
-  312 D1:AB45 C9 -  -  -      ret
-  313 D1:AB46 -  -  -  -  
-  314 D1:AB46 -  -  -  -  
-  315 D1:AB46 -  -  -  -  
-  316 D1:AB46 -  -  -  -  int_equals:
-  317 D1:AB46 B7 -  -  -      or          A
-  318 D1:AB47 ED 52 -  -      sbc         HL, DE
-  319 D1:AB49 19 -  -  -      add         HL, DE
-  320 D1:AB4A DA 0F AB D1     jp          C, A_false_ret
-  321 D1:AB4E CA 0C AB D1     jp          Z, A_true_ret
-  322 D1:AB52 3E 00 -  -      ld          A, regFALSE
-  323 D1:AB54 C9 -  -  -      ret
-  324 D1:AB55 -  -  -  -  
-  325 D1:AB55 -  -  -  -  
-  326 D1:AB55 -  -  -  -  
-  327 D1:AB55 -  -  -  -  int_not_equals:
-  328 D1:AB55 B7 -  -  -      or          A
-  329 D1:AB56 ED 52 -  -      sbc         HL, DE
-  330 D1:AB58 19 -  -  -      add         HL, DE
-  331 D1:AB59 DA 0C AB D1     jp          C, A_true_ret
-  332 D1:AB5D CA 0F AB D1     jp          Z, A_false_ret
-  333 D1:AB61 3E FF -  -      ld          A, regTRUE
-  334 D1:AB63 C9 -  -  -      ret
-  335 D1:AB64 -  -  -  -  
-  336 D1:AB64 -  -  -  -  
-  337 D1:AB64 -  -  -  -  
-  338 D1:AB64 -  -  -  -  sub_block_enter:
-  339 D1:AB64 D1 -  -  -      pop         DE
-  340 D1:AB65 21 00 00 00     ld          HL, 0
-  341 D1:AB69 39 -  -  -  	add         HL, SP
-  342 D1:AB6A ED 7B E0 AC 
+  149 D1:A99F -  -  -  -  
+  150 D1:A99F -  -  -  -  
+  151 D1:A99F -  -  -  -  
+  152 D1:A99F -  -  -  -  printLn_string:
+  153 D1:A99F D1 -  -  -      pop         DE
+  154 D1:A9A0 E1 -  -  -      pop         HL
+  155 D1:A9A1 CD C0 07 02     call        _PutS
+  156 D1:A9A5 CD F0 07 02     call        _NewLine
+  157 D1:A9A9 EB -  -  -      ex          DE, HL
+  158 D1:A9AA E9 -  -  -      jp          (HL)
+  159 D1:A9AB -  -  -  -  
+  160 D1:A9AB -  -  -  -  
+  161 D1:A9AB -  -  -  -  
+  162 D1:A9AB -  -  -  -  print_byte:
+  163 D1:A9AB D1 -  -  -      pop         DE
+  164 D1:A9AC C1 -  -  -      pop         BC
+  165 D1:A9AD D5 -  -  -      push        DE
+  166 D1:A9AE 21 00 00 00     ld          HL, 0
+  167 D1:A9B2 68 -  -  -      ld          L, B
+  168 D1:A9B3 CD E0 1E 02     call        _DispHL
+  169 D1:A9B7 C9 -  -  -      ret
+  170 D1:A9B8 -  -  -  -  
+  171 D1:A9B8 -  -  -  -  
+  172 D1:A9B8 -  -  -  -  
+  173 D1:A9B8 -  -  -  -  printLn_byte:
+  174 D1:A9B8 D1 -  -  -      pop         DE
+  175 D1:A9B9 C1 -  -  -      pop         BC
+  176 D1:A9BA D5 -  -  -      push        DE
+  177 D1:A9BB 21 00 00 00     ld          HL, 0
+  178 D1:A9BF 68 -  -  -      ld          L, B
+  179 D1:A9C0 CD E0 1E 02     call        _DispHL
+  180 D1:A9C4 CD F0 07 02     call        _NewLine
+  181 D1:A9C8 C9 -  -  -      ret
+  182 D1:A9C9 -  -  -  -  
+  183 D1:A9C9 -  -  -  -  
+  184 D1:A9C9 -  -  -  -  
+  185 D1:A9C9 -  -  -  -  print_int:
+  186 D1:A9C9 D1 -  -  -      pop         DE
+  187 D1:A9CA C1 -  -  -      pop         BC
+  188 D1:A9CB D5 -  -  -      push        DE
+  189 D1:A9CC 21 00 00 00     ld          HL, 0
+  190 D1:A9D0 69 -  -  -      ld          L, C
+  191 D1:A9D1 60 -  -  -      ld          H, B
+  192 D1:A9D2 CD E0 1E 02     call        _DispHL
+  193 D1:A9D6 C9 -  -  -      ret
+  194 D1:A9D7 -  -  -  -  
+  195 D1:A9D7 -  -  -  -  
+  196 D1:A9D7 -  -  -  -  
+  197 D1:A9D7 -  -  -  -  printLn_int:
+  198 D1:A9D7 D1 -  -  -      pop         DE
+  199 D1:A9D8 C1 -  -  -      pop         BC
+  200 D1:A9D9 D5 -  -  -      push        DE
+  201 D1:A9DA 21 00 00 00     ld          HL, 0
+  202 D1:A9DE 69 -  -  -      ld          L, C
+  203 D1:A9DF 60 -  -  -      ld          H, B
+  204 D1:A9E0 CD E0 1E 02     call        _DispHL
+  205 D1:A9E4 CD F0 07 02     call        _NewLine
+  206 D1:A9E8 C9 -  -  -      ret
+  207 D1:A9E9 -  -  -  -  
+  208 D1:A9E9 -  -  -  -  
+  209 D1:A9E9 -  -  -  -  
+  210 D1:A9E9 -  -  -  -  byte_smaller:
+  211 D1:A9E9 BC -  -  -      cp		    A, H
+  212 D1:A9EA 38 31 -  -      jr		    C, A_true_ret
+  213 D1:A9EC 3E 00 -  -      ld	        A, regFALSE
+  214 D1:A9EE C9 -  -  -      ret
+  215 D1:A9EF -  -  -  -  
+  216 D1:A9EF -  -  -  -  
+  217 D1:A9EF -  -  -  -  
+  218 D1:A9EF -  -  -  -  byte_higher:
+  219 D1:A9EF BC -  -  -      cp		    A, H
+  220 D1:A9F0 28 2E -  -      jr		    Z, A_false_ret
+  221 D1:A9F2 38 2C -  -      jr		    C, A_false_ret
+  222 D1:A9F4 3E FF -  -      ld	        A, regTRUE
+  223 D1:A9F6 C9 -  -  -      ret
+  224 D1:A9F7 -  -  -  -  
+  225 D1:A9F7 -  -  -  -  
+  226 D1:A9F7 -  -  -  -  
+  227 D1:A9F7 -  -  -  -  byte_higher_or_equals:
+  228 D1:A9F7 BC -  -  -      cp		    A, H
+  229 D1:A9F8 30 23 -  -      jr		    NC, A_true_ret
+  230 D1:A9FA 3E 00 -  -      ld	        A, regFALSE
+  231 D1:A9FC C9 -  -  -      ret
+  232 D1:A9FD -  -  -  -  
+  233 D1:A9FD -  -  -  -  
+  234 D1:A9FD -  -  -  -  
+  235 D1:A9FD -  -  -  -  byte_lower_or_equals:
+  236 D1:A9FD BC -  -  -      cp		    A, H
+  237 D1:A9FE 28 1D -  -      jr		    Z, A_true_ret
+  238 D1:AA00 38 1B -  -      jr          C, A_true_ret
+  239 D1:AA02 3E 00 -  -      ld	        A, regFALSE
+  240 D1:AA04 C9 -  -  -      ret
+  241 D1:AA05 -  -  -  -  
+  242 D1:AA05 -  -  -  -  
+  243 D1:AA05 -  -  -  -  
+  244 D1:AA05 -  -  -  -  byte_equals:
+  245 D1:AA05 BC -  -  -      cp	        A, H
+  246 D1:AA06 DA 20 AA D1     jp          C, A_false_ret
+  247 D1:AA0A CA 1D AA D1     jp          Z, A_true_ret
+  248 D1:AA0E 3E 00 -  -      ld          A, regFALSE
+  249 D1:AA10 C9 -  -  -      ret
+  250 D1:AA11 -  -  -  -  
+  251 D1:AA11 -  -  -  -  
+  252 D1:AA11 -  -  -  -  
+  253 D1:AA11 -  -  -  -  byte_not_equals:
+  254 D1:AA11 BC -  -  -      cp	        A, H
+  255 D1:AA12 DA 1D AA D1     jp          C, A_true_ret
+  256 D1:AA16 CA 20 AA D1     jp          Z, A_false_ret
+  257 D1:AA1A 3E FF -  -      ld          A, regTRUE
+  258 D1:AA1C C9 -  -  -      ret
+  259 D1:AA1D -  -  -  -  
+  260 D1:AA1D -  -  -  -  
+  261 D1:AA1D -  -  -  -  
+  262 D1:AA1D -  -  -  -  A_true_ret:
+  263 D1:AA1D 3E FF -  -      ld          A, regTRUE
+  264 D1:AA1F C9 -  -  -      ret
+  265 D1:AA20 -  -  -  -  
+  266 D1:AA20 -  -  -  -  
+  267 D1:AA20 -  -  -  -  
+  268 D1:AA20 -  -  -  -  A_false_ret:
+  269 D1:AA20 3E 00 -  -      ld          A, regFALSE
+  270 D1:AA22 C9 -  -  -      ret
+  271 D1:AA23 -  -  -  -  
+  272 D1:AA23 -  -  -  -  
+  273 D1:AA23 -  -  -  -  
+  274 D1:AA23 -  -  -  -  int_smaller:
+  275 D1:AA23 B7 -  -  -      or          A
+  276 D1:AA24 ED 52 -  -      sbc         HL, DE
+  277 D1:AA26 19 -  -  -      add         HL, DE
+  278 D1:AA27 DA 1D AA D1     jp          C, A_true_ret
+  279 D1:AA2B 3E 00 -  -      ld          A, regFALSE
+  280 D1:AA2D C9 -  -  -      ret
+  281 D1:AA2E -  -  -  -  
+  282 D1:AA2E -  -  -  -  
+  283 D1:AA2E -  -  -  -  
+  284 D1:AA2E -  -  -  -  int_higher:
+  285 D1:AA2E B7 -  -  -      or          A
+  286 D1:AA2F ED 52 -  -      sbc         HL, DE
+  287 D1:AA31 19 -  -  -      add         HL, DE
+  288 D1:AA32 CA 20 AA D1     jp          Z, A_false_ret
+  289 D1:AA36 D2 1D AA D1     jp          NC, A_true_ret
+  290 D1:AA3A 3E 00 -  -      ld          A, regFALSE
+  291 D1:AA3C C9 -  -  -      ret
+  292 D1:AA3D -  -  -  -  
+  293 D1:AA3D -  -  -  -  
+  294 D1:AA3D -  -  -  -  
+  295 D1:AA3D -  -  -  -  int_higher_or_equals:
+  296 D1:AA3D B7 -  -  -      or          A
+  297 D1:AA3E ED 52 -  -      sbc         HL, DE
+  298 D1:AA40 19 -  -  -      add         HL, DE
+  299 D1:AA41 D2 1D AA D1     jp          NC, A_true_ret
+  300 D1:AA45 3E 00 -  -      ld          A, regFALSE
+  301 D1:AA47 C9 -  -  -      ret
+  302 D1:AA48 -  -  -  -  
+  303 D1:AA48 -  -  -  -  
+  304 D1:AA48 -  -  -  -  
+  305 D1:AA48 -  -  -  -  int_smaller_or_equals:
+  306 D1:AA48 B7 -  -  -      or          A
+  307 D1:AA49 ED 52 -  -      sbc         HL, DE
+  308 D1:AA4B 19 -  -  -      add         HL, DE
+  309 D1:AA4C CA 1D AA D1     jp          Z, A_true_ret
+  310 D1:AA50 DA 1D AA D1     jp          C, A_true_ret
+  311 D1:AA54 3E 00 -  -      ld          A, regFALSE
+  312 D1:AA56 C9 -  -  -      ret
+  313 D1:AA57 -  -  -  -  
+  314 D1:AA57 -  -  -  -  
+  315 D1:AA57 -  -  -  -  
+  316 D1:AA57 -  -  -  -  int_equals:
+  317 D1:AA57 B7 -  -  -      or          A
+  318 D1:AA58 ED 52 -  -      sbc         HL, DE
+  319 D1:AA5A 19 -  -  -      add         HL, DE
+  320 D1:AA5B DA 20 AA D1     jp          C, A_false_ret
+  321 D1:AA5F CA 1D AA D1     jp          Z, A_true_ret
+  322 D1:AA63 3E 00 -  -      ld          A, regFALSE
+  323 D1:AA65 C9 -  -  -      ret
+  324 D1:AA66 -  -  -  -  
+  325 D1:AA66 -  -  -  -  
+  326 D1:AA66 -  -  -  -  
+  327 D1:AA66 -  -  -  -  int_not_equals:
+  328 D1:AA66 B7 -  -  -      or          A
+  329 D1:AA67 ED 52 -  -      sbc         HL, DE
+  330 D1:AA69 19 -  -  -      add         HL, DE
+  331 D1:AA6A DA 1D AA D1     jp          C, A_true_ret
+  332 D1:AA6E CA 20 AA D1     jp          Z, A_false_ret
+  333 D1:AA72 3E FF -  -      ld          A, regTRUE
+  334 D1:AA74 C9 -  -  -      ret
+  335 D1:AA75 -  -  -  -  
+  336 D1:AA75 -  -  -  -  
+  337 D1:AA75 -  -  -  -  
+  338 D1:AA75 -  -  -  -  sub_block_enter:
+  339 D1:AA75 D1 -  -  -      pop         DE
+  340 D1:AA76 21 00 00 00     ld          HL, 0
+  341 D1:AA7A 39 -  -  -  	add         HL, SP
+  342 D1:AA7B ED 7B F1 AB 
               D1 -  -  -  	ld          SP, (callStack)
-  343 D1:AB6F E5 -  -  -  	push        HL
-  344 D1:AB70 ED 73 E0 AC 
+  343 D1:AA80 E5 -  -  -  	push        HL
+  344 D1:AA81 ED 73 F1 AB 
               D1 -  -  -  	ld          (callStack), SP
-  345 D1:AB75 F9 -  -  -  	ld          SP, HL
-  346 D1:AB76 EB -  -  -  	ex          DE, HL
-  347 D1:AB77 E9 -  -  -  	jp          (HL)
-  348 D1:AB78 -  -  -  -  
-  349 D1:AB78 -  -  -  -  
-  350 D1:AB78 -  -  -  -  
-  351 D1:AB78 -  -  -  -  sub_block_leave:
-  352 D1:AB78 D1 -  -  -      pop         DE
-  353 D1:AB79 ED 7B E0 AC 
+  345 D1:AA86 F9 -  -  -  	ld          SP, HL
+  346 D1:AA87 EB -  -  -  	ex          DE, HL
+  347 D1:AA88 E9 -  -  -  	jp          (HL)
+  348 D1:AA89 -  -  -  -  
+  349 D1:AA89 -  -  -  -  
+  350 D1:AA89 -  -  -  -  
+  351 D1:AA89 -  -  -  -  sub_block_leave:
+  352 D1:AA89 D1 -  -  -      pop         DE
+  353 D1:AA8A ED 7B F1 AB 
               D1 -  -  -      ld          SP,(callStack)
-  354 D1:AB7E E1 -  -  -      pop         HL
-  355 D1:AB7F ED 73 E0 AC 
+  354 D1:AA8F E1 -  -  -      pop         HL
+  355 D1:AA90 ED 73 F1 AB 
               D1 -  -  -      ld          (callStack),SP
-  356 D1:AB84 F9 -  -  -      ld          SP,HL
-  357 D1:AB85 EB -  -  -  	ex          DE, HL
-  358 D1:AB86 E9 -  -  -      jp          (HL)
-  359 D1:AB87 -  -  -  -  
-  360 D1:AB87 -  -  -  -  
-  361 D1:AB87 -  -  -  -  multi_block_leave:
-  362 D1:AB87 E1 -  -  -      pop         HL
-  363 D1:AB88 22 F2 A9 D1     ld          (Var_Safe1), HL
-  364 D1:AB8C ED 7B E0 AC 
+  356 D1:AA95 F9 -  -  -      ld          SP,HL
+  357 D1:AA96 EB -  -  -  	ex          DE, HL
+  358 D1:AA97 E9 -  -  -      jp          (HL)
+  359 D1:AA98 -  -  -  -  
+  360 D1:AA98 -  -  -  -  
+  361 D1:AA98 -  -  -  -  multi_block_leave:
+  362 D1:AA98 E1 -  -  -      pop         HL
+  363 D1:AA99 22 03 A9 D1     ld          (Var_Safe1), HL
+  364 D1:AA9D ED 7B F1 AB 
               D1 -  -  -      ld          SP,(callStack)
-  365 D1:AB91 -  -  -  -  multi_block_loop:
-  366 D1:AB91 E1 -  -  -      pop         HL
-  367 D1:AB92 10 FD -  -      djnz        multi_block_loop
-  368 D1:AB94 ED 73 E0 AC 
+  365 D1:AAA2 -  -  -  -  multi_block_loop:
+  366 D1:AAA2 E1 -  -  -      pop         HL
+  367 D1:AAA3 10 FD -  -      djnz        multi_block_loop
+  368 D1:AAA5 ED 73 F1 AB 
               D1 -  -  -      ld          (callStack),SP
-  369 D1:AB99 F9 -  -  -      ld          SP,HL
-  370 D1:AB9A 2A F2 A9 D1 	ld          HL, (Var_Safe1)
-  371 D1:AB9E E9 -  -  -  	jp          (HL)
-  372 D1:AB9F -  -  -  -  
-  373 D1:AB9F -  -  -  -  
-  374 D1:AB9F -  -  -  -  
-  375 D1:AB9F -  -  -  -  index_out_of_bounds:
-  376 D1:AB9F 21 AB AB D1     ld      HL, index_out_of_bounds__message
-  377 D1:ABA3 CD C0 07 02     call    _PutS
-  378 D1:ABA7 C3 E4 A9 D1     jp      ProgramExit
-  379 D1:ABAB -  -  -  -  
-  380 D1:ABAB -  -  -  -  index_out_of_bounds__message:
-  381 D1:ABAB 69 6E 64 65 
+  369 D1:AAAA F9 -  -  -      ld          SP,HL
+  370 D1:AAAB 2A 03 A9 D1 	ld          HL, (Var_Safe1)
+  371 D1:AAAF E9 -  -  -  	jp          (HL)
+  372 D1:AAB0 -  -  -  -  
+  373 D1:AAB0 -  -  -  -  
+  374 D1:AAB0 -  -  -  -  
+  375 D1:AAB0 -  -  -  -  index_out_of_bounds:
+  376 D1:AAB0 21 BC AA D1     ld      HL, index_out_of_bounds__message
+  377 D1:AAB4 CD C0 07 02     call    _PutS
+  378 D1:AAB8 C3 F5 A8 D1     jp      ProgramExit
+  379 D1:AABC -  -  -  -  
+  380 D1:AABC -  -  -  -  index_out_of_bounds__message:
+  381 D1:AABC 69 6E 64 65 
               78 20 6F 75 
               74 20 6F 66 
               20 62 6F 75 
               6E 64 73 21 
               00 -  -  -      .db     "index out of bounds!", 0
-  382 D1:ABC0 -  -  -  -  
-  383 D1:ABC0 -  -  -  -  
-  384 D1:ABC0 -  -  -  -  
-  385 D1:ABC0 -  -  -  -  multiply_int:; num1: int(DE), num2(BC): int -> int(HL)
-  386 D1:ABC0 21 00 00 00    ld	hl, 0
-  387 D1:ABC4 -  -  -  -  
-  388 D1:ABC4 CB 23 -  -     sla	e
-  389 D1:ABC6 CB 12 -  -     rl	d
-  390 D1:ABC8 30 02 -  -     jr	nc, $+4
-  391 D1:ABCA 60 -  -  -     ld	h, b
-  392 D1:ABCB 69 -  -  -     ld	l, c
-  393 D1:ABCC -  -  -  -  
-  394 D1:ABCC 3E 0F -  -     ld	a, 15
-  395 D1:ABCE -  -  -  -  multiply_int__loop:
-  396 D1:ABCE 29 -  -  -     add	hl, hl
-  397 D1:ABCF CB 13 -  -     rl	e
-  398 D1:ABD1 CB 12 -  -     rl	d
-  399 D1:ABD3 30 04 -  -     jr	nc, $+6
-  400 D1:ABD5 09 -  -  -     add	hl, bc
-  401 D1:ABD6 30 01 -  -     jr	nc, $+3
-  402 D1:ABD8 13 -  -  -     inc	de
-  403 D1:ABD9 -  -  -  -  
-  404 D1:ABD9 3D -  -  -     dec	a
-  405 D1:ABDA 20 F2 -  -     jr	nz, multiply_int__loop
-  406 D1:ABDC -  -  -  -  
-  407 D1:ABDC C9 -  -  -     ret
-  408 D1:ABDD -  -  -  -  
-  409 D1:ABDD -  -  -  -  
-  410 D1:ABDD -  -  -  -  
-  411 D1:ABDD -  -  -  -  divide_byte:
-  412 D1:ABDD E1 -  -  -      pop         HL
-  413 D1:ABDE C1 -  -  -      pop         BC
-  414 D1:ABDF F1 -  -  -      pop         AF
-  415 D1:ABE0 0E 00 -  -  	ld          C,$00
-  416 D1:ABE2 -  -  -  -  
-  417 D1:ABE2 -  -  -  -  divide_byte__loop:
-  418 D1:ABE2 0C -  -  -  	inc         C
-  419 D1:ABE3 90 -  -  -  	sub         A, B
-  420 D1:ABE4 28 06 -  -  	jr          Z, divide_byte__end
-  421 D1:ABE6 30 FA -  -  	jr          NC,divide_byte__loop
-  422 D1:ABE8 -  -  -  -  
-  423 D1:ABE8 -  -  -  -  divide_byte__overflow:
-  424 D1:ABE8 79 -  -  -  	ld          A, C
-  425 D1:ABE9 3D -  -  -      dec         A
-  426 D1:ABEA F5 -  -  -      push        AF
-  427 D1:ABEB E9 -  -  -      jp          (HL)
-  428 D1:ABEC -  -  -  -  
-  429 D1:ABEC -  -  -  -  divide_byte__end:
-  430 D1:ABEC 79 -  -  -      ld          A, C
-  431 D1:ABED F5 -  -  -      push        AF
-  432 D1:ABEE E9 -  -  -      jp          (HL)
-  433 D1:ABEF -  -  -  -  
-  434 D1:ABEF -  -  -  -  
-  435 D1:ABEF -  -  -  -  
-  436 D1:ABEF -  -  -  -  modulo_byte:
-  437 D1:ABEF E1 -  -  -      pop         HL
-  438 D1:ABF0 C1 -  -  -      pop         BC
-  439 D1:ABF1 F1 -  -  -      pop         AF
-  440 D1:ABF2 -  -  -  -  
-  441 D1:ABF2 B8 -  -  -      cp          A, B
-  442 D1:ABF3 DA FD AB D1     jp          C, modulo_byte__end
-  443 D1:ABF7 -  -  -  -  modulo_byte__loop:
-  444 D1:ABF7 90 -  -  -      sub         A, B
-  445 D1:ABF8 B8 -  -  -      cp          A, B
-  446 D1:ABF9 D2 F7 AB D1     jp          NC, modulo_byte__loop
-  447 D1:ABFD -  -  -  -  
-  448 D1:ABFD -  -  -  -  modulo_byte__end:
-  449 D1:ABFD F5 -  -  -      push        AF
-  450 D1:ABFE E9 -  -  -      jp          (HL)
-  451 D1:ABFF -  -  -  -  
-  452 D1:ABFF -  -  -  -  
-  453 D1:ABFF -  -  -  -  
-  454 D1:ABFF -  -  -  -  
-  455 D1:ABFF -  -  -  -  divide_long_byte: ;DE HL / A -> DEHL
-  456 D1:ABFF AF -  -  -     xor	a
-  457 D1:AC00 06 20 -  -     ld	b, 32
-  458 D1:AC02 -  -  -  -  
-  459 D1:AC02 -  -  -  -  divide_long_byte__loop:
-  460 D1:AC02 29 -  -  -     add	hl, hl
-  461 D1:AC03 CB 13 -  -     rl	e
-  462 D1:AC05 CB 12 -  -     rl	d
-  463 D1:AC07 17 -  -  -     rla
-  464 D1:AC08 38 03 -  -     jr	c, $+5
-  465 D1:AC0A B9 -  -  -     cp	c
-  466 D1:AC0B 38 02 -  -     jr	c, $+4
-  467 D1:AC0D -  -  -  -  
-  468 D1:AC0D 91 -  -  -     sub	c
-  469 D1:AC0E 2C -  -  -     inc	l
-  470 D1:AC0F -  -  -  -  
-  471 D1:AC0F 10 F1 -  -     djnz	divide_long_byte__loop
-  472 D1:AC11 -  -  -  -  
-  473 D1:AC11 C9 -  -  -     ret
-  474 D1:AC12 -  -  -  -  
-  475 D1:AC12 -  -  -  -  
-  476 D1:AC12 -  -  -  -  
-  477 D1:AC12 -  -  -  -  sleep:
-  478 D1:AC12 B7 -  -  -      or          A
-  479 D1:AC13 11 00 00 00     ld          DE, 0
-  480 D1:AC17 -  -  -  -  sleep__loop:
-  481 D1:AC17 2B -  -  -      dec         HL
-  482 D1:AC18 ED 52 -  -      sbc         HL, DE
-  483 D1:AC1A 19 -  -  -      add         HL, DE
-  484 D1:AC1B 20 FA -  -      jr	        nz, sleep__loop
-  485 D1:AC1D -  -  -  -  
-  486 D1:AC1D C9 -  -  -      ret
-  487 D1:AC1E -  -  -  -  
-  488 D1:AC1E -  -  -  -  
-  489 D1:AC1E -  -  -  -  
-  490 D1:AC1E -  -  -  -  sleep_millis:
-  491 D1:AC1E E1 -  -  -      pop         HL
-  492 D1:AC1F 22 F2 A9 D1     ld          (Var_Safe1), HL
-  493 D1:AC23 -  -  -  -  
-  494 D1:AC23 E1 -  -  -      pop         HL
-  495 D1:AC24 01 00 00 00     ld          BC, 0
-  496 D1:AC28 -  -  -  -  
-  497 D1:AC28 -  -  -  -  sleep_millis__loop:
-  498 D1:AC28 E5 -  -  -      push        HL
-  499 D1:AC29 21 F4 01 00     ld          HL, 500
-  500 D1:AC2D CD 12 AC D1     call        sleep
-  501 D1:AC31 E1 -  -  -      pop         HL
-  502 D1:AC32 -  -  -  -  
-  503 D1:AC32 2B -  -  -      dec         HL
-  504 D1:AC33 ED 42 -  -      sbc         HL, BC
-  505 D1:AC35 09 -  -  -      add         HL, BC
-  506 D1:AC36 C2 28 AC D1     jp          nz, sleep_millis__loop
-  507 D1:AC3A -  -  -  -  
-  508 D1:AC3A -  -  -  -  
-  509 D1:AC3A 2A F2 A9 D1     ld          HL, (Var_Safe1)
-  510 D1:AC3E E9 -  -  -      jp          (HL)
-  511 D1:AC3F -  -  -  -  
-  512 D1:AC3F -  -  -  -  
-  513 D1:AC3F -  -  -  -  
-  514 D1:AC3F -  -  -  -  seed_upper:
-  515 D1:AC3F 00 D0 50 -      .db 00,208,80
-  516 D1:AC42 -  -  -  -  seed_lower:
-  517 D1:AC42 00 1F DD -      .db 00,31,221
-  518 D1:AC45 -  -  -  -  
-  519 D1:AC45 -  -  -  -  random_number:
-  520 D1:AC45 2A 3F AC D1     ld hl,(seed_upper)
-  521 D1:AC49 44 -  -  -      ld b,h
-  522 D1:AC4A 4D -  -  -      ld c,l
-  523 D1:AC4B 29 -  -  -      add hl,hl
-  524 D1:AC4C 29 -  -  -      add hl,hl
-  525 D1:AC4D 2C -  -  -      inc l
-  526 D1:AC4E 09 -  -  -      add hl,bc
-  527 D1:AC4F 22 3F AC D1     ld (seed_upper),hl
-  528 D1:AC53 2A 42 AC D1     ld hl,(seed_lower)
-  529 D1:AC57 29 -  -  -      add hl,hl
-  530 D1:AC58 9F -  -  -      sbc a,a
-  531 D1:AC59 E6 2D -  -      and %00101101
-  532 D1:AC5B AD -  -  -      xor l
-  533 D1:AC5C 6F -  -  -      ld l,a
-  534 D1:AC5D 22 42 AC D1     ld (seed_lower),hl
-  535 D1:AC61 09 -  -  -      add hl,bc
-  536 D1:AC62 C9 -  -  -      ret
-  537 D1:AC63 -  -  -  -  
-  538 D1:AC63 -  -  -  -  
-  539 D1:AC63 -  -  -  -  
-  540 D1:AC63 -  -  -  -  copy_array:
-  541 D1:AC63 E1 -  -  -      pop          HL
-  542 D1:AC64 22 F2 A9 D1     ld           (Var_Safe1), HL
-  543 D1:AC68 -  -  -  -  
-  544 D1:AC68 D1 -  -  -      pop         DE
-  545 D1:AC69 E1 -  -  -      pop         HL
-  546 D1:AC6A D5 -  -  -      push        DE
-  547 D1:AC6B -  -  -  -  
-  548 D1:AC6B -  -  -  -  
-  549 D1:AC6B 01 00 00 00     ld          BC, 0
-  550 D1:AC6F 4E -  -  -      ld          C, (HL)
-  551 D1:AC70 23 -  -  -      inc         HL
-  552 D1:AC71 46 -  -  -      ld          B, (HL)
-  553 D1:AC72 2B -  -  -      dec         HL
-  554 D1:AC73 -  -  -  -  
-  555 D1:AC73 03 -  -  -      inc         BC
-  556 D1:AC74 03 -  -  -      inc         BC
-  557 D1:AC75 -  -  -  -  
-  558 D1:AC75 -  -  -  -  
-  559 D1:AC75 ED B0 -  -      LDIR
-  560 D1:AC77 -  -  -  -  
-  561 D1:AC77 2A F2 A9 D1     ld          HL, (Var_Safe1)
-  562 D1:AC7B E9 -  -  -      jp          (HL)
-  563 D1:AC7C -  -  -  -  
-  564 D1:AC7C -  -  -  -  
-  565 D1:AC7C -  -  -  -  thrown_error:
-  566 D1:AC7C E1 -  -  -      pop         HL
-  567 D1:AC7D CD C0 07 02     call        _PutS
-  568 D1:AC81 CD 8C 0D 02     call        _getKey
-  569 D1:AC85 -  -  -  -  
-  570 D1:AC85 C3 E4 A9 D1     jp           ProgramExit
-  571 D1:AC89 -  -  -  -  
-  572 D1:AC89 -  -  -  -  
-  573 D1:AC89 -  -  -  -  
-  574 D1:AC89 -  -  -  -  KEY_MAPPING:
-  575 D1:AC89 21 30 -  -      .db $21, $30
-  576 D1:AC8B 22 31 -  -      .db $22, $31
-  577 D1:AC8D 1A 32 -  -      .db $1A, $32
-  578 D1:AC8F 12 33 -  -      .db $12, $33
-  579 D1:AC91 23 34 -  -      .db $23, $34
-  580 D1:AC93 1B 35 -  -      .db $1B, $35
-  581 D1:AC95 13 36 -  -      .db $13, $36
-  582 D1:AC97 24 37 -  -      .db $24, $37
-  583 D1:AC99 1C 38 -  -      .db $1C, $38
-  584 D1:AC9B 14 39 -  -      .db $14, $39
-  585 D1:AC9D 0C 2A -  -      .db $0C, $2A
-  586 D1:AC9F 0B 2D -  -      .db $0B, $2D
-  587 D1:ACA1 0A 2B -  -      .db $0A, $2B
-  588 D1:ACA3 25 2C -  -      .db $25, $2C
-  589 D1:ACA5 19 2E -  -      .db $19, $2E
-  590 D1:ACA7 -  -  -  -  
-  591 D1:ACA7 -  -  -  -  ALPHA_KEY_MAPPING:
-  592 D1:ACA7 2F 61 -  -      .db $2F, $61
-  593 D1:ACA9 27 62 -  -      .db $27, $62
-  594 D1:ACAB 1F 63 -  -      .db $1F, $63
-  595 D1:ACAD 2E 64 -  -      .db $2E, $64
-  596 D1:ACAF 26 65 -  -      .db $26, $65
-  597 D1:ACB1 1E 66 -  -      .db $1E, $66
-  598 D1:ACB3 16 67 -  -      .db $16, $67
-  599 D1:ACB5 0E 68 -  -      .db $0E, $68
-  600 D1:ACB7 2D 69 -  -      .db $2D, $69
-  601 D1:ACB9 25 6A -  -      .db $25, $6A
-  602 D1:ACBB 1D 6B -  -      .db $1D, $6B
-  603 D1:ACBD 15 6C -  -      .db $15, $6C
-  604 D1:ACBF 0D 6D -  -      .db $0D, $6D
-  605 D1:ACC1 2C 6E -  -      .db $2C, $6E
-  606 D1:ACC3 24 6F -  -      .db $24, $6F
-  607 D1:ACC5 1C 70 -  -      .db $1C, $70
-  608 D1:ACC7 14 71 -  -      .db $14, $71
-  609 D1:ACC9 0C 72 -  -      .db $0C, $72
-  610 D1:ACCB 2B 73 -  -      .db $2B, $73
-  611 D1:ACCD 23 74 -  -      .db $23, $74
-  612 D1:ACCF 1B 75 -  -      .db $1B, $75
-  613 D1:ACD1 13 76 -  -      .db $13, $76
-  614 D1:ACD3 0B 77 -  -      .db $0B, $77
-  615 D1:ACD5 2A 78 -  -      .db $2A, $78
-  616 D1:ACD7 22 79 -  -      .db $22, $79
-  617 D1:ACD9 1A 7A -  -      .db $1A, $7A
-  618 D1:ACDB 21 20 -  -      .db $21, $20
+  382 D1:AAD1 -  -  -  -  
+  383 D1:AAD1 -  -  -  -  
+  384 D1:AAD1 -  -  -  -  
+  385 D1:AAD1 -  -  -  -  multiply_int:; num1: int(DE), num2(BC): int -> int(HL)
+  386 D1:AAD1 21 00 00 00    ld	hl, 0
+  387 D1:AAD5 -  -  -  -  
+  388 D1:AAD5 CB 23 -  -     sla	e
+  389 D1:AAD7 CB 12 -  -     rl	d
+  390 D1:AAD9 30 02 -  -     jr	nc, $+4
+  391 D1:AADB 60 -  -  -     ld	h, b
+  392 D1:AADC 69 -  -  -     ld	l, c
+  393 D1:AADD -  -  -  -  
+  394 D1:AADD 3E 0F -  -     ld	a, 15
+  395 D1:AADF -  -  -  -  multiply_int__loop:
+  396 D1:AADF 29 -  -  -     add	hl, hl
+  397 D1:AAE0 CB 13 -  -     rl	e
+  398 D1:AAE2 CB 12 -  -     rl	d
+  399 D1:AAE4 30 04 -  -     jr	nc, $+6
+  400 D1:AAE6 09 -  -  -     add	hl, bc
+  401 D1:AAE7 30 01 -  -     jr	nc, $+3
+  402 D1:AAE9 13 -  -  -     inc	de
+  403 D1:AAEA -  -  -  -  
+  404 D1:AAEA 3D -  -  -     dec	a
+  405 D1:AAEB 20 F2 -  -     jr	nz, multiply_int__loop
+  406 D1:AAED -  -  -  -  
+  407 D1:AAED C9 -  -  -     ret
+  408 D1:AAEE -  -  -  -  
+  409 D1:AAEE -  -  -  -  
+  410 D1:AAEE -  -  -  -  
+  411 D1:AAEE -  -  -  -  divide_byte:
+  412 D1:AAEE E1 -  -  -      pop         HL
+  413 D1:AAEF C1 -  -  -      pop         BC
+  414 D1:AAF0 F1 -  -  -      pop         AF
+  415 D1:AAF1 0E 00 -  -  	ld          C,$00
+  416 D1:AAF3 -  -  -  -  
+  417 D1:AAF3 -  -  -  -  divide_byte__loop:
+  418 D1:AAF3 0C -  -  -  	inc         C
+  419 D1:AAF4 90 -  -  -  	sub         A, B
+  420 D1:AAF5 28 06 -  -  	jr          Z, divide_byte__end
+  421 D1:AAF7 30 FA -  -  	jr          NC,divide_byte__loop
+  422 D1:AAF9 -  -  -  -  
+  423 D1:AAF9 -  -  -  -  divide_byte__overflow:
+  424 D1:AAF9 79 -  -  -  	ld          A, C
+  425 D1:AAFA 3D -  -  -      dec         A
+  426 D1:AAFB F5 -  -  -      push        AF
+  427 D1:AAFC E9 -  -  -      jp          (HL)
+  428 D1:AAFD -  -  -  -  
+  429 D1:AAFD -  -  -  -  divide_byte__end:
+  430 D1:AAFD 79 -  -  -      ld          A, C
+  431 D1:AAFE F5 -  -  -      push        AF
+  432 D1:AAFF E9 -  -  -      jp          (HL)
+  433 D1:AB00 -  -  -  -  
+  434 D1:AB00 -  -  -  -  
+  435 D1:AB00 -  -  -  -  
+  436 D1:AB00 -  -  -  -  modulo_byte:
+  437 D1:AB00 E1 -  -  -      pop         HL
+  438 D1:AB01 C1 -  -  -      pop         BC
+  439 D1:AB02 F1 -  -  -      pop         AF
+  440 D1:AB03 -  -  -  -  
+  441 D1:AB03 B8 -  -  -      cp          A, B
+  442 D1:AB04 DA 0E AB D1     jp          C, modulo_byte__end
+  443 D1:AB08 -  -  -  -  modulo_byte__loop:
+  444 D1:AB08 90 -  -  -      sub         A, B
+  445 D1:AB09 B8 -  -  -      cp          A, B
+  446 D1:AB0A D2 08 AB D1     jp          NC, modulo_byte__loop
+  447 D1:AB0E -  -  -  -  
+  448 D1:AB0E -  -  -  -  modulo_byte__end:
+  449 D1:AB0E F5 -  -  -      push        AF
+  450 D1:AB0F E9 -  -  -      jp          (HL)
+  451 D1:AB10 -  -  -  -  
+  452 D1:AB10 -  -  -  -  
+  453 D1:AB10 -  -  -  -  
+  454 D1:AB10 -  -  -  -  
+  455 D1:AB10 -  -  -  -  divide_long_byte: ;DE HL / A -> DEHL
+  456 D1:AB10 AF -  -  -     xor	a
+  457 D1:AB11 06 20 -  -     ld	b, 32
+  458 D1:AB13 -  -  -  -  
+  459 D1:AB13 -  -  -  -  divide_long_byte__loop:
+  460 D1:AB13 29 -  -  -     add	hl, hl
+  461 D1:AB14 CB 13 -  -     rl	e
+  462 D1:AB16 CB 12 -  -     rl	d
+  463 D1:AB18 17 -  -  -     rla
+  464 D1:AB19 38 03 -  -     jr	c, $+5
+  465 D1:AB1B B9 -  -  -     cp	c
+  466 D1:AB1C 38 02 -  -     jr	c, $+4
+  467 D1:AB1E -  -  -  -  
+  468 D1:AB1E 91 -  -  -     sub	c
+  469 D1:AB1F 2C -  -  -     inc	l
+  470 D1:AB20 -  -  -  -  
+  471 D1:AB20 10 F1 -  -     djnz	divide_long_byte__loop
+  472 D1:AB22 -  -  -  -  
+  473 D1:AB22 C9 -  -  -     ret
+  474 D1:AB23 -  -  -  -  
+  475 D1:AB23 -  -  -  -  
+  476 D1:AB23 -  -  -  -  
+  477 D1:AB23 -  -  -  -  sleep:
+  478 D1:AB23 B7 -  -  -      or          A
+  479 D1:AB24 11 00 00 00     ld          DE, 0
+  480 D1:AB28 -  -  -  -  sleep__loop:
+  481 D1:AB28 2B -  -  -      dec         HL
+  482 D1:AB29 ED 52 -  -      sbc         HL, DE
+  483 D1:AB2B 19 -  -  -      add         HL, DE
+  484 D1:AB2C 20 FA -  -      jr	        nz, sleep__loop
+  485 D1:AB2E -  -  -  -  
+  486 D1:AB2E C9 -  -  -      ret
+  487 D1:AB2F -  -  -  -  
+  488 D1:AB2F -  -  -  -  
+  489 D1:AB2F -  -  -  -  
+  490 D1:AB2F -  -  -  -  sleep_millis:
+  491 D1:AB2F E1 -  -  -      pop         HL
+  492 D1:AB30 22 03 A9 D1     ld          (Var_Safe1), HL
+  493 D1:AB34 -  -  -  -  
+  494 D1:AB34 E1 -  -  -      pop         HL
+  495 D1:AB35 01 00 00 00     ld          BC, 0
+  496 D1:AB39 -  -  -  -  
+  497 D1:AB39 -  -  -  -  sleep_millis__loop:
+  498 D1:AB39 E5 -  -  -      push        HL
+  499 D1:AB3A 21 F4 01 00     ld          HL, 500
+  500 D1:AB3E CD 23 AB D1     call        sleep
+  501 D1:AB42 E1 -  -  -      pop         HL
+  502 D1:AB43 -  -  -  -  
+  503 D1:AB43 2B -  -  -      dec         HL
+  504 D1:AB44 ED 42 -  -      sbc         HL, BC
+  505 D1:AB46 09 -  -  -      add         HL, BC
+  506 D1:AB47 C2 39 AB D1     jp          nz, sleep_millis__loop
+  507 D1:AB4B -  -  -  -  
+  508 D1:AB4B -  -  -  -  
+  509 D1:AB4B 2A 03 A9 D1     ld          HL, (Var_Safe1)
+  510 D1:AB4F E9 -  -  -      jp          (HL)
+  511 D1:AB50 -  -  -  -  
+  512 D1:AB50 -  -  -  -  
+  513 D1:AB50 -  -  -  -  
+  514 D1:AB50 -  -  -  -  seed_upper:
+  515 D1:AB50 00 D0 50 -      .db 00,208,80
+  516 D1:AB53 -  -  -  -  seed_lower:
+  517 D1:AB53 00 1F DD -      .db 00,31,221
+  518 D1:AB56 -  -  -  -  
+  519 D1:AB56 -  -  -  -  random_number:
+  520 D1:AB56 2A 50 AB D1     ld hl,(seed_upper)
+  521 D1:AB5A 44 -  -  -      ld b,h
+  522 D1:AB5B 4D -  -  -      ld c,l
+  523 D1:AB5C 29 -  -  -      add hl,hl
+  524 D1:AB5D 29 -  -  -      add hl,hl
+  525 D1:AB5E 2C -  -  -      inc l
+  526 D1:AB5F 09 -  -  -      add hl,bc
+  527 D1:AB60 22 50 AB D1     ld (seed_upper),hl
+  528 D1:AB64 2A 53 AB D1     ld hl,(seed_lower)
+  529 D1:AB68 29 -  -  -      add hl,hl
+  530 D1:AB69 9F -  -  -      sbc a,a
+  531 D1:AB6A E6 2D -  -      and %00101101
+  532 D1:AB6C AD -  -  -      xor l
+  533 D1:AB6D 6F -  -  -      ld l,a
+  534 D1:AB6E 22 53 AB D1     ld (seed_lower),hl
+  535 D1:AB72 09 -  -  -      add hl,bc
+  536 D1:AB73 C9 -  -  -      ret
+  537 D1:AB74 -  -  -  -  
+  538 D1:AB74 -  -  -  -  
+  539 D1:AB74 -  -  -  -  
+  540 D1:AB74 -  -  -  -  copy_array:
+  541 D1:AB74 E1 -  -  -      pop          HL
+  542 D1:AB75 22 03 A9 D1     ld           (Var_Safe1), HL
+  543 D1:AB79 -  -  -  -  
+  544 D1:AB79 D1 -  -  -      pop         DE
+  545 D1:AB7A E1 -  -  -      pop         HL
+  546 D1:AB7B D5 -  -  -      push        DE
+  547 D1:AB7C -  -  -  -  
+  548 D1:AB7C -  -  -  -  
+  549 D1:AB7C 01 00 00 00     ld          BC, 0
+  550 D1:AB80 4E -  -  -      ld          C, (HL)
+  551 D1:AB81 23 -  -  -      inc         HL
+  552 D1:AB82 46 -  -  -      ld          B, (HL)
+  553 D1:AB83 2B -  -  -      dec         HL
+  554 D1:AB84 -  -  -  -  
+  555 D1:AB84 03 -  -  -      inc         BC
+  556 D1:AB85 03 -  -  -      inc         BC
+  557 D1:AB86 -  -  -  -  
+  558 D1:AB86 -  -  -  -  
+  559 D1:AB86 ED B0 -  -      LDIR
+  560 D1:AB88 -  -  -  -  
+  561 D1:AB88 2A 03 A9 D1     ld          HL, (Var_Safe1)
+  562 D1:AB8C E9 -  -  -      jp          (HL)
+  563 D1:AB8D -  -  -  -  
+  564 D1:AB8D -  -  -  -  
+  565 D1:AB8D -  -  -  -  thrown_error:
+  566 D1:AB8D E1 -  -  -      pop         HL
+  567 D1:AB8E CD C0 07 02     call        _PutS
+  568 D1:AB92 CD 8C 0D 02     call        _getKey
+  569 D1:AB96 -  -  -  -  
+  570 D1:AB96 C3 F5 A8 D1     jp           ProgramExit
+  571 D1:AB9A -  -  -  -  
+  572 D1:AB9A -  -  -  -  
+  573 D1:AB9A -  -  -  -  
+  574 D1:AB9A -  -  -  -  KEY_MAPPING:
+  575 D1:AB9A 21 30 -  -      .db $21, $30
+  576 D1:AB9C 22 31 -  -      .db $22, $31
+  577 D1:AB9E 1A 32 -  -      .db $1A, $32
+  578 D1:ABA0 12 33 -  -      .db $12, $33
+  579 D1:ABA2 23 34 -  -      .db $23, $34
+  580 D1:ABA4 1B 35 -  -      .db $1B, $35
+  581 D1:ABA6 13 36 -  -      .db $13, $36
+  582 D1:ABA8 24 37 -  -      .db $24, $37
+  583 D1:ABAA 1C 38 -  -      .db $1C, $38
+  584 D1:ABAC 14 39 -  -      .db $14, $39
+  585 D1:ABAE 0C 2A -  -      .db $0C, $2A
+  586 D1:ABB0 0B 2D -  -      .db $0B, $2D
+  587 D1:ABB2 0A 2B -  -      .db $0A, $2B
+  588 D1:ABB4 25 2C -  -      .db $25, $2C
+  589 D1:ABB6 19 2E -  -      .db $19, $2E
+  590 D1:ABB8 -  -  -  -  
+  591 D1:ABB8 -  -  -  -  ALPHA_KEY_MAPPING:
+  592 D1:ABB8 2F 61 -  -      .db $2F, $61
+  593 D1:ABBA 27 62 -  -      .db $27, $62
+  594 D1:ABBC 1F 63 -  -      .db $1F, $63
+  595 D1:ABBE 2E 64 -  -      .db $2E, $64
+  596 D1:ABC0 26 65 -  -      .db $26, $65
+  597 D1:ABC2 1E 66 -  -      .db $1E, $66
+  598 D1:ABC4 16 67 -  -      .db $16, $67
+  599 D1:ABC6 0E 68 -  -      .db $0E, $68
+  600 D1:ABC8 2D 69 -  -      .db $2D, $69
+  601 D1:ABCA 25 6A -  -      .db $25, $6A
+  602 D1:ABCC 1D 6B -  -      .db $1D, $6B
+  603 D1:ABCE 15 6C -  -      .db $15, $6C
+  604 D1:ABD0 0D 6D -  -      .db $0D, $6D
+  605 D1:ABD2 2C 6E -  -      .db $2C, $6E
+  606 D1:ABD4 24 6F -  -      .db $24, $6F
+  607 D1:ABD6 1C 70 -  -      .db $1C, $70
+  608 D1:ABD8 14 71 -  -      .db $14, $71
+  609 D1:ABDA 0C 72 -  -      .db $0C, $72
+  610 D1:ABDC 2B 73 -  -      .db $2B, $73
+  611 D1:ABDE 23 74 -  -      .db $23, $74
+  612 D1:ABE0 1B 75 -  -      .db $1B, $75
+  613 D1:ABE2 13 76 -  -      .db $13, $76
+  614 D1:ABE4 0B 77 -  -      .db $0B, $77
+  615 D1:ABE6 2A 78 -  -      .db $2A, $78
+  616 D1:ABE8 22 79 -  -      .db $22, $79
+  617 D1:ABEA 1A 7A -  -      .db $1A, $7A
+  618 D1:ABEC 21 20 -  -      .db $21, $20
 Listing for file "asm/main.asm"
-  154 D1:ACDD -  -  -  -  StackSave:
-  155 D1:ACDD 00 00 00 -  	.db          0,0,0
-  156 D1:ACE0 -  -  -  -  CallStack:
-  157 D1:ACE0 00 00 00 -  	.db          0,0,0
-  158 D1:ACE3 -  -  -  -  SaveLocation:
-  159 D1:ACE3 00 00 00 -  	.db          0,0,0
-  160 D1:ACE6 -  -  -  -  stackStart .equ saveSScreen+7315
-  161 D1:ACE6 -  -  -  -  callStackStart .equ saveSScreen+14630
-  162 D1:ACE6 -  -  -  -  globalVars .equ pixelShadow
-  163 D1:ACE6 -  -  -  -  
-  164 D1:ACE6 -  -  -  -  malloc_6:
-  165 D1:ACE6 DD E5 -  -  	push         IX
-  166 D1:ACE8 ED 73 E0 AC 
+   57 D1:ABEE -  -  -  -  StackSave:
+   58 D1:ABEE 00 00 00 -  	.db          0,0,0
+   59 D1:ABF1 -  -  -  -  CallStack:
+   60 D1:ABF1 00 00 00 -  	.db          0,0,0
+   61 D1:ABF4 -  -  -  -  SaveLocation:
+   62 D1:ABF4 00 00 00 -  	.db          0,0,0
+   63 D1:ABF7 -  -  -  -  stackStart .equ saveSScreen+7315
+   64 D1:ABF7 -  -  -  -  callStackStart .equ saveSScreen+14630
+   65 D1:ABF7 -  -  -  -  globalVars .equ pixelShadow
+   66 D1:ABF7 -  -  -  -  
+   67 D1:ABF7 -  -  -  -  fib_2:
+   68 D1:ABF7 DD E5 -  -  	push         IX
+   69 D1:ABF9 ED 73 F1 AB 
               D1 -  -  -  	ld           (callStack),SP
-  167 D1:ACED F9 -  -  -  	ld           SP,HL
-  168 D1:ACEE DD 21 03 00 
+   70 D1:ABFE F9 -  -  -  	ld           SP,HL
+   71 D1:ABFF DD 21 03 00 
               00 -  -  -  	ld           IX,3
-  169 D1:ACF3 DD 39 -  -  	add          IX,SP
-  170 D1:ACF5 21 45 23 D1 	ld           HL,13706053
-  171 D1:ACF9 E5 -  -  -  	push         HL
-  172 D1:ACFA 21 45 23 D1 	ld           HL,13706053
-  173 D1:ACFE E5 -  -  -  	push         HL
-  174 D1:ACFF 21 45 23 D1 	ld           HL,13706053
-  175 D1:AD03 E5 -  -  -  	push         HL
-  176 D1:AD04 -  -  -  -  while_start10:
-  177 D1:AD04 DD 27 FA -  	ld           HL,(IX-6)
-  178 D1:AD07 E5 -  -  -  	push         HL
-  179 D1:AD08 21 45 23 D1 	ld           HL,13706053
-  180 D1:AD0C E5 -  -  -  	push         HL
-  181 D1:AD0D 21 D8 3F D1 	ld           HL,13713368
-  182 D1:AD11 D1 -  -  -  	pop          DE
-  183 D1:AD12 EB -  -  -  	ex           DE,HL
-  184 D1:AD13 CD 12 AB D1 	call         int_smaller
-  185 D1:AD17 FE FF -  -  	cp           A,%11111111
-  186 D1:AD19 C2 41 AE D1 	jp           NZ,while_end11
-  187 D1:AD1D CD 64 AB D1 	call         sub_block_enter
-  188 D1:AD21 DD 27 FA -  	ld           HL,(IX-6)
-  189 D1:AD24 E5 -  -  -  	push         HL
-  190 D1:AD25 21 45 23 D1 	ld           HL,13706053
-  191 D1:AD29 7E -  -  -  	ld           A,(HL)
-  192 D1:AD2A F5 -  -  -  	push         AF
-  193 D1:AD2B DD 27 FA -  	ld           HL,(IX-6)
-  194 D1:AD2E E5 -  -  -  	push         HL
-  195 D1:AD2F 21 45 23 D1 	ld           HL,13706053
-  196 D1:AD33 E5 -  -  -  	push         HL
-  197 D1:AD34 21 01 00 00 	ld           HL,1
-  198 D1:AD38 E5 -  -  -  	push         HL
-  199 D1:AD39 D1 -  -  -  	pop          DE
-  200 D1:AD3A E1 -  -  -  	pop          HL
-  201 D1:AD3B 19 -  -  -  	add          HL,DE
-  202 D1:AD3C 11 00 00 00 	ld           DE,0
-  203 D1:AD40 5E -  -  -  	ld           E,(HL)
-  204 D1:AD41 23 -  -  -  	inc          HL
-  205 D1:AD42 56 -  -  -  	ld           D,(HL)
-  206 D1:AD43 D5 -  -  -  	push         DE
-  207 D1:AD44 DD 27 F7 -  	ld           HL,(IX-9)
-  208 D1:AD47 E5 -  -  -  	push         HL
-  209 D1:AD48 F1 -  -  -  	pop          AF
-  210 D1:AD49 CD 6B AA D1 	call         print_bool
-  211 D1:AD4D CD 64 AB D1 	call         sub_block_enter
-  212 D1:AD51 DD 27 F7 -  	ld           HL,(IX-9)
-  213 D1:AD54 E5 -  -  -  	push         HL
-  214 D1:AD55 DD 27 F4 -  	ld           HL,(IX-12)
-  215 D1:AD58 E5 -  -  -  	push         HL
-  216 D1:AD59 DD 27 FD -  	ld           HL,(IX-3)
-  217 D1:AD5C D1 -  -  -  	pop          DE
-  218 D1:AD5D EB -  -  -  	ex           DE,HL
-  219 D1:AD5E CD 12 AB D1 	call         int_smaller
-  220 D1:AD62 F5 -  -  -  	push         AF
-  221 D1:AD63 E1 -  -  -  	pop          HL
-  222 D1:AD64 F1 -  -  -  	pop          AF
-  223 D1:AD65 B4 -  -  -  	or           A,H
-  224 D1:AD66 FE FF -  -  	cp           A,%11111111
-  225 D1:AD68 C2 96 AD D1 	jp           NZ,if_next_31
-  226 D1:AD6C DD 27 FA -  	ld           HL,(IX-6)
-  227 D1:AD6F E5 -  -  -  	push         HL
-  228 D1:AD70 21 45 23 D1 	ld           HL,13706053
-  229 D1:AD74 E5 -  -  -  	push         HL
-  230 D1:AD75 DD 27 F4 -  	ld           HL,(IX-12)
-  231 D1:AD78 E5 -  -  -  	push         HL
-  232 D1:AD79 D1 -  -  -  	pop          DE
-  233 D1:AD7A E1 -  -  -  	pop          HL
-  234 D1:AD7B 19 -  -  -  	add          HL,DE
-  235 D1:AD7C E5 -  -  -  	push         HL
-  236 D1:AD7D 21 03 00 00 	ld           HL,3
-  237 D1:AD81 E5 -  -  -  	push         HL
-  238 D1:AD82 D1 -  -  -  	pop          DE
-  239 D1:AD83 E1 -  -  -  	pop          HL
-  240 D1:AD84 19 -  -  -  	add          HL,DE
-  241 D1:AD85 DD 2F FA -  	ld           (IX-6),HL
-  242 D1:AD88 06 02 -  -  	ld           B,2
-  243 D1:AD8A CD 87 AB D1 	call         multi_block_leave
-  244 D1:AD8E C3 04 AD D1 	jp           while_start10
-  245 D1:AD92 C3 10 AE D1 	jp           if_end_30
-  246 D1:AD96 -  -  -  -  if_next_31:
-  247 D1:AD96 DD 27 F4 -  	ld           HL,(IX-12)
-  248 D1:AD99 E5 -  -  -  	push         HL
-  249 D1:AD9A DD 27 FD -  	ld           HL,(IX-3)
-  250 D1:AD9D D1 -  -  -  	pop          DE
-  251 D1:AD9E EB -  -  -  	ex           DE,HL
-  252 D1:AD9F CD 1D AB D1 	call         int_higher
-  253 D1:ADA3 FE FF -  -  	cp           A,%11111111
-  254 D1:ADA5 C2 10 AE D1 	jp           NZ,elif_next_40
-  255 D1:ADA9 DD 27 FD -  	ld           HL,(IX-3)
-  256 D1:ADAC E5 -  -  -  	push         HL
-  257 D1:ADAD DD 27 FA -  	ld           HL,(IX-6)
-  258 D1:ADB0 E5 -  -  -  	push         HL
-  259 D1:ADB1 21 45 23 D1 	ld           HL,13706053
-  260 D1:ADB5 E5 -  -  -  	push         HL
-  261 D1:ADB6 21 01 00 00 	ld           HL,1
-  262 D1:ADBA E5 -  -  -  	push         HL
-  263 D1:ADBB D1 -  -  -  	pop          DE
-  264 D1:ADBC E1 -  -  -  	pop          HL
-  265 D1:ADBD 19 -  -  -  	add          HL,DE
-  266 D1:ADBE D1 -  -  -  	pop          DE
-  267 D1:ADBF 73 -  -  -  	ld           (HL),E
-  268 D1:ADC0 23 -  -  -  	inc          HL
-  269 D1:ADC1 72 -  -  -  	ld           (HL),D
-  270 D1:ADC2 DD 27 F4 -  	ld           HL,(IX-12)
-  271 D1:ADC5 E5 -  -  -  	push         HL
-  272 D1:ADC6 DD 27 FD -  	ld           HL,(IX-3)
-  273 D1:ADC9 B7 -  -  -  	or           A,A
-  274 D1:ADCA D1 -  -  -  	pop          DE
-  275 D1:ADCB EB -  -  -  	ex           DE,HL
-  276 D1:ADCC ED 52 -  -  	sbc          HL,DE
-  277 D1:ADCE E5 -  -  -  	push         HL
-  278 D1:ADCF DD 27 FA -  	ld           HL,(IX-6)
-  279 D1:ADD2 E5 -  -  -  	push         HL
-  280 D1:ADD3 21 45 23 D1 	ld           HL,13706053
-  281 D1:ADD7 E5 -  -  -  	push         HL
-  282 D1:ADD8 DD 27 F4 -  	ld           HL,(IX-12)
-  283 D1:ADDB E5 -  -  -  	push         HL
-  284 D1:ADDC D1 -  -  -  	pop          DE
-  285 D1:ADDD E1 -  -  -  	pop          HL
-  286 D1:ADDE 19 -  -  -  	add          HL,DE
-  287 D1:ADDF E5 -  -  -  	push         HL
-  288 D1:ADE0 21 03 00 00 	ld           HL,3
-  289 D1:ADE4 E5 -  -  -  	push         HL
-  290 D1:ADE5 D1 -  -  -  	pop          DE
-  291 D1:ADE6 E1 -  -  -  	pop          HL
-  292 D1:ADE7 19 -  -  -  	add          HL,DE
-  293 D1:ADE8 E5 -  -  -  	push         HL
-  294 D1:ADE9 3E 00 -  -  	ld           A,%00000000
-  295 D1:ADEB F5 -  -  -  	push         AF
-  296 D1:ADEC DD 27 EE -  	ld           HL,(IX-18)
-  297 D1:ADEF F1 -  -  -  	pop          AF
-  298 D1:ADF0 77 -  -  -  	ld           (HL),A
-  299 D1:ADF1 DD 27 F1 -  	ld           HL,(IX-15)
-  300 D1:ADF4 B7 -  -  -  	or           A,A
-  301 D1:ADF5 11 03 00 00 	ld           DE,3
-  302 D1:ADF9 ED 52 -  -  	sbc          HL,DE
-  303 D1:ADFB E5 -  -  -  	push         HL
-  304 D1:ADFC DD 27 EE -  	ld           HL,(IX-18)
-  305 D1:ADFF E5 -  -  -  	push         HL
-  306 D1:AE00 21 01 00 00 	ld           HL,1
-  307 D1:AE04 E5 -  -  -  	push         HL
-  308 D1:AE05 D1 -  -  -  	pop          DE
-  309 D1:AE06 E1 -  -  -  	pop          HL
-  310 D1:AE07 19 -  -  -  	add          HL,DE
-  311 D1:AE08 D1 -  -  -  	pop          DE
-  312 D1:AE09 73 -  -  -  	ld           (HL),E
-  313 D1:AE0A 23 -  -  -  	inc          HL
-  314 D1:AE0B 72 -  -  -  	ld           (HL),D
-  315 D1:AE0C C3 10 AE D1 	jp           if_end_30
-  316 D1:AE10 -  -  -  -  elif_next_40:
-  317 D1:AE10 -  -  -  -  if_end_30:
-  318 D1:AE10 CD 78 AB D1 	call         sub_block_leave
-  319 D1:AE14 3E FF -  -  	ld           A,%11111111
-  320 D1:AE16 F5 -  -  -  	push         AF
-  321 D1:AE17 DD 27 FA -  	ld           HL,(IX-6)
-  322 D1:AE1A F1 -  -  -  	pop          AF
-  323 D1:AE1B 77 -  -  -  	ld           (HL),A
-  324 D1:AE1C DD 27 FA -  	ld           HL,(IX-6)
-  325 D1:AE1F E5 -  -  -  	push         HL
-  326 D1:AE20 21 45 23 D1 	ld           HL,13706053
-  327 D1:AE24 E5 -  -  -  	push         HL
-  328 D1:AE25 21 03 00 00 	ld           HL,3
-  329 D1:AE29 E5 -  -  -  	push         HL
-  330 D1:AE2A D1 -  -  -  	pop          DE
-  331 D1:AE2B E1 -  -  -  	pop          HL
-  332 D1:AE2C 19 -  -  -  	add          HL,DE
-  333 D1:AE2D E5 -  -  -  	push         HL
-  334 D1:AE2E D1 -  -  -  	pop          DE
-  335 D1:AE2F 06 01 -  -  	ld           B,1
-  336 D1:AE31 CD 87 AB D1 	call         multi_block_leave
-  337 D1:AE35 C3 4E AE D1 	jp           malloc_end_7
-  338 D1:AE39 CD 78 AB D1 	call         sub_block_leave
-  339 D1:AE3D C3 04 AD D1 	jp           while_start10
-  340 D1:AE41 -  -  -  -  while_end11:
-  341 D1:AE41 21 52 B1 D1 	ld           HL,string_68
-  342 D1:AE45 E5 -  -  -  	push         HL
-  343 D1:AE46 C3 7C AC D1 	jp           thrown_error
-  344 D1:AE4A 11 00 00 00 	ld           DE,0
-  345 D1:AE4E -  -  -  -  malloc_end_7:
-  346 D1:AE4E ED 7B E0 AC 
+   72 D1:AC04 DD 39 -  -  	add          IX,SP
+   73 D1:AC06 CD 75 AA D1 	call         sub_block_enter
+   74 D1:AC0A DD 27 FD -  	ld           HL,(IX-3)
+   75 D1:AC0D E5 -  -  -  	push         HL
+   76 D1:AC0E 3E 01 -  -  	ld           A,1
+   77 D1:AC10 F5 -  -  -  	push         AF
+   78 D1:AC11 E1 -  -  -  	pop          HL
+   79 D1:AC12 F1 -  -  -  	pop          AF
+   80 D1:AC13 CD 05 AA D1 	call         byte_equals
+   81 D1:AC17 F5 -  -  -  	push         AF
+   82 D1:AC18 DD 27 FD -  	ld           HL,(IX-3)
+   83 D1:AC1B E5 -  -  -  	push         HL
+   84 D1:AC1C 3E 00 -  -  	ld           A,0
+   85 D1:AC1E F5 -  -  -  	push         AF
+   86 D1:AC1F E1 -  -  -  	pop          HL
+   87 D1:AC20 F1 -  -  -  	pop          AF
+   88 D1:AC21 CD 05 AA D1 	call         byte_equals
+   89 D1:AC25 F5 -  -  -  	push         AF
+   90 D1:AC26 E1 -  -  -  	pop          HL
+   91 D1:AC27 F1 -  -  -  	pop          AF
+   92 D1:AC28 B4 -  -  -  	or           A,H
+   93 D1:AC29 FE FF -  -  	cp           A,%11111111
+   94 D1:AC2B C2 43 AC D1 	jp           NZ,if_next_10
+   95 D1:AC2F 21 01 00 00 	ld           HL,1
+   96 D1:AC33 E5 -  -  -  	push         HL
+   97 D1:AC34 D1 -  -  -  	pop          DE
+   98 D1:AC35 06 01 -  -  	ld           B,1
+   99 D1:AC37 CD 98 AA D1 	call         multi_block_leave
+  100 D1:AC3B C3 9D AC D1 	jp           fib_end_3
+  101 D1:AC3F C3 95 AC D1 	jp           if_end_9
+  102 D1:AC43 -  -  -  -  if_next_10:
+  103 D1:AC43 CD 75 AA D1 	call         sub_block_enter
+  104 D1:AC47 DD 27 FD -  	ld           HL,(IX-3)
+  105 D1:AC4A E5 -  -  -  	push         HL
+  106 D1:AC4B F1 -  -  -  	pop          AF
+  107 D1:AC4C 3D -  -  -  	dec          A
+  108 D1:AC4D F5 -  -  -  	push         AF
+  109 D1:AC4E 21 00 00 00 	ld           HL,0
+  110 D1:AC52 39 -  -  -  	add          HL,SP
+  111 D1:AC53 ED 7B F1 AB 
               D1 -  -  -  	ld           SP,(callStack)
-  347 D1:AE53 DD E1 -  -  	pop          IX
-  348 D1:AE55 C9 -  -  -  	ret          
-  349 D1:AE56 -  -  -  -  free_70:
-  350 D1:AE56 DD E5 -  -  	push         IX
-  351 D1:AE58 ED 73 E0 AC 
+  112 D1:AC58 CD F7 AB D1 	call         fib_2
+  113 D1:AC5C E1 -  -  -  	pop          HL
+  114 D1:AC5D ED 73 F1 AB 
               D1 -  -  -  	ld           (callStack),SP
-  352 D1:AE5D F9 -  -  -  	ld           SP,HL
-  353 D1:AE5E DD 21 03 00 
-              00 -  -  -  	ld           IX,3
-  354 D1:AE63 DD 39 -  -  	add          IX,SP
-  355 D1:AE65 DD 27 FD -  	ld           HL,(IX-3)
-  356 D1:AE68 E5 -  -  -  	push         HL
-  357 D1:AE69 21 03 00 00 	ld           HL,3
-  358 D1:AE6D E5 -  -  -  	push         HL
-  359 D1:AE6E D1 -  -  -  	pop          DE
-  360 D1:AE6F E1 -  -  -  	pop          HL
-  361 D1:AE70 B7 -  -  -  	or           A,A
-  362 D1:AE71 ED 52 -  -  	sbc          HL,DE
-  363 D1:AE73 DD 2F FD -  	ld           (IX-3),HL
-  364 D1:AE76 3E 00 -  -  	ld           A,%00000000
-  365 D1:AE78 F5 -  -  -  	push         AF
-  366 D1:AE79 DD 27 FD -  	ld           HL,(IX-3)
-  367 D1:AE7C F1 -  -  -  	pop          AF
-  368 D1:AE7D 77 -  -  -  	ld           (HL),A
-  369 D1:AE7E 11 00 00 00 	ld           DE,0
-  370 D1:AE82 -  -  -  -  free_end_71:
-  371 D1:AE82 ED 7B E0 AC 
+  115 D1:AC62 F9 -  -  -  	ld           SP,HL
+  116 D1:AC63 D5 -  -  -  	push         DE
+  117 D1:AC64 CD 75 AA D1 	call         sub_block_enter
+  118 D1:AC68 DD 27 FD -  	ld           HL,(IX-3)
+  119 D1:AC6B 7C -  -  -  	ld           A,H
+  120 D1:AC6C D6 02 -  -  	sub          A,2
+  121 D1:AC6E 67 -  -  -  	ld           H,A
+  122 D1:AC6F E5 -  -  -  	push         HL
+  123 D1:AC70 21 00 00 00 	ld           HL,0
+  124 D1:AC74 39 -  -  -  	add          HL,SP
+  125 D1:AC75 ED 7B F1 AB 
               D1 -  -  -  	ld           SP,(callStack)
-  372 D1:AE87 DD E1 -  -  	pop          IX
-  373 D1:AE89 C9 -  -  -  	ret          
-  374 D1:AE8A -  -  -  -  heapInit_78:
-  375 D1:AE8A DD E5 -  -  	push         IX
-  376 D1:AE8C ED 73 E0 AC 
+  126 D1:AC7A CD F7 AB D1 	call         fib_2
+  127 D1:AC7E E1 -  -  -  	pop          HL
+  128 D1:AC7F ED 73 F1 AB 
               D1 -  -  -  	ld           (callStack),SP
-  377 D1:AE91 F9 -  -  -  	ld           SP,HL
-  378 D1:AE92 DD 21 00 00 
-              00 -  -  -  	ld           IX,0
-  379 D1:AE97 DD 39 -  -  	add          IX,SP
-  380 D1:AE99 3E 00 -  -  	ld           A,%00000000
-  381 D1:AE9B F5 -  -  -  	push         AF
-  382 D1:AE9C 21 45 23 D1 	ld           HL,13706053
-  383 D1:AEA0 F1 -  -  -  	pop          AF
-  384 D1:AEA1 77 -  -  -  	ld           (HL),A
-  385 D1:AEA2 21 93 1C 00 	ld           HL,7315
-  386 D1:AEA6 E5 -  -  -  	push         HL
-  387 D1:AEA7 21 45 23 D1 	ld           HL,13706053
-  388 D1:AEAB D1 -  -  -  	pop          DE
-  389 D1:AEAC 73 -  -  -  	ld           (HL),E
-  390 D1:AEAD 23 -  -  -  	inc          HL
-  391 D1:AEAE 72 -  -  -  	ld           (HL),D
-  392 D1:AEAF 11 00 00 00 	ld           DE,0
-  393 D1:AEB3 -  -  -  -  heapInit_end_79:
-  394 D1:AEB3 ED 7B E0 AC 
+  129 D1:AC84 F9 -  -  -  	ld           SP,HL
+  130 D1:AC85 D5 -  -  -  	push         DE
+  131 D1:AC86 E1 -  -  -  	pop          HL
+  132 D1:AC87 D1 -  -  -  	pop          DE
+  133 D1:AC88 19 -  -  -  	add          HL,DE
+  134 D1:AC89 E5 -  -  -  	push         HL
+  135 D1:AC8A D1 -  -  -  	pop          DE
+  136 D1:AC8B 06 01 -  -  	ld           B,1
+  137 D1:AC8D CD 98 AA D1 	call         multi_block_leave
+  138 D1:AC91 C3 9D AC D1 	jp           fib_end_3
+  139 D1:AC95 -  -  -  -  if_end_9:
+  140 D1:AC95 CD 89 AA D1 	call         sub_block_leave
+  141 D1:AC99 11 00 00 00 	ld           DE,0
+  142 D1:AC9D -  -  -  -  fib_end_3:
+  143 D1:AC9D ED 7B F1 AB 
               D1 -  -  -  	ld           SP,(callStack)
-  395 D1:AEB8 DD E1 -  -  	pop          IX
-  396 D1:AEBA C9 -  -  -  	ret          
-  397 D1:AEBB -  -  -  -  fillArray_83:
-  398 D1:AEBB DD E5 -  -  	push         IX
-  399 D1:AEBD ED 73 E0 AC 
-              D1 -  -  -  	ld           (callStack),SP
-  400 D1:AEC2 F9 -  -  -  	ld           SP,HL
-  401 D1:AEC3 DD 21 06 00 
-              00 -  -  -  	ld           IX,6
-  402 D1:AEC8 DD 39 -  -  	add          IX,SP
-  403 D1:AECA 21 00 00 00 	ld           HL,0
-  404 D1:AECE E5 -  -  -  	push         HL
-  405 D1:AECF DD 27 FD -  	ld           HL,(IX-3)
-  406 D1:AED2 E5 -  -  -  	push         HL
-  407 D1:AED3 CD 3E AA D1 	call         get_array_size
-  408 D1:AED7 -  -  -  -  while_start90:
-  409 D1:AED7 DD 27 F7 -  	ld           HL,(IX-9)
-  410 D1:AEDA E5 -  -  -  	push         HL
-  411 D1:AEDB DD 27 F4 -  	ld           HL,(IX-12)
-  412 D1:AEDE D1 -  -  -  	pop          DE
-  413 D1:AEDF EB -  -  -  	ex           DE,HL
-  414 D1:AEE0 CD 12 AB D1 	call         int_smaller
-  415 D1:AEE4 FE FF -  -  	cp           A,%11111111
-  416 D1:AEE6 C2 0E AF D1 	jp           NZ,while_end91
-  417 D1:AEEA CD 64 AB D1 	call         sub_block_enter
-  418 D1:AEEE DD 27 FA -  	ld           HL,(IX-6)
-  419 D1:AEF1 E5 -  -  -  	push         HL
-  420 D1:AEF2 DD 27 FD -  	ld           HL,(IX-3)
-  421 D1:AEF5 E5 -  -  -  	push         HL
-  422 D1:AEF6 DD 27 F7 -  	ld           HL,(IX-9)
-  423 D1:AEF9 23 -  -  -  	inc          HL
-  424 D1:AEFA 23 -  -  -  	inc          HL
-  425 D1:AEFB C1 -  -  -  	pop          BC
-  426 D1:AEFC 09 -  -  -  	add          HL,BC
-  427 D1:AEFD F1 -  -  -  	pop          AF
-  428 D1:AEFE 77 -  -  -  	ld           (HL),A
-  429 D1:AEFF DD 27 F7 -  	ld           HL,(IX-9)
-  430 D1:AF02 23 -  -  -  	inc          HL
-  431 D1:AF03 DD 2F F7 -  	ld           (IX-9),HL
-  432 D1:AF06 CD 78 AB D1 	call         sub_block_leave
-  433 D1:AF0A C3 D7 AE D1 	jp           while_start90
-  434 D1:AF0E -  -  -  -  while_end91:
-  435 D1:AF0E 11 00 00 00 	ld           DE,0
-  436 D1:AF12 -  -  -  -  fillArray_end_84:
-  437 D1:AF12 ED 7B E0 AC 
-              D1 -  -  -  	ld           SP,(callStack)
-  438 D1:AF17 DD E1 -  -  	pop          IX
-  439 D1:AF19 C9 -  -  -  	ret          
-  440 D1:AF1A -  -  -  -  fillArray_102:
-  441 D1:AF1A DD E5 -  -  	push         IX
-  442 D1:AF1C ED 73 E0 AC 
-              D1 -  -  -  	ld           (callStack),SP
-  443 D1:AF21 F9 -  -  -  	ld           SP,HL
-  444 D1:AF22 DD 21 06 00 
-              00 -  -  -  	ld           IX,6
-  445 D1:AF27 DD 39 -  -  	add          IX,SP
-  446 D1:AF29 21 00 00 00 	ld           HL,0
-  447 D1:AF2D E5 -  -  -  	push         HL
-  448 D1:AF2E DD 27 FD -  	ld           HL,(IX-3)
-  449 D1:AF31 E5 -  -  -  	push         HL
-  450 D1:AF32 CD 3E AA D1 	call         get_array_size
-  451 D1:AF36 -  -  -  -  while_start109:
-  452 D1:AF36 DD 27 F7 -  	ld           HL,(IX-9)
-  453 D1:AF39 E5 -  -  -  	push         HL
-  454 D1:AF3A DD 27 F4 -  	ld           HL,(IX-12)
-  455 D1:AF3D D1 -  -  -  	pop          DE
-  456 D1:AF3E EB -  -  -  	ex           DE,HL
-  457 D1:AF3F CD 12 AB D1 	call         int_smaller
-  458 D1:AF43 FE FF -  -  	cp           A,%11111111
-  459 D1:AF45 C2 6D AF D1 	jp           NZ,while_end110
-  460 D1:AF49 CD 64 AB D1 	call         sub_block_enter
-  461 D1:AF4D DD 27 FA -  	ld           HL,(IX-6)
-  462 D1:AF50 E5 -  -  -  	push         HL
-  463 D1:AF51 DD 27 FD -  	ld           HL,(IX-3)
-  464 D1:AF54 E5 -  -  -  	push         HL
-  465 D1:AF55 DD 27 F7 -  	ld           HL,(IX-9)
-  466 D1:AF58 23 -  -  -  	inc          HL
-  467 D1:AF59 23 -  -  -  	inc          HL
-  468 D1:AF5A C1 -  -  -  	pop          BC
-  469 D1:AF5B 09 -  -  -  	add          HL,BC
-  470 D1:AF5C F1 -  -  -  	pop          AF
-  471 D1:AF5D 77 -  -  -  	ld           (HL),A
-  472 D1:AF5E DD 27 F7 -  	ld           HL,(IX-9)
-  473 D1:AF61 23 -  -  -  	inc          HL
-  474 D1:AF62 DD 2F F7 -  	ld           (IX-9),HL
-  475 D1:AF65 CD 78 AB D1 	call         sub_block_leave
-  476 D1:AF69 C3 36 AF D1 	jp           while_start109
-  477 D1:AF6D -  -  -  -  while_end110:
-  478 D1:AF6D 11 00 00 00 	ld           DE,0
-  479 D1:AF71 -  -  -  -  fillArray_end_103:
-  480 D1:AF71 ED 7B E0 AC 
-              D1 -  -  -  	ld           SP,(callStack)
-  481 D1:AF76 DD E1 -  -  	pop          IX
-  482 D1:AF78 C9 -  -  -  	ret          
-  483 D1:AF79 -  -  -  -  redact_121:
-  484 D1:AF79 DD E5 -  -  	push         IX
-  485 D1:AF7B ED 73 E0 AC 
-              D1 -  -  -  	ld           (callStack),SP
-  486 D1:AF80 F9 -  -  -  	ld           SP,HL
-  487 D1:AF81 DD 21 06 00 
-              00 -  -  -  	ld           IX,6
-  488 D1:AF86 DD 39 -  -  	add          IX,SP
-  489 D1:AF88 DD 27 FA -  	ld           HL,(IX-6)
-  490 D1:AF8B E5 -  -  -  	push         HL
-  491 D1:AF8C DD 27 FD -  	ld           HL,(IX-3)
-  492 D1:AF8F E5 -  -  -  	push         HL
-  493 D1:AF90 CD 3E AA D1 	call         get_array_size
-  494 D1:AF94 E1 -  -  -  	pop          HL
-  495 D1:AF95 2B -  -  -  	dec          HL
-  496 D1:AF96 E5 -  -  -  	push         HL
-  497 D1:AF97 -  -  -  -  while_start130:
-  498 D1:AF97 DD 27 F7 -  	ld           HL,(IX-9)
-  499 D1:AF9A E5 -  -  -  	push         HL
-  500 D1:AF9B DD 27 F4 -  	ld           HL,(IX-12)
-  501 D1:AF9E D1 -  -  -  	pop          DE
-  502 D1:AF9F EB -  -  -  	ex           DE,HL
-  503 D1:AFA0 CD 12 AB D1 	call         int_smaller
-  504 D1:AFA4 FE FF -  -  	cp           A,%11111111
-  505 D1:AFA6 C2 DA AF D1 	jp           NZ,while_end131
-  506 D1:AFAA CD 64 AB D1 	call         sub_block_enter
-  507 D1:AFAE DD 27 FD -  	ld           HL,(IX-3)
-  508 D1:AFB1 E5 -  -  -  	push         HL
-  509 D1:AFB2 DD 27 F7 -  	ld           HL,(IX-9)
-  510 D1:AFB5 23 -  -  -  	inc          HL
-  511 D1:AFB6 E5 -  -  -  	push         HL
-  512 D1:AFB7 C1 -  -  -  	pop          BC
-  513 D1:AFB8 E1 -  -  -  	pop          HL
-  514 D1:AFB9 23 -  -  -  	inc          HL
-  515 D1:AFBA 23 -  -  -  	inc          HL
-  516 D1:AFBB 09 -  -  -  	add          HL,BC
-  517 D1:AFBC 7E -  -  -  	ld           A,(HL)
-  518 D1:AFBD F5 -  -  -  	push         AF
-  519 D1:AFBE DD 27 FD -  	ld           HL,(IX-3)
-  520 D1:AFC1 E5 -  -  -  	push         HL
-  521 D1:AFC2 DD 27 F7 -  	ld           HL,(IX-9)
-  522 D1:AFC5 23 -  -  -  	inc          HL
-  523 D1:AFC6 23 -  -  -  	inc          HL
-  524 D1:AFC7 C1 -  -  -  	pop          BC
-  525 D1:AFC8 09 -  -  -  	add          HL,BC
-  526 D1:AFC9 F1 -  -  -  	pop          AF
-  527 D1:AFCA 77 -  -  -  	ld           (HL),A
-  528 D1:AFCB DD 27 F7 -  	ld           HL,(IX-9)
-  529 D1:AFCE 23 -  -  -  	inc          HL
-  530 D1:AFCF DD 2F F7 -  	ld           (IX-9),HL
-  531 D1:AFD2 CD 78 AB D1 	call         sub_block_leave
-  532 D1:AFD6 C3 97 AF D1 	jp           while_start130
-  533 D1:AFDA -  -  -  -  while_end131:
-  534 D1:AFDA 11 00 00 00 	ld           DE,0
-  535 D1:AFDE -  -  -  -  redact_end_122:
-  536 D1:AFDE ED 7B E0 AC 
-              D1 -  -  -  	ld           SP,(callStack)
-  537 D1:AFE3 DD E1 -  -  	pop          IX
-  538 D1:AFE5 C9 -  -  -  	ret          
-  539 D1:AFE6 -  -  -  -  mallocByteArray_146:
-  540 D1:AFE6 DD E5 -  -  	push         IX
-  541 D1:AFE8 ED 73 E0 AC 
-              D1 -  -  -  	ld           (callStack),SP
-  542 D1:AFED F9 -  -  -  	ld           SP,HL
-  543 D1:AFEE DD 21 03 00 
-              00 -  -  -  	ld           IX,3
-  544 D1:AFF3 DD 39 -  -  	add          IX,SP
-  545 D1:AFF5 CD 64 AB D1 	call         sub_block_enter
-  546 D1:AFF9 DD 27 FD -  	ld           HL,(IX-3)
-  547 D1:AFFC 11 02 00 00 	ld           DE,2
-  548 D1:B000 19 -  -  -  	add          HL,DE
-  549 D1:B001 E5 -  -  -  	push         HL
-  550 D1:B002 21 00 00 00 	ld           HL,0
-  551 D1:B006 39 -  -  -  	add          HL,SP
-  552 D1:B007 ED 7B E0 AC 
-              D1 -  -  -  	ld           SP,(callStack)
-  553 D1:B00C CD E6 AC D1 	call         malloc_6
-  554 D1:B010 E1 -  -  -  	pop          HL
-  555 D1:B011 ED 73 E0 AC 
-              D1 -  -  -  	ld           (callStack),SP
-  556 D1:B016 F9 -  -  -  	ld           SP,HL
-  557 D1:B017 11 00 00 00 	ld           DE,0
-  558 D1:B01B -  -  -  -  mallocByteArray_end_147:
-  559 D1:B01B ED 7B E0 AC 
-              D1 -  -  -  	ld           SP,(callStack)
-  560 D1:B020 DD E1 -  -  	pop          IX
-  561 D1:B022 C9 -  -  -  	ret          
-  562 D1:B023 -  -  -  -  mallocIntArray_152:
-  563 D1:B023 DD E5 -  -  	push         IX
-  564 D1:B025 ED 73 E0 AC 
-              D1 -  -  -  	ld           (callStack),SP
-  565 D1:B02A F9 -  -  -  	ld           SP,HL
-  566 D1:B02B DD 21 03 00 
-              00 -  -  -  	ld           IX,3
-  567 D1:B030 DD 39 -  -  	add          IX,SP
-  568 D1:B032 CD 64 AB D1 	call         sub_block_enter
-  569 D1:B036 DD 27 FD -  	ld           HL,(IX-3)
-  570 D1:B039 E5 -  -  -  	push         HL
-  571 D1:B03A 21 03 00 00 	ld           HL,3
-  572 D1:B03E E5 -  -  -  	push         HL
-  573 D1:B03F D1 -  -  -  	pop          DE
-  574 D1:B040 C1 -  -  -  	pop          BC
-  575 D1:B041 CD C0 AB D1 	call         multiply_int
-  576 D1:B045 11 02 00 00 	ld           DE,2
-  577 D1:B049 19 -  -  -  	add          HL,DE
-  578 D1:B04A E5 -  -  -  	push         HL
-  579 D1:B04B 21 00 00 00 	ld           HL,0
-  580 D1:B04F 39 -  -  -  	add          HL,SP
-  581 D1:B050 ED 7B E0 AC 
-              D1 -  -  -  	ld           SP,(callStack)
-  582 D1:B055 CD E6 AC D1 	call         malloc_6
-  583 D1:B059 E1 -  -  -  	pop          HL
-  584 D1:B05A ED 73 E0 AC 
-              D1 -  -  -  	ld           (callStack),SP
-  585 D1:B05F F9 -  -  -  	ld           SP,HL
-  586 D1:B060 11 00 00 00 	ld           DE,0
-  587 D1:B064 -  -  -  -  mallocIntArray_end_153:
-  588 D1:B064 ED 7B E0 AC 
-              D1 -  -  -  	ld           SP,(callStack)
-  589 D1:B069 DD E1 -  -  	pop          IX
-  590 D1:B06B C9 -  -  -  	ret          
-  591 D1:B06C -  -  -  -  copyFrom_160:
-  592 D1:B06C DD E5 -  -  	push         IX
-  593 D1:B06E ED 73 E0 AC 
-              D1 -  -  -  	ld           (callStack),SP
-  594 D1:B073 F9 -  -  -  	ld           SP,HL
-  595 D1:B074 DD 21 06 00 
-              00 -  -  -  	ld           IX,6
-  596 D1:B079 DD 39 -  -  	add          IX,SP
-  597 D1:B07B DD 27 FA -  	ld           HL,(IX-6)
-  598 D1:B07E E5 -  -  -  	push         HL
-  599 D1:B07F CD 3E AA D1 	call         get_array_size
-  600 D1:B083 21 00 00 00 	ld           HL,0
-  601 D1:B087 E5 -  -  -  	push         HL
-  602 D1:B088 -  -  -  -  while_start167:
-  603 D1:B088 DD 27 F4 -  	ld           HL,(IX-12)
-  604 D1:B08B E5 -  -  -  	push         HL
-  605 D1:B08C DD 27 F7 -  	ld           HL,(IX-9)
-  606 D1:B08F D1 -  -  -  	pop          DE
-  607 D1:B090 EB -  -  -  	ex           DE,HL
-  608 D1:B091 CD 12 AB D1 	call         int_smaller
-  609 D1:B095 FE FF -  -  	cp           A,%11111111
-  610 D1:B097 C2 D2 B0 D1 	jp           NZ,while_end168
-  611 D1:B09B CD 64 AB D1 	call         sub_block_enter
-  612 D1:B09F DD 27 FD -  	ld           HL,(IX-3)
-  613 D1:B0A2 E5 -  -  -  	push         HL
-  614 D1:B0A3 DD 27 F4 -  	ld           HL,(IX-12)
-  615 D1:B0A6 E5 -  -  -  	push         HL
-  616 D1:B0A7 D1 -  -  -  	pop          DE
-  617 D1:B0A8 E1 -  -  -  	pop          HL
-  618 D1:B0A9 19 -  -  -  	add          HL,DE
-  619 D1:B0AA E5 -  -  -  	push         HL
-  620 D1:B0AB 3E 02 -  -  	ld           A,2
-  621 D1:B0AD E1 -  -  -  	pop          HL
-  622 D1:B0AE 11 00 00 00 	ld           DE,0
-  623 D1:B0B2 5F -  -  -  	ld           E,A
-  624 D1:B0B3 19 -  -  -  	add          HL,DE
-  625 D1:B0B4 7E -  -  -  	ld           A,(HL)
-  626 D1:B0B5 F5 -  -  -  	push         AF
-  627 D1:B0B6 DD 27 FA -  	ld           HL,(IX-6)
-  628 D1:B0B9 E5 -  -  -  	push         HL
-  629 D1:B0BA DD 27 F4 -  	ld           HL,(IX-12)
-  630 D1:B0BD 23 -  -  -  	inc          HL
-  631 D1:B0BE 23 -  -  -  	inc          HL
-  632 D1:B0BF C1 -  -  -  	pop          BC
-  633 D1:B0C0 09 -  -  -  	add          HL,BC
-  634 D1:B0C1 F1 -  -  -  	pop          AF
-  635 D1:B0C2 77 -  -  -  	ld           (HL),A
-  636 D1:B0C3 DD 27 F4 -  	ld           HL,(IX-12)
-  637 D1:B0C6 23 -  -  -  	inc          HL
-  638 D1:B0C7 DD 2F F4 -  	ld           (IX-12),HL
-  639 D1:B0CA CD 78 AB D1 	call         sub_block_leave
-  640 D1:B0CE C3 88 B0 D1 	jp           while_start167
-  641 D1:B0D2 -  -  -  -  while_end168:
-  642 D1:B0D2 11 00 00 00 	ld           DE,0
-  643 D1:B0D6 -  -  -  -  copyFrom_end_161:
-  644 D1:B0D6 ED 7B E0 AC 
-              D1 -  -  -  	ld           SP,(callStack)
-  645 D1:B0DB DD E1 -  -  	pop          IX
-  646 D1:B0DD C9 -  -  -  	ret          
-  647 D1:B0DE -  -  -  -  copyTo_185:
-  648 D1:B0DE DD E5 -  -  	push         IX
-  649 D1:B0E0 ED 73 E0 AC 
-              D1 -  -  -  	ld           (callStack),SP
-  650 D1:B0E5 F9 -  -  -  	ld           SP,HL
-  651 D1:B0E6 DD 21 06 00 
-              00 -  -  -  	ld           IX,6
-  652 D1:B0EB DD 39 -  -  	add          IX,SP
-  653 D1:B0ED DD 27 FA -  	ld           HL,(IX-6)
-  654 D1:B0F0 E5 -  -  -  	push         HL
-  655 D1:B0F1 CD 3E AA D1 	call         get_array_size
-  656 D1:B0F5 21 00 00 00 	ld           HL,0
-  657 D1:B0F9 E5 -  -  -  	push         HL
-  658 D1:B0FA -  -  -  -  while_start192:
-  659 D1:B0FA DD 27 F4 -  	ld           HL,(IX-12)
-  660 D1:B0FD E5 -  -  -  	push         HL
-  661 D1:B0FE DD 27 F7 -  	ld           HL,(IX-9)
-  662 D1:B101 D1 -  -  -  	pop          DE
-  663 D1:B102 EB -  -  -  	ex           DE,HL
-  664 D1:B103 CD 12 AB D1 	call         int_smaller
-  665 D1:B107 FE FF -  -  	cp           A,%11111111
-  666 D1:B109 C2 46 B1 D1 	jp           NZ,while_end193
-  667 D1:B10D CD 64 AB D1 	call         sub_block_enter
-  668 D1:B111 DD 27 FA -  	ld           HL,(IX-6)
-  669 D1:B114 E5 -  -  -  	push         HL
-  670 D1:B115 DD 27 F4 -  	ld           HL,(IX-12)
-  671 D1:B118 E5 -  -  -  	push         HL
-  672 D1:B119 C1 -  -  -  	pop          BC
-  673 D1:B11A E1 -  -  -  	pop          HL
-  674 D1:B11B 23 -  -  -  	inc          HL
-  675 D1:B11C 23 -  -  -  	inc          HL
-  676 D1:B11D 09 -  -  -  	add          HL,BC
-  677 D1:B11E 7E -  -  -  	ld           A,(HL)
-  678 D1:B11F F5 -  -  -  	push         AF
-  679 D1:B120 DD 27 FD -  	ld           HL,(IX-3)
-  680 D1:B123 E5 -  -  -  	push         HL
-  681 D1:B124 DD 27 F4 -  	ld           HL,(IX-12)
-  682 D1:B127 E5 -  -  -  	push         HL
-  683 D1:B128 D1 -  -  -  	pop          DE
-  684 D1:B129 E1 -  -  -  	pop          HL
-  685 D1:B12A 19 -  -  -  	add          HL,DE
-  686 D1:B12B E5 -  -  -  	push         HL
-  687 D1:B12C 3E 02 -  -  	ld           A,2
-  688 D1:B12E E1 -  -  -  	pop          HL
-  689 D1:B12F 11 00 00 00 	ld           DE,0
-  690 D1:B133 5F -  -  -  	ld           E,A
-  691 D1:B134 19 -  -  -  	add          HL,DE
-  692 D1:B135 F1 -  -  -  	pop          AF
-  693 D1:B136 77 -  -  -  	ld           (HL),A
-  694 D1:B137 DD 27 F4 -  	ld           HL,(IX-12)
-  695 D1:B13A 23 -  -  -  	inc          HL
-  696 D1:B13B DD 2F F4 -  	ld           (IX-12),HL
-  697 D1:B13E CD 78 AB D1 	call         sub_block_leave
-  698 D1:B142 C3 FA B0 D1 	jp           while_start192
-  699 D1:B146 -  -  -  -  while_end193:
-  700 D1:B146 11 00 00 00 	ld           DE,0
-  701 D1:B14A -  -  -  -  copyTo_end_186:
-  702 D1:B14A ED 7B E0 AC 
-              D1 -  -  -  	ld           SP,(callStack)
-  703 D1:B14F DD E1 -  -  	pop          IX
-  704 D1:B151 C9 -  -  -  	ret          
-  705 D1:B152 -  -  -  -  
-  706 D1:B152 -  -  -  -  string_68:
-  707 D1:B152 68 65 61 70 
-              20 65 78 63 
-              65 70 74 69 
-              6F 6E 00 -  	.db          "heap exception", 0
+  144 D1:ACA2 DD E1 -  -  	pop          IX
+  145 D1:ACA4 C9 -  -  -  	ret          
+  146 D1:ACA5 -  -  -  -  

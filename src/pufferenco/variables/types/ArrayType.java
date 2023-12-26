@@ -1,6 +1,5 @@
 package pufferenco.variables.types;
 
-import pufferenco.ArrayUtil;
 import pufferenco.AssemblyBuilder;
 import pufferenco.DataType;
 import pufferenco.Main;
@@ -18,16 +17,16 @@ public class ArrayType implements DataType {
 
     @Override
     public StackElement getStackVariable(StackElement element, AssemblyBuilder builder) {
-        builder.append_ld("HL", "(" + element.location + ")");
+        builder.append_ld("HL", "(" + element.getLocation() + ")");
         builder.append_push("HL");
-        return StackElement.array("var_array_" + Main.getId(), element.array_type);
+        return StackElement.array("var_array_" + Main.getId(), element.getArray_type());
     }
 
     @Override
     public StackElement convertFrom(StackElement old, AssemblyBuilder builder, boolean keep_constant) {
-        if(old.type == DataType.POINTER)
+        if(old.getType() == DataType.POINTER)
             return new StackElement("converted_array", getId());
-        if(old.type != Data_type_id)
+        if(old.getType() != Data_type_id)
             builder.error("cannot convert from non-array to array");
         return old;
     }
@@ -45,13 +44,13 @@ public class ArrayType implements DataType {
 
     @Override
     public void setStackVariable(StackElement variable, StackElement newValue, AssemblyBuilder builder) {
-        if(newValue.type != Data_type_id)
+        if(newValue.getType() != Data_type_id)
             builder.error("cannot set value to non-array");
-        if(variable.array_type != newValue.array_type)
+        if(variable.getArray_type() != newValue.getArray_type())
             builder.error("cannot set value to different array type");
 
         builder.append_pop("HL");
-        builder.append_ld("(" + variable.location + ")", "HL");
+        builder.append_ld("(" + variable.getLocation() + ")", "HL");
     }
 
     @Override
@@ -63,7 +62,7 @@ public class ArrayType implements DataType {
     public StackElement getSub(StackElement element, StackElement key, AssemblyBuilder builder) {
         DataType.getInstance(DataType.INT).convertFrom(key, builder, false);
 
-        int element_size = DataType.getInstance(element.array_type).elementSize(builder);
+        int element_size = DataType.getInstance(element.getArray_type()).elementSize(builder);
 
         if(element_size != 1) {
             builder.append_pop("DE");
@@ -84,12 +83,12 @@ public class ArrayType implements DataType {
         }
         builder.append_push("HL");
 
-        return DataType.getInstance(element.array_type).getAt(new StackElement("index_pointer", DataType.POINTER), builder);
+        return DataType.getInstance(element.getArray_type()).getAt(new StackElement("index_pointer", DataType.POINTER), builder);
     }
 
     @Override
     public void setSub(StackElement element, StackElement key, StackElement new_value, AssemblyBuilder builder) {
-        int element_size = DataType.getInstance(element.array_type).elementSize(builder);
+        int element_size = DataType.getInstance(element.getArray_type()).elementSize(builder);
         DataType.getInstance(DataType.INT).convertFrom(key, builder, false);
                    // move index(STACK -> BC)
 
@@ -111,7 +110,7 @@ public class ArrayType implements DataType {
             builder.append_add("HL", "BC");
         }
         builder.append_push("HL");
-        DataType.getInstance(element.array_type).setAt(new StackElement("index_pointer", DataType.POINTER), new_value, builder);
+        DataType.getInstance(element.getArray_type()).setAt(new StackElement("index_pointer", DataType.POINTER), new_value, builder);
     }
 
     @Override
@@ -135,8 +134,8 @@ public class ArrayType implements DataType {
     public StackElement initGlobal(StackElement element, AssemblyBuilder builder) {
         element = convertFrom(element, builder, false);
         builder.append_pop("HL");
-        element.location = "globalVars+" + (Variable.GlobalOffset);
-        builder.append_ld("("+element.location+")", "HL");
+        element.setLocation("globalVars+" + (Variable.GlobalOffset));
+        builder.append_ld("("+ element.getLocation() +")", "HL");
         Variable.GlobalOffset += 3;
         return element;
     }

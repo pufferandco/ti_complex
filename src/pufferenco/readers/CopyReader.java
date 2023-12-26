@@ -22,12 +22,12 @@ public class CopyReader {
         StackElement element = ExpressionReader.evalExpression(new TokenStream(pre_tokens, builder), builder, false);
 
         StackElement pointer = ExpressionReader.evalExpression(stream, builder, false);
-        if(pointer.type != DataType.POINTER)
+        if(pointer.getType() != DataType.POINTER)
             builder.error("expected pointer in copy statement");
 
-        switch (element.type) {
+        switch (element.getType()) {
             case DataType.INT, DataType.BYTE, DataType.BOOL, DataType.POINTER ->
-                    builder.error("cannot copy" + DataType.getName(element.type)+ "(use move instead)");
+                    builder.error("cannot copy" + DataType.getName(element.getType())+ "(use move instead)");
             case DataType.ARRAY  -> builder.append_call("copy_array");
             case DataType.NULL -> builder.error("cannot move to pointer cause it is null");
 

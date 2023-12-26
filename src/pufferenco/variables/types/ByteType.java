@@ -25,7 +25,7 @@ public class ByteType implements DataType {
 
     @Override
     public StackElement getStackVariable(StackElement element, AssemblyBuilder builder) {
-        builder.append_ld("HL", "(" + element.location + ")");
+        builder.append_ld("HL", "(" + element.getLocation() + ")");
         builder.append_push("HL");
         return new StackElement("var_read_byte_" + Main.getId(), Data_type_id);
     }
@@ -34,7 +34,7 @@ public class ByteType implements DataType {
     public void setStackVariable(StackElement variable, StackElement newValue, AssemblyBuilder builder) {
         convertFrom(newValue, builder, false);
         builder.append_pop("HL");
-        builder.append_ld("(" + variable.location + ")", "HL");
+        builder.append_ld("(" + variable.getLocation() + ")", "HL");
     }
 
     @Override
@@ -90,8 +90,8 @@ public class ByteType implements DataType {
 
     @Override
     public StackElement convertFrom(StackElement old, AssemblyBuilder builder, boolean keep_constant) {
-        if (old.type != Data_type_id) {
-            builder.error("cannot convert " + DataType.NAMES[old.type] + " to byte" );
+        if (old.getType() != Data_type_id) {
+            builder.error("cannot convert " + DataType.NAMES[old.getType()] + " to byte" );
             throw new RuntimeException();
         }
         if (old.is_constant && !keep_constant) {
@@ -111,7 +111,7 @@ public class ByteType implements DataType {
     @Override
     public StackElement callOperator(String operator, AssemblyBuilder builder, StackElement right) {
         if (!Operators.containsKey(operator))
-            builder.error("illegal operator [" + operator + "] with combination: " + DataType.NAMES[Data_type_id] + " and " + DataType.NAMES[right.type]);
+            builder.error("illegal operator [" + operator + "] with combination: " + DataType.NAMES[Data_type_id] + " and " + DataType.NAMES[right.getType()]);
 
         return Operators.get(operator).apply(builder, right);
     }
@@ -121,8 +121,8 @@ public class ByteType implements DataType {
 
         element = convertFrom(element, builder, false);
         builder.append_pop("AF");
-        element.location = "globalVars+" + (Variable.GlobalOffset);
-        builder.append_ld("("+element.location+")", "A");
+        element.setLocation("globalVars+" + (Variable.GlobalOffset));
+        builder.append_ld("("+ element.getLocation() +")", "A");
         Variable.GlobalOffset += 1;
         return element;
     }

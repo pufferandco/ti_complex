@@ -24,7 +24,7 @@ public class IntType implements DataType {
 
     @Override
     public StackElement getStackVariable(StackElement element, AssemblyBuilder builder) {
-        builder.append_ld("HL", "(" + element.location + ")");
+        builder.append_ld("HL", "(" + element.getLocation() + ")");
         builder.append_push("HL");
         return new StackElement("var_read_int_" + Main.getId(), Data_type_id);
     }
@@ -84,10 +84,10 @@ public class IntType implements DataType {
     @Override
     public StackElement initGlobal(StackElement element, AssemblyBuilder builder) {
         element = convertFrom(element, builder, false);
-        element.location = "globalVars+" + (Variable.GlobalOffset);
+        element.setLocation("globalVars+" + (Variable.GlobalOffset));
 
         builder.append_pop("DE");
-        builder.append_ld("HL", element.location);
+        builder.append_ld("HL", element.getLocation());
         builder.append_ld("(HL)", "E");
         builder.append_inc("HL");
         builder.append_ld("(HL)", "D");
@@ -119,7 +119,7 @@ public class IntType implements DataType {
 
     @Override
     public StackElement convertFrom(StackElement old, AssemblyBuilder builder, boolean keep_constant) {
-        if (old.type == Data_type_id) {
+        if (old.getType() == Data_type_id) {
             if (old.is_constant && !keep_constant) {
                 old.is_constant = false;
                 try {
@@ -131,7 +131,7 @@ public class IntType implements DataType {
                 }
             }
             return old;
-        } else if (old.type == DataType.BYTE) {
+        } else if (old.getType() == DataType.BYTE) {
             if (old.is_constant) {
                 if (!keep_constant){
                     old.is_constant = false;
@@ -142,7 +142,7 @@ public class IntType implements DataType {
                         builder.error("constant value is not an integer");
                     }
                 }else
-                    old.type = DataType.INT;
+                    old.setType(DataType.INT);
                 return old;
             }
             builder.append_pop("AF");
@@ -152,7 +152,7 @@ public class IntType implements DataType {
             return new StackElement("int_from_byte", Data_type_id);
         }
 
-        builder.error("cannot convert " + DataType.getName(old.type) + " to integer");
+        builder.error("cannot convert " + DataType.getName(old.getType()) + " to integer");
         throw new RuntimeException();
 
     }
@@ -160,7 +160,7 @@ public class IntType implements DataType {
     @Override
     public StackElement callOperator(String operator, AssemblyBuilder builder, StackElement right) {
         if (!Operators.containsKey(operator))
-            builder.error("illegal operator [" + operator + "] with combination: " + DataType.NAMES[Data_type_id] + " and " + DataType.NAMES[right.type]);
+            builder.error("illegal operator [" + operator + "] with combination: " + DataType.NAMES[Data_type_id] + " and " + DataType.NAMES[right.getType()]);
 
         return Operators.get(operator).apply(builder, right);
     }
@@ -285,7 +285,7 @@ public class IntType implements DataType {
     public void setStackVariable(StackElement variable, StackElement newValue, AssemblyBuilder builder) {
         convertFrom(newValue, builder, false);
         builder.append_pop("HL");
-        builder.append_ld("(" + variable.location + ")", "HL");
+        builder.append_ld("(" + variable.getLocation() + ")", "HL");
     }
 
     @Override

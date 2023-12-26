@@ -1,0 +1,2 @@
+var i: byte = 16b;
+print(i + 5b);

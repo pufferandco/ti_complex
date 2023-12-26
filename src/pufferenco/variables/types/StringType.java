@@ -21,16 +21,16 @@ public class StringType implements DataType {
 
     @Override
     public StackElement getStackVariable(StackElement element, AssemblyBuilder builder) {
-        builder.append_ld("HL", "(" + element.location + ")");
+        builder.append_ld("HL", "(" + element.getLocation() + ")");
         builder.append_push("HL");
         return new StackElement("var_read_string_" + Main.getId(), Data_type_id);
     }
 
     @Override
     public StackElement convertFrom(StackElement old, AssemblyBuilder builder, boolean keep_constant) {
-        if(old.type == DataType.POINTER)
+        if(old.getType() == DataType.POINTER)
             return new StackElement("converted_pointer", getId());
-        if (old.type != Data_type_id) {
+        if (old.getType() != Data_type_id) {
             builder.error("cannot convert value to string");
             throw new RuntimeException();
         }
@@ -52,9 +52,9 @@ public class StringType implements DataType {
         newValue = convertFrom(newValue, builder, false);
 
         builder.append_pop("HL");
-        builder.append_ld("(" + variable.location + ")", "HL");
+        builder.append_ld("(" + variable.getLocation() + ")", "HL");
 
-        newValue.location = variable.location;
+        newValue.setLocation(variable.getLocation());
     }
 
     @Override

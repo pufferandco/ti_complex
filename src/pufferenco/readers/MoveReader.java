@@ -21,10 +21,10 @@ public class MoveReader {
         StackElement element = ExpressionReader.evalExpression(new TokenStream(pre_tokens, builder), builder, false);
 
         StackElement pointer = ExpressionReader.evalExpression(stream, builder, false);
-        if(pointer.type != DataType.POINTER)
+        if(pointer.getType() != DataType.POINTER)
             builder.error("expected pointer in move statement");
 
-        switch (element.type) {
+        switch (element.getType()) {
             case DataType.INT -> {
                 builder.append_pop("HL");
                 builder.append_pop("DE");

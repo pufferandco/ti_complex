@@ -50,7 +50,7 @@ public class Variable {
                 builder.error("no required token [=] after type of value");
 
             StackElement expr = ExpressionReader.evalExpression(stream, builder, false);
-            if(expr.array_type != dataId)
+            if(expr.getArray_type() != dataId)
                 builder.error("type of value is not the same as the type of the array");
 
             if(is_global)
@@ -108,14 +108,14 @@ public class Variable {
             HashMap<String, Variable> current_scope = Variables.get(i);
             if (current_scope.containsKey(name)) {
                 StackElement element = current_scope.get(name).element;
-                DataType.getInstance(element.type).getStackVariable(element, builder);
+                DataType.getInstance(element.getType()).getStackVariable(element, builder);
 
                 return element.retrieve();
             }
         }
         if(Globals.containsKey(name)) {
             StackElement element = Globals.get(name).element;
-            DataType.getInstance(element.type).getStatic(builder, element.location);
+            DataType.getInstance(element.getType()).getStatic(builder, element.getLocation());
             return element.retrieve();
         }
 
@@ -152,7 +152,7 @@ public class Variable {
             StackElement array = get(name, builder);
             StackElement key = ExpressionReader.evalExpression(new TokenStream(Token.tokenize(next_token.content), builder), builder, true);
 
-            DataType.getInstance(element.type).setSub(
+            DataType.getInstance(element.getType()).setSub(
                     array,
                     key,
                     value,
@@ -161,13 +161,13 @@ public class Variable {
             return;
         }
         if(is_global)
-            DataType.getInstance(element.type).setStatic(
-                    element.location,
+            DataType.getInstance(element.getType()).setStatic(
+                    element.getLocation(),
                     ExpressionReader.evalExpression(stream, builder, false),
                     builder
             );
         else
-            DataType.getInstance(element.type).setStackVariable(
+            DataType.getInstance(element.getType()).setStackVariable(
                     element,
                     ExpressionReader.evalExpression(stream, builder, false),
                     builder
@@ -193,7 +193,7 @@ public class Variable {
         Variable variable = new Variable();
         variable.name = name;
         variable.is_global = true;
-        variable.element = DataType.getInstance(element.type).initGlobal(element, builder);
+        variable.element = DataType.getInstance(element.getType()).initGlobal(element, builder);
 
         Globals.put(name, variable);
     }

@@ -105,16 +105,16 @@ public class ExpressionReader {
             return null;
         }
         if(prev.is_constant){
-            prev = DataType.getInstance(prev.type).convertFrom(prev, builder, false);
+            prev = DataType.getInstance(prev.getType()).convertFrom(prev, builder, false);
         }
 
         if(tokenStream.isEmpty() && operator.content.equals("++")) {
-            DataType type = DataType.getInstance(prev.type);
+            DataType type = DataType.getInstance(prev.getType());
             StackElement increment;
             if(type.getId() == DataType.POINTER)
                 increment = type.callOperator("+", builder, new StackElement(1, DataType.BYTE, "1"));
             else
-                increment = type.callOperator("+", builder, new StackElement(1, prev.type, "1"));
+                increment = type.callOperator("+", builder, new StackElement(1, prev.getType(), "1"));
             type.setStackVariable(prev, increment, builder);
             type.getStackVariable(prev, builder);
             return increment;
@@ -123,7 +123,7 @@ public class ExpressionReader {
         while (tokenStream.isNotEmpty()) {
             Token current = tokenStream.read();
             if (current.type == Token.TokenTypes.ARITHMETIC || current.type == Token.TokenTypes.AND || current.type == Token.TokenTypes.OR || current.type == Token.TokenTypes.XOR) {
-                prev = DataType.getInstance(prev.type)
+                prev = DataType.getInstance(prev.getType())
                         .callOperator(
                                 operator.content, builder,
                                 evalExpression(new TokenStream(Tokens, builder), builder, true)
@@ -136,7 +136,7 @@ public class ExpressionReader {
 
 
         StackElement right = evalExpression(new TokenStream(Tokens, builder), builder, true);
-        return DataType.getInstance(prev.type)
+        return DataType.getInstance(prev.getType())
                 .callOperator(
                         operator.content,
                         builder,
@@ -326,12 +326,12 @@ public class ExpressionReader {
     private static StackElement evalSquareBrackets(Token brackets, AssemblyBuilder builder, StackElement prev) {
         if(prev == null)
             return null;
-        if(prev.type == DataType.NULL)
+        if(prev.getType() == DataType.NULL)
             builder.error("tried to access sub-element of a null element");
 
 
         StackElement key = evalExpression(new TokenStream(brackets.content, builder), builder, true);
-        return DataType.getInstance(prev.type).getSub(prev, key, builder);
+        return DataType.getInstance(prev.getType()).getSub(prev, key, builder);
     }
 
     private static StackElement newReader(TokenStream stream, AssemblyBuilder builder, StackElement prev){
@@ -346,14 +346,14 @@ public class ExpressionReader {
         if(next.type == Token.TokenTypes.SQUARE_BRACKETS){
             if(!next.content.isEmpty()) {
                 StackElement size = evalExpression(new TokenStream(next.content, builder), builder, false);
-                if (size.type != DataType.INT)
+                if (size.getType() != DataType.INT)
                     builder.error("array size mst be defined by a integer");
 
                 if (stream.read().type != Token.TokenTypes.AT)
                     builder.error("not [at] after [new]");
 
                 StackElement pointer = evalExpression(stream, builder, false);
-                if (pointer.type != DataType.POINTER)
+                if (pointer.getType() != DataType.POINTER)
                     builder.error("expression after [at] should result in a pointer");
 
                 return ArrayType.createNew(data_type.getId(), size, pointer, builder);
@@ -380,7 +380,7 @@ public class ExpressionReader {
                     short size = (short) (elements.size() * data_type.elementSize(builder));
                     string_builder.append((byte)(size & 0xff)).append(", ").append((size >> 8) & 0xff).append(", ");
                     for (StackElement element : elements) {
-                        if (element.is_constant && element.type == data_type.getId()) {
+                        if (element.is_constant && element.getType() == data_type.getId()) {
                             string_builder.append((int) element.Constant_value).append(", ");
                         } else
                             builder.error("type in array initialization must be a constant");
@@ -426,12 +426,12 @@ public class ExpressionReader {
         StackElement element = ExpressionReader.evalExpression(new TokenStream(pre_tokens, builder), builder, false);
 
         StackElement pointer = ExpressionReader.evalExpression(stream, builder, false);
-        if(pointer.type != DataType.POINTER)
+        if(pointer.getType() != DataType.POINTER)
             builder.error("expected pointer in move statement");
 
-        switch (element.type) {
+        switch (element.getType()) {
             case DataType.INT, DataType.BYTE, DataType.BOOL, DataType.POINTER ->
-                    builder.error("cannot copy" + DataType.getName(element.type)+ "(use move instead)");
+                    builder.error("cannot copy" + DataType.getName(element.getType())+ "(use move instead)");
             case DataType.ARRAY  -> {
                 builder.append_call("copy_array");
                 return element.retrieve();

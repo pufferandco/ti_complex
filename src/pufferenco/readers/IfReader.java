@@ -92,7 +92,7 @@ public class IfReader {
         StackElement logic_value = ExpressionReader.evalExpression(
                 new TokenStream(Token.tokenize(logic_expression.content), builder), builder, false);
 
-        if (logic_value.type != DataType.BOOL) {
+        if (logic_value.getType() != DataType.BOOL) {
             builder.error("if statement requires a boolean");
         }
     }

@@ -28,7 +28,7 @@ public class ImportReader {
         if(is_assembly)
             Constants.append(AssemblyLine.customAssemblyLine("#include \"" + root_folder + file_name + "\""));
         else
-            Main.get_and_run(file_name, builder);
+            Main.getAndRun(file_name, builder);
 
     }
 

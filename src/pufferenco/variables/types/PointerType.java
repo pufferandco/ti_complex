@@ -20,17 +20,17 @@ public class PointerType implements DataType {
 
     @Override
     public StackElement getStackVariable(StackElement element, AssemblyBuilder builder) {
-        builder.append_ld("HL", "(" + element.location + ")");
+        builder.append_ld("HL", "(" + element.getLocation() + ")");
         builder.append_push("HL");
         return new StackElement("var_read_pointer_" + Main.getId(), getId());
     }
 
     @Override
     public StackElement convertFrom(StackElement old, AssemblyBuilder builder, boolean keep_constant) {
-        if(old.type == DataType.ARRAY || old.type == DataType.STRING) {
+        if(old.getType() == DataType.ARRAY || old.getType() == DataType.STRING) {
             return new StackElement("converted_pointer", getId());
         }
-        if (old.type != getId()) {
+        if (old.getType() != getId()) {
             builder.error("cannot convert value to pointer");
             throw new RuntimeException();
         }
@@ -53,7 +53,7 @@ public class PointerType implements DataType {
     @Override
     public void init() {
         Operators.put("+", (right, builder) -> {
-            if(right.type == DataType.INT) {
+            if(right.getType() == DataType.INT) {
                 DataType.getInstance(INT).convertFrom(right, builder, false);
                 builder.append_pop("DE");
                 builder.append_pop("HL");
@@ -61,7 +61,7 @@ public class PointerType implements DataType {
                 builder.append_push("HL");
                 return new StackElement("var_pointer_add" + Main.getId(), getId());
             }
-            if(right.type == DataType.BYTE) {
+            if(right.getType() == DataType.BYTE) {
                 DataType.getInstance(BYTE).convertFrom(right, builder, false);
                 builder.append_pop("AF");
                 builder.append_pop("HL");
@@ -75,7 +75,7 @@ public class PointerType implements DataType {
             throw new RuntimeException();
         });
         Operators.put("-", (right, builder) -> {
-            if(right.type == DataType.INT) {
+            if(right.getType() == DataType.INT) {
                 DataType.getInstance(INT).convertFrom(right, builder, false);
                 builder.append_pop("DE");
                 builder.append_pop("HL");
@@ -84,7 +84,7 @@ public class PointerType implements DataType {
                 builder.append_push("HL");
                 return new StackElement("var_pointer_add" + Main.getId(), getId());
             }
-            if(right.type == DataType.BYTE) {
+            if(right.getType() == DataType.BYTE) {
                 DataType.getInstance(BYTE).convertFrom(right, builder, false);
                 builder.append_pop("AF");
                 builder.append_pop("HL");
@@ -100,7 +100,7 @@ public class PointerType implements DataType {
         });
 
         Operators.put("->", (right, builder) -> {
-            if(right.type != DataType.TYPE)
+            if(right.getType() != DataType.TYPE)
                 builder.error("& operator requires a type identifier");
 
             switch ((int)right.Constant_value) {
@@ -132,13 +132,13 @@ public class PointerType implements DataType {
         });
 
         Operators.put("==", (right, builder) ->{
-            if(right.type == DataType.TYPE && right.Constant_value.equals(DataType.NULL)){
+            if(right.getType() == DataType.TYPE && right.Constant_value.equals(DataType.NULL)){
                 builder.append_pop("HL");
                 builder.append_ld("DE", "0");
                 builder.append_call("int_equals");
                 builder.append_push("AF");
                 return new StackElement("pointer_compare_" + Main.getId(), DataType.BOOL);
-            }else if(right.type == DataType.POINTER){
+            }else if(right.getType() == DataType.POINTER){
                 right = convertFrom(right, builder, false);
                 builder.append_pop("DE");
                 builder.append_pop("HL");
@@ -207,9 +207,9 @@ public class PointerType implements DataType {
         newValue = convertFrom(newValue, builder, false);
 
         builder.append_pop("HL");
-        builder.append_ld("(" + variable.location + ")", "HL");
+        builder.append_ld("(" + variable.getLocation() + ")", "HL");
 
-        newValue.location = variable.location;
+        newValue.setLocation(variable.getLocation());
     }
 
     @Override
@@ -252,8 +252,8 @@ public class PointerType implements DataType {
     public StackElement initGlobal(StackElement element, AssemblyBuilder builder) {
         element = convertFrom(element, builder, false);
         builder.append_pop("HL");
-        element.location = "globalVars+" + (Variable.GlobalOffset);
-        builder.append_ld("("+element.location+")", "HL");
+        element.setLocation("globalVars+" + (Variable.GlobalOffset));
+        builder.append_ld("("+ element.getLocation() +")", "HL");
         Variable.GlobalOffset += 3;
         return element;
     }

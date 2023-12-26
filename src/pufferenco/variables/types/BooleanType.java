@@ -23,7 +23,7 @@ public class BooleanType implements DataType {
 
     @Override
     public StackElement getStackVariable(StackElement element, AssemblyBuilder builder) {
-        builder.append_ld("HL", "(" + element.location + ")");
+        builder.append_ld("HL", "(" + element.getLocation() + ")");
         builder.append_push("HL");
         return new StackElement("var_read_bool_" + Main.getId(), Data_type_id);
     }
@@ -32,7 +32,7 @@ public class BooleanType implements DataType {
     public void setStackVariable(StackElement variable, StackElement newValue, AssemblyBuilder builder) {
         convertFrom(newValue, builder, false);
         builder.append_pop("HL");
-        builder.append_ld("(" + variable.location + ")", "HL");
+        builder.append_ld("(" + variable.getLocation() + ")", "HL");
     }
 
     @Override
@@ -75,8 +75,8 @@ public class BooleanType implements DataType {
     public StackElement initGlobal(StackElement element, AssemblyBuilder builder) {
         element = convertFrom(element, builder, false);
         builder.append_pop("AF");
-        element.location = "globalVars+" + (Variable.GlobalOffset);
-        builder.append_ld("("+element.location+")", "A");
+        element.setLocation("globalVars+" + (Variable.GlobalOffset));
+        builder.append_ld("("+ element.getLocation() +")", "A");
         Variable.GlobalOffset += 1;
         return element;
     }
@@ -97,8 +97,8 @@ public class BooleanType implements DataType {
 
     @Override
     public StackElement convertFrom(StackElement old, AssemblyBuilder builder, boolean keep_constant) {
-        if (old.type != Data_type_id) {
-            builder.error("cannot convert " + DataType.NAMES[old.type] + " to bool");
+        if (old.getType() != Data_type_id) {
+            builder.error("cannot convert " + DataType.NAMES[old.getType()] + " to bool");
             throw new RuntimeException();
         }
         if (old.is_constant) {
@@ -117,7 +117,7 @@ public class BooleanType implements DataType {
     @Override
     public StackElement callOperator(String operator, AssemblyBuilder builder, StackElement right) {
         if (!Operators.containsKey(operator))
-            builder.error("illegal operator [" + operator + "] with combination: boolean and " + DataType.NAMES[right.type]);
+            builder.error("illegal operator [" + operator + "] with combination: boolean and " + DataType.NAMES[right.getType()]);
 
         return Operators.get(operator).apply(builder, right);
     }

@@ -35,7 +35,7 @@ public class Constant {
         if (!constant.is_constant)
             builder.error("constant [" + constant.name + "] is not a constant");
 
-        if(constant.type != dataType.getId()){
+        if(constant.getType() != dataType.getId()){
 
             builder.error("constant [" + constant.name + "] is not of type " + DataType.NAMES[dataType.getId()]);
             return;
@@ -48,7 +48,7 @@ public class Constant {
         StackElement element = constants.get(name);
         System.out.println(element.Constant_value);
         System.out.println(builder.lines.get(builder.lines.size()-1));
-        element = DataType.getInstance(element.type).convertFrom(element.retrieve(), builder, allow_constant);
+        element = DataType.getInstance(element.getType()).convertFrom(element.retrieve(), builder, allow_constant);
 
         return element;
     }

@@ -10,7 +10,6 @@ import pufferenco.variables.Variable;
 import java.util.List;
 import java.util.Stack;
 
-import static pufferenco.ArrayUtil.isInArray;
 import static pufferenco.AssemblyLine.customAssemblyLine;
 
 public class Main {
@@ -22,14 +21,13 @@ public class Main {
     final static int OPTIMIZE_LEVEL = 1;
     public static boolean early_exit = false;
     public static String root_folder;
-    public static boolean safety_mode = true;
+    public static boolean safety_mode = false;
 
 
     public static void main(String[] args) {
-
+        if(args.length != 2)
+            throw new RuntimeException("the program requires 2 inputs: root folder and main file");
         root_folder = args[0] + "/";
-        int safe_size = Integer.parseInt(args[2]);
-        safety_mode = isInArray("*unsafe", args);
 
         DataStack global_stack = new DataStack("stackStart");
         VariableStacks.push(global_stack);
@@ -51,7 +49,7 @@ public class Main {
         builder.append_call("_ClrScrnFull");
         builder.append((new AssemblyLine("")));
 
-        get_and_run(args[1], builder);
+        getAndRun(args[1], builder);
 
         builder.append((new AssemblyLine("")));
         builder.append_tag("ProgramExit");
@@ -75,6 +73,8 @@ public class Main {
                 AssemblyCollapse.optimize(builder, OPTIMIZE_LEVEL).getAssembly() + "\n" +
                         AssemblyCollapse.optimize(Function.FunctionBuilder, OPTIMIZE_LEVEL).getAssembly() + "\n"
                         + Constants.getAssembly());
+
+        System.out.println("compilation successful!");
     }
 
     public static void tokenizeAndRun(String code, AssemblyBuilder builder) {
@@ -99,7 +99,7 @@ public class Main {
         return String.valueOf(id++);
     }
 
-    public static void get_and_run(String file_name, AssemblyBuilder builder) {
+    public static void getAndRun(String file_name, AssemblyBuilder builder) {
         Variable.increase_scope(builder);
 
         String code = IOUtil.readTxt(root_folder + file_name);

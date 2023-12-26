@@ -26,7 +26,7 @@ public class Function {
             if (function.parameters.size() != params.size())
                 continue;
             for (int i = 0; i < function.parameters.size(); i++) {
-                if (function.parameters.get(i).type.getId() != params.get(i).type)
+                if (function.parameters.get(i).type.getId() != params.get(i).getType())
                     continue outer;
             }
             function.call(builder, return_value);
@@ -40,7 +40,7 @@ public class Function {
         }
         StringBuilder string_params = new StringBuilder();
         for (int i = 0; i < params.size(); i++) {
-            string_params.append(DataType.NAMES[params.get(i).type]);
+            string_params.append(DataType.NAMES[params.get(i).getType()]);
             if (i!= params.size() - 1)
                 string_params.append(", ");
         }
@@ -103,12 +103,12 @@ public class Function {
         StackElement return_type = null;
         if (stream.read().content.equals("->")) {
             return_type = new StackElement("return_value", ArrayUtil.inArray(stream.read().content, DataType.NAMES));
-            if (return_type.type == -1)
+            if (return_type.getType() == -1)
                 builder.error("invalid return type");
 
             if(stream.read().type == Token.TokenTypes.SQUARE_BRACKETS){
-                return_type.array_type = return_type.type;
-                return_type.type = DataType.ARRAY;
+                return_type.setArray_type(return_type.getType());
+                return_type.setType(DataType.ARRAY);
             }else
                 stream.backSpace();
         } else
@@ -149,7 +149,7 @@ public class Function {
             StackElement stack_element;
             if(parameter.subtype != null){
                 stack_element = Main.VariableStacks.peek().push(parameter.name, 1, DataType.ARRAY, FunctionBuilder);
-                stack_element.array_type = parameter.subtype.getId();
+                stack_element.setArray_type(parameter.subtype.getId());
             }else {
                 stack_element = Main.VariableStacks.peek().push(parameter.name, 1, parameter.type.getId(), FunctionBuilder);
             }

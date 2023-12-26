@@ -179,7 +179,7 @@ public class NativeFunction {
             if(overload.params.length != params.size())
                 continue;
             for (int i = 0; i < overload.params.length; i++) {
-                if (overload.params[i] != params.get(i).type)
+                if (overload.params[i] != params.get(i).getType())
                     continue overload_list;
             }
 

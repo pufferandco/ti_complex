@@ -1,0 +1,15 @@
+fun fib(Index: byte) -> int{
+    #printLn(Index);
+    if((Index == 1b) or (Index == 0b)){
+        return 1i;
+    }else{
+        return fib(Index - 1b) + fib(Index - 2b);
+    };
+};
+
+var i: byte = 0b;
+while(i < 30b){
+    printLn(fib(i));
+    i = i + 1b;
+};
+#16s

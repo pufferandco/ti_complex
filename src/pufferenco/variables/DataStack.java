@@ -22,9 +22,9 @@ public class DataStack {
 
     public StackElement push(StackElement element, AssemblyBuilder builder) {
         if (element.is_constant)
-            element = DataType.getInstance(element.type).convertFrom(element, builder, false);
-        if(element.location == null)
-            element.location = stack_start + "-" + (size + 3);
+            element = DataType.getInstance(element.getType()).convertFrom(element, builder, false);
+        if(element.getLocation() == null)
+            element.setLocation(stack_start + "-" + (size + 3));
         stack.add(element);
         size += element.size * 3;
         max_size = Math.max(max_size, size);
